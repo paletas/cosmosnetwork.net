@@ -1,0 +1,135 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE;DEBUG_API</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cryptography.ECDSA.Secp256K1" Version="1.1.3" />
+    <PackageReference Include="DevHawk.RIPEMD160" Version="3.0.27" />
+    <PackageReference Include="Google.Protobuf" Version="3.19.1" />
+    <PackageReference Include="Grpc.Core" Version="2.42.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.42.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Nethereum.HdWallet" Version="4.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos_proto\cosmos.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\gogoproto\gogo.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\google\api\http.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\google\api\httpbody.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\google\api\annotations.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\tendermint\abci\types.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\tendermint\crypto\keys.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\tendermint\crypto\proof.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\tendermint\libs\bits\types.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\tendermint\p2p\types.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\tendermint\types\block.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\tendermint\types\evidence.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\tendermint\types\params.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\tendermint\types\types.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\tendermint\types\validator.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\tendermint\version\types.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\market\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\market\v1beta1\market.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\market\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\market\v1beta1\tx.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\oracle\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\oracle\v1beta1\oracle.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\oracle\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\oracle\v1beta1\tx.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\treasury\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\treasury\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\treasury\v1beta1\treasury.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\tx\v1beta1\service.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\vesting\v1beta1\vesting.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\wasm\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\wasm\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\wasm\v1beta1\tx.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\terra\wasm\v1beta1\wasm.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\auth\v1beta1\auth.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\auth\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\auth\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\authz\v1beta1\authz.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\authz\v1beta1\event.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\authz\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\authz\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\authz\v1beta1\tx.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\bank\v1beta1\authz.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\bank\v1beta1\bank.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\bank\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\bank\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\bank\v1beta1\tx.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\base\abci\v1beta1\abci.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\base\kv\v1beta1\kv.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\base\query\v1beta1\pagination.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\base\reflection\v1beta1\reflection.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\base\reflection\v2alpha1\reflection.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\base\snapshots\v1beta1\snapshot.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\base\store\v1beta1\commit_info.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\base\store\v1beta1\listening.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\base\store\v1beta1\snapshot.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\base\tendermint\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\base\v1beta1\coin.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\capability\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\capability\v1beta1\capability.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\crisis\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\crisis\v1beta1\tx.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\crypto\ed25519\keys.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\crypto\multisig\v1beta1\multisig.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\crypto\multisig\keys.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\crypto\secp256k1\keys.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\crypto\secp256r1\keys.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\distribution\v1beta1\distribution.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\distribution\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\distribution\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\distribution\v1beta1\tx.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\evidence\v1beta1\evidence.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\evidence\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\evidence\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\evidence\v1beta1\tx.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\feegrant\v1beta1\feegrant.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\feegrant\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\feegrant\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\feegrant\v1beta1\tx.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\genutil\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\gov\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\gov\v1beta1\gov.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\gov\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\gov\v1beta1\tx.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\mint\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\mint\v1beta1\mint.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\mint\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\params\v1beta1\params.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\params\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\slashing\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\slashing\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\slashing\v1beta1\slashing.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\slashing\v1beta1\tx.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\staking\v1beta1\authz.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\staking\v1beta1\genesis.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\staking\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\staking\v1beta1\staking.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\staking\v1beta1\tx.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\tx\signing\v1beta1\signing.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\tx\v1beta1\service.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\tx\v1beta1\tx.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\upgrade\v1beta1\query.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\upgrade\v1beta1\upgrade.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\vesting\v1beta1\vesting.proto" GrpcServices="Client" />
+  </ItemGroup>
+</Project>
