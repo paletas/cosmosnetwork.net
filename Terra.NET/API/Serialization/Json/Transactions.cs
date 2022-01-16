@@ -51,5 +51,9 @@ namespace Terra.NET.API.Serialization.Json
 
     public record TransactionEvent(string Type, TransactionEventAttribute[] Attributes);
 
+    public record TransactionLog([property: JsonPropertyName("msg_index")] ulong MessageIndex, string Log, TransactionEvent[] Events);
+
     public record TransactionEventAttribute(string Key, string Value);
+
+    public record TransactionExecutionResult(ulong Height, [property: JsonPropertyName("txhash")] string TransactionHash, string Codespace, ulong Code, string Data, TransactionLog[] Logs, string Info, ulong GasWanted, ulong GasUsed, TransactionEvent[] Events);
 }

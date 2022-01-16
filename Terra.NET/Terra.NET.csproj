@@ -132,4 +132,8 @@
     <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\upgrade\v1beta1\upgrade.proto" GrpcServices="Client" />
     <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\vesting\v1beta1\vesting.proto" GrpcServices="Client" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="API\Internal\" />
+  </ItemGroup>
 </Project>

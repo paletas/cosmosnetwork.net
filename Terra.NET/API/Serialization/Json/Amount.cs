@@ -1,6 +1,4 @@
-﻿using Cosmos.SDK.Protos;
-
-namespace Terra.NET.API.Serialization.Json
+﻿namespace Terra.NET.API.Serialization.Json
 {
     internal record DenomAmount(string Denom, ulong Amount)
     {

@@ -6,6 +6,8 @@
 
     public record Coin(string Denom, ulong Amount, bool IsNative);
 
+    public record CoinDecimal(string Denom, decimal Amount, bool IsNative);
+
     public record CustomCoin(string ContractAddress, ulong Amount) : Coin(ContractAddress, Amount, false);
 
     public record NativeCoin(string Denom, ulong Amount) : Coin(Denom, Amount, true);

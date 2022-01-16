@@ -1,19 +1,22 @@
 ﻿using Microsoft.Extensions.Logging;
+using Terra.NET.API.Internal;
 
 namespace Terra.NET.API.Impl
 {
     internal class WalletApi : BaseApiSection, IWalletApi
     {
         private readonly ITransactionsApi _transactionsApi;
+        private readonly TransactionsBuilder _transactionsBuilder;
 
-        public WalletApi(TerraApiOptions options, HttpClient httpClient, ILogger<WalletApi> logger, ITransactionsApi transactionsApi) : base(options, httpClient, logger)
+        public WalletApi(TerraApiOptions options, HttpClient httpClient, ILogger<WalletApi> logger, ITransactionsApi transactionsApi, TransactionsBuilder transactionsBuilder) : base(options, httpClient, logger)
         {
             this._transactionsApi = transactionsApi;
+            this._transactionsBuilder = transactionsBuilder;
         }
 
         public async Task<IWallet> GetWallet(string mnemonicKey, CancellationToken cancellationToken = default)
         {
-            var wallet = new Wallet(this, this._transactionsApi);
+            var wallet = new Wallet(this.Options, this, this._transactionsApi, this._transactionsBuilder);
             await wallet.SetKey(mnemonicKey, cancellationToken).ConfigureAwait(false);
 
             return wallet;

@@ -6,5 +6,7 @@ namespace Terra.NET.API.Serialization.Json.Responses
 
     internal record TransactionSimulationResponse(TransactionGasUsage GasInfo, TransactionSimulationResult Result);
 
+    internal record TransactionBroadcastResponse([property: JsonPropertyName("tx_response")] TransactionExecutionResult Result);
+
     internal record ComputeTaxResponse(DenomAmount[] TaxAmount);
 }

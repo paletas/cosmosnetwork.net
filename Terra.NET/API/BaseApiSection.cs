@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using Terra.NET.API.Serialization.Json;
 
 namespace Terra.NET.API
 {
@@ -16,18 +14,8 @@ namespace Terra.NET.API
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _logger = logger;
 
-            JsonSerializerOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                PropertyNamingPolicy = new SnakeCaseNamingPolicy()
-            };
-
-            JsonSerializerOptions.Converters.Add(new BigIntegerConverter());
-            JsonSerializerOptions.Converters.Add(new SignerModeConverter());
-
             Options = options;
+            JsonSerializerOptions = options.JsonSerializerOptions;
         }
 
         protected JsonSerializerOptions JsonSerializerOptions { get; init; }
@@ -83,7 +71,7 @@ namespace Terra.NET.API
 #endif
 
             using var httpResponse = await _httpClient.PostAsync(endpoint, httpContent).ConfigureAwait(false);
-            
+
 #if DEBUG_API
             var stringResponse = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
             _logger.LogInformation($"Get {endpoint} received {stringResponse}");

@@ -18,8 +18,8 @@
         internal override API.Serialization.Json.Message ToJson()
         {
             return new API.Serialization.Json.MessageExecuteContract<T>(
-                this.Coins.Select(coin => new API.Serialization.Json.DenomAmount(coin.Denom, coin.Amount)).ToArray(), 
-                this.Sender.Address, 
+                this.Coins.Select(coin => new API.Serialization.Json.DenomAmount(coin.Denom, coin.Amount)).ToArray(),
+                this.Sender.Address,
                 this.Contract.Address,
                 ExecuteMessage
             );

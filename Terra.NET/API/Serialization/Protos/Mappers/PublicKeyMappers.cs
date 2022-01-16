@@ -12,7 +12,7 @@ namespace Terra.NET.API.Serialization.Protos.Mappers
             var base64Key = Convert.ToBase64String(publicKey.RawKey);
             return new PubKey
             {
-                Key = ByteString.CopyFrom(base64Key, Encoding.UTF8)
+                Key = ByteString.FromBase64(base64Key)
             };
         }
 
