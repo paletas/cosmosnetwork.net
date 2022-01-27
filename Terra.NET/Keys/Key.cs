@@ -1,7 +1,6 @@
 ﻿using Cosmos.SDK.Protos.Tx;
 using Cosmos.SDK.Protos.Tx.Signing;
 using Google.Protobuf;
-using System.Text;
 using Terra.NET.API.Serialization.Protos.Mappers;
 
 namespace Terra.NET.Keys
@@ -14,8 +13,8 @@ namespace Terra.NET.Keys
 
         protected void SetKeys(byte[] privateKey, byte[] publicKey)
         {
-            PrivateKey = privateKey;
-            PublicKey = new PublicKey(publicKey);
+            this.PrivateKey = privateKey;
+            this.PublicKey = new PublicKey(publicKey);
         }
 
         private Signature CreateSignature(string chain, SignerOptions signer, SignerInfo signerInfo, SignerModeEnum signerMode, AuthInfo authInfo, TxBody txBody)

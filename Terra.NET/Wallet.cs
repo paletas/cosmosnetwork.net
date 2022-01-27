@@ -1,7 +1,7 @@
 ﻿using Google.Protobuf;
 using Terra.NET.API;
-using Terra.NET.API.Internal;
 using Terra.NET.Keys;
+using Terra.NET.Transactions;
 
 namespace Terra.NET
 {
@@ -56,7 +56,7 @@ namespace Terra.NET
             return this._walletApi.GetAccountBalances(this.AccountAdddress, cancellationToken);
         }
 
-        public async Task<SignedTransaction> CreateSignedTransaction(IEnumerable<Message> messages, CreateTransactionOptions transactionOptions, CancellationToken cancellationToken)
+        public async Task<SignedTransaction> CreateSignedTransaction(IEnumerable<Message> messages, CreateTransactionOptions transactionOptions, CancellationToken cancellationToken = default)
         {
             if (this._key == null) throw new InvalidOperationException("Need to setup wallet key first");
 
@@ -80,7 +80,7 @@ namespace Terra.NET
             Fee fees;
             if (transactionOptions.Fees == null)
             {
-                fees = await this._transactionsApi.EstimateFee(messages, signers, new EstimateFeesOptions(transactionOptions.Memo, FeeDenoms: transactionOptions.FeesDenoms ?? _options.DefaultDenoms), cancellationToken).ConfigureAwait(false);
+                fees = await this._transactionsApi.EstimateFee(messages, signers, new EstimateFeesOptions(transactionOptions.Memo, Gas: transactionOptions.Gas, GasPrices: transactionOptions.GasPrices, FeesDenoms: transactionOptions.FeesDenoms ?? this._options.DefaultDenoms), cancellationToken).ConfigureAwait(false);
             }
             else
             {
@@ -116,7 +116,7 @@ namespace Terra.NET
             if (this.PublicKey == null) throw new InvalidOperationException("Private key needs to be set");
             if (this.AccountNumber == null || this.Sequence == null)
             {
-                await GetAccountInformation().ConfigureAwait(false);
+                await GetAccountInformation(cancellationToken).ConfigureAwait(false);
 
                 if (this.AccountNumber == null) throw new InvalidOperationException("AccountNumber needs to be set");
                 if (this.Sequence == null) throw new InvalidOperationException("AccountSequence needs to be set");
@@ -136,14 +136,28 @@ namespace Terra.NET
 
         public async Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransaction(IEnumerable<Message> messages, BroadcastTransactionOptions? broadcastOptions = null, CancellationToken cancellationToken = default)
         {
-            var signedTransaction = await CreateSignedTransaction(messages, new CreateTransactionOptions(broadcastOptions?.Memo, broadcastOptions?.TimeoutHeight, broadcastOptions?.Fees, GasPrices: null, broadcastOptions?.FeesDenoms), cancellationToken).ConfigureAwait(false);
+            var signedTransaction = await CreateSignedTransaction(messages, new CreateTransactionOptions(broadcastOptions?.Memo, broadcastOptions?.TimeoutHeight, broadcastOptions?.Fees, Gas: broadcastOptions?.Gas, GasPrices: null, broadcastOptions?.FeesDenoms), cancellationToken).ConfigureAwait(false);
 
-            return await this._transactionsApi.BroadcastTransaction(signedTransaction, cancellationToken).ConfigureAwait(false);
+            try
+            {
+                return await this._transactionsApi.BroadcastTransaction(signedTransaction, cancellationToken).ConfigureAwait(false);
+            }
+            finally
+            {
+                this.Sequence++;
+            }
         }
 
         public Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransaction(SignedTransaction transaction, CancellationToken cancellationToken = default)
         {
-            return this._transactionsApi.BroadcastTransaction(transaction, cancellationToken);
+            try
+            {
+                return this._transactionsApi.BroadcastTransaction(transaction, cancellationToken);
+            }
+            finally
+            {
+                this.Sequence++;
+            }
         }
 
         public async Task<Fee> EstimateFee(IEnumerable<Message> messages, EstimateFeesOptions? estimateOptions = null, CancellationToken cancellationToken = default)
@@ -151,7 +165,7 @@ namespace Terra.NET
             if (this.PublicKey == null) throw new InvalidOperationException("Private key needs to be set");
             if (this.AccountNumber == null || this.Sequence == null)
             {
-                await GetAccountInformation().ConfigureAwait(false);
+                await GetAccountInformation(cancellationToken).ConfigureAwait(false);
 
                 if (this.AccountNumber == null) throw new InvalidOperationException("AccountNumber needs to be set");
                 if (this.Sequence == null) throw new InvalidOperationException("AccountSequence needs to be set");

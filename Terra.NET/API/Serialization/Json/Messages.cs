@@ -35,7 +35,7 @@ namespace Terra.NET.API.Serialization.Json
                 FromAddress = FromAddress,
                 ToAddress = ToAddress
             };
-            send.Amount.AddRange(Coins.Select(c => c.ToProto()));
+            send.Amount.AddRange(this.Coins.Select(c => c.ToProto()));
             return send;
         }
 
@@ -50,7 +50,7 @@ namespace Terra.NET.API.Serialization.Json
     {
         internal override IMessage ToProto(JsonSerializerOptions? serializerOptions = null)
         {
-            string executeMessageJson = JsonSerializer.Serialize(ExecuteMessage, serializerOptions);
+            string executeMessageJson = JsonSerializer.Serialize(this.ExecuteMessage, serializerOptions);
 
             var execute = new MsgExecuteContract
             {
@@ -58,7 +58,7 @@ namespace Terra.NET.API.Serialization.Json
                 Contract = Contract,
                 ExecuteMsg = ByteString.CopyFrom(executeMessageJson, Encoding.UTF8)
             };
-            execute.Coins.AddRange(Coins.Select(c => c.ToProto()));
+            execute.Coins.AddRange(this.Coins.Select(c => c.ToProto()));
             return execute;
         }
 

@@ -21,7 +21,7 @@
                 this.Coins.Select(coin => new API.Serialization.Json.DenomAmount(coin.Denom, coin.Amount)).ToArray(),
                 this.Sender.Address,
                 this.Contract.Address,
-                ExecuteMessage
+                this.ExecuteMessage
             );
         }
     }

@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using Terra.NET.API;
 using Terra.NET.API.Impl;
-using Terra.NET.API.Internal;
+using Terra.NET.Transactions;
 
 [assembly: InternalsVisibleTo("Terra.NET.Tests")]
 
@@ -25,6 +25,7 @@ namespace Terra.NET
             this.Blockchain = new BlockchainApi(options, httpClient, loggerFactory.CreateLogger<BlockchainApi>());
             this.Transactions = new TransactionsApi(options, httpClient, loggerFactory.CreateLogger<TransactionsApi>(), this._transactionsBuilder, this.Blockchain);
             this.Wallet = new WalletApi(options, httpClient, loggerFactory.CreateLogger<WalletApi>(), this.Transactions, this._transactionsBuilder);
+            this.MemPool = new MemPoolApi(options, httpClient, loggerFactory.CreateLogger<MemPoolApi>());
         }
 
         public TerraApiOptions Options { get; init; }
@@ -36,5 +37,7 @@ namespace Terra.NET
         public IBlockchainApi Blockchain { get; init; }
 
         public IWalletApi Wallet { get; init; }
+
+        public IMemPoolApi MemPool { get; init; }
     }
 }

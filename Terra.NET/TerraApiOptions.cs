@@ -8,7 +8,7 @@ namespace Terra.NET
     {
         public TerraApiOptions()
         {
-            JsonSerializerOptions = new JsonSerializerOptions
+            this.JsonSerializerOptions = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
                 NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString,
@@ -16,18 +16,18 @@ namespace Terra.NET
                 PropertyNamingPolicy = new SnakeCaseNamingPolicy()
             };
 
-            JsonSerializerOptions.Converters.Add(new BigIntegerConverter());
-            JsonSerializerOptions.Converters.Add(new SignerModeConverter());
+            this.JsonSerializerOptions.Converters.Add(new BigIntegerConverter());
+            this.JsonSerializerOptions.Converters.Add(new SignerModeConverter());
         }
 
         public TerraApiOptions(int? throttlingEnumeratorsInSeconds = default, long? startingBlockHeightForTransactionSearch = default)
             : this()
         {
             if (throttlingEnumeratorsInSeconds != default)
-                ThrottlingEnumeratorsInMilliseconds = throttlingEnumeratorsInSeconds;
+                this.ThrottlingEnumeratorsInMilliseconds = throttlingEnumeratorsInSeconds;
 
             if (startingBlockHeightForTransactionSearch.HasValue)
-                StartingBlockHeightForTransactionSearch = startingBlockHeightForTransactionSearch.Value;
+                this.StartingBlockHeightForTransactionSearch = startingBlockHeightForTransactionSearch.Value;
         }
 
         public string ChainId { get; set; } = "columbus-5";

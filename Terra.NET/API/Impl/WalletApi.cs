@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using Terra.NET.API.Internal;
+using Terra.NET.Transactions;
 
 namespace Terra.NET.API.Impl
 {

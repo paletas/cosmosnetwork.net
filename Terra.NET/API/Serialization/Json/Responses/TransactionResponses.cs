@@ -9,4 +9,6 @@ namespace Terra.NET.API.Serialization.Json.Responses
     internal record TransactionBroadcastResponse([property: JsonPropertyName("tx_response")] TransactionExecutionResult Result);
 
     internal record ComputeTaxResponse(DenomAmount[] TaxAmount);
+
+    internal record MemPoolTransactionsResponse([property: JsonPropertyName("txs")] MemPoolTransaction[] Transactions);
 }

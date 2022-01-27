@@ -20,12 +20,12 @@ namespace Terra.NET
 
         public IEnumerator<Coin> GetEnumerator()
         {
-            return _balances.GetEnumerator();
+            return this._balances.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return _balances.GetEnumerator();
+            return this._balances.GetEnumerator();
         }
     }
 }

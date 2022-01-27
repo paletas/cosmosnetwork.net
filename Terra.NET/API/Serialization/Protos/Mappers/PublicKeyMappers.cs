@@ -1,7 +1,6 @@
 ﻿using Cosmos.SDK.Protos.Crypto.Keys.Secp256k1;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
-using System.Text;
 
 namespace Terra.NET.API.Serialization.Protos.Mappers
 {

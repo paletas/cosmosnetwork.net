@@ -7,7 +7,7 @@
             return new Cosmos.SDK.Protos.Coin
             {
                 Denom = Denom,
-                Amount = Amount.ToString()
+                Amount = this.Amount.ToString()
             };
         }
 

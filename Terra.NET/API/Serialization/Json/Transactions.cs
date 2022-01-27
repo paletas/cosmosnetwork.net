@@ -19,6 +19,19 @@ namespace Terra.NET.API.Serialization.Json
         }
     };
 
+    internal record MemPoolTransaction([property: JsonPropertyName("chainId")] string ChainId, [property: JsonPropertyName("txhash")] string Hash, DateTime Timestamp, [property: JsonPropertyName("tx")] TransactionPack Details)
+    {
+        internal Terra.NET.MemPoolTransaction ToModel()
+        {
+            return new Terra.NET.MemPoolTransaction(
+                this.ChainId,
+                this.Hash,
+                this.Timestamp,
+                this.Details.ToModel()
+            );
+        }
+    };
+
     internal record TransactionPack([property: JsonPropertyName("type")] string TransactionType, StandardTransaction Value)
     {
         internal Terra.NET.Transaction ToModel()
@@ -33,7 +46,7 @@ namespace Terra.NET.API.Serialization.Json
         }
     };
 
-    internal record StandardTransaction([property: JsonPropertyName("fee")] Fee Fees, [property: JsonPropertyName("msg")] Message[] Messages, string Memo, SignerOptions[] Signatures);
+    internal record StandardTransaction([property: JsonPropertyName("fee")] Fee Fees, [property: JsonPropertyName("msg")] Message[] Messages, string Memo, SignerOptions[] Signatures, ulong? TimeoutHeight);
 
     internal record Fee(ulong Gas, DenomAmount[] Amount)
     {

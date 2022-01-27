@@ -16,7 +16,7 @@ namespace Terra.NET.API.Impl
         {
             var endpoint = $"/terra/wasm/v1beta1/codes/{codeId}";
 
-            var smartContractCode = await this.Get<GetSmartContractCode>(endpoint, cancellationToken).ConfigureAwait(false);
+            var smartContractCode = await Get<GetSmartContractCode>(endpoint, cancellationToken).ConfigureAwait(false);
             if (smartContractCode == null) return null;
 
             return smartContractCode.Code.ToModel();
@@ -26,7 +26,7 @@ namespace Terra.NET.API.Impl
         {
             var endpoint = $"/terra/wasm/v1beta1/contracts/{contractAddress}";
 
-            var smartContract = await this.Get<GetSmartContract>(endpoint, cancellationToken).ConfigureAwait(false);
+            var smartContract = await Get<GetSmartContract>(endpoint, cancellationToken).ConfigureAwait(false);
             if (smartContract == null) return null;
 
             return smartContract.SmartContract.ToModel();
@@ -39,7 +39,7 @@ namespace Terra.NET.API.Impl
             var firstSearchEndpoint = endpoint;
             if (startFromOffset != null) firstSearchEndpoint = $"{endpoint}?offset={startFromOffset}";
 
-            var smartContracts = await this.Get<ListSmartContracts>(firstSearchEndpoint, cancellationToken).ConfigureAwait(false);
+            var smartContracts = await Get<ListSmartContracts>(firstSearchEndpoint, cancellationToken).ConfigureAwait(false);
             while (smartContracts != null && smartContracts.Contracts.Any())
             {
                 foreach (var smartContractDetails in smartContracts.Contracts)
@@ -52,10 +52,10 @@ namespace Terra.NET.API.Impl
 
                 if (smartContracts.Next == null || smartContracts.Next > smartContracts.Contracts.Max(contract => contract.Id)) break;
 
-                if (Options.ThrottlingEnumeratorsInMilliseconds.HasValue)
-                    await Task.Delay(Options.ThrottlingEnumeratorsInMilliseconds.Value, cancellationToken).ConfigureAwait(false);
+                if (this.Options.ThrottlingEnumeratorsInMilliseconds.HasValue)
+                    await Task.Delay(this.Options.ThrottlingEnumeratorsInMilliseconds.Value, cancellationToken).ConfigureAwait(false);
 
-                smartContracts = await this.Get<ListSmartContracts>($"{endpoint}?offset={smartContracts.Next}", cancellationToken).ConfigureAwait(false);
+                smartContracts = await Get<ListSmartContracts>($"{endpoint}?offset={smartContracts.Next}", cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -67,7 +67,7 @@ namespace Terra.NET.API.Impl
 
             var endpoint = $"/terra/wasm/v1beta1/contracts/{contractAddress.Address}/store?query_msg={encodedMessage}";
 
-            var queryResult = await this.Get<QueryResult<TResponse>>(endpoint, cancellationToken).ConfigureAwait(false);
+            var queryResult = await Get<QueryResult<TResponse>>(endpoint, cancellationToken).ConfigureAwait(false);
             return queryResult?.Result;
         }
 

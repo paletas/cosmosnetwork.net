@@ -1,9 +1,10 @@
 ﻿using Cosmos.SDK.Protos.Tx;
 using Microsoft.Extensions.Logging;
 using System.Runtime.CompilerServices;
-using Terra.NET.API.Internal;
 using Terra.NET.API.Serialization.Json.Requests;
 using Terra.NET.API.Serialization.Json.Responses;
+using Terra.NET.Exceptions;
+using Terra.NET.Transactions;
 
 namespace Terra.NET.API.Impl
 {
@@ -20,43 +21,45 @@ namespace Terra.NET.API.Impl
 
         public async Task<Transaction> CreateTransaction(IEnumerable<Message> messages, SignerOptions[] signers, CreateTransactionOptions transactionOptions, CancellationToken cancellationToken = default)
         {
-            var fees = transactionOptions.Fees ?? await this.EstimateFee(messages, signers, new EstimateFeesOptions(Memo: transactionOptions.Memo, FeeDenoms: transactionOptions.FeesDenoms), cancellationToken).ConfigureAwait(false);
+            var fees = transactionOptions.Fees ?? await EstimateFee(messages, signers, new EstimateFeesOptions(Memo: transactionOptions.Memo, FeesDenoms: transactionOptions.FeesDenoms), cancellationToken).ConfigureAwait(false);
 
             return new StandardTransaction(messages.ToArray(), transactionOptions.Memo, transactionOptions.TimeoutHeight, fees, signers);
         }
 
         public async Task<Fee> EstimateFee(IEnumerable<Message> messages, SignerOptions[] signers, EstimateFeesOptions? estimateOptions = null, CancellationToken cancellationToken = default)
         {
-            var gasAdjustment = estimateOptions.GasAdjustment ?? base.Options.GasAdjustment;
+            var gasAdjustment = estimateOptions?.GasAdjustment ?? base.Options.GasAdjustment;
             var gasPrices = estimateOptions?.GasPrices ?? base.Options.GasPrices;
             if (gasPrices == null)
             {
-                var updatedGasPrices = await _blockchainApi.GetGasPrices(cancellationToken).ConfigureAwait(false);
+                var updatedGasPrices = await this._blockchainApi.GetGasPrices(cancellationToken).ConfigureAwait(false);
                 gasPrices = base.Options.GasPrices = updatedGasPrices.Select(gas => new CoinDecimal(gas.Key, gas.Value, true)).ToArray();
+
+                if (gasPrices.Length == 0) throw new InvalidOperationException("Gas prices unknown");
             }
 
-            var feeDenoms = estimateOptions?.FeeDenoms ?? base.Options.DefaultDenoms ?? throw new InvalidOperationException("Default denoms are required");
+            var feeDenoms = estimateOptions?.FeesDenoms ?? base.Options.DefaultDenoms ?? throw new InvalidOperationException("Default denoms are required");
             var gas = estimateOptions?.Gas ?? default;
 
             if (gas == default)
             {
                 var (errorCode, simulationResult) = await SimulateTransaction(messages, signers, estimateOptions, cancellationToken);
-                if (errorCode != null) throw new InvalidOperationException();
+                if (errorCode.HasValue) throw new EstimateFeeException(errorCode.Value, "Unable to estimate fee");
                 if (simulationResult == null || simulationResult.GasUsage == null) throw new InvalidOperationException();
                 gas = simulationResult.GasUsage.GasUsed;
-                gas = (ulong) Math.Ceiling(gas * gasAdjustment);
+                gas = (ulong)Math.Ceiling(gas * gasAdjustment);
             }
 
-            return new Fee(gas, gasPrices.Where(gp => feeDenoms.Contains(gp.Denom)).Select(gp => new Coin(gp.Denom, (ulong) Math.Ceiling(gp.Amount * gas), true)).ToArray());
+            return new Fee(gas, gasPrices.Where(gp => feeDenoms.Contains(gp.Denom)).Select(gp => new Coin(gp.Denom, (ulong)Math.Ceiling(gp.Amount * gas), true)).ToArray());
         }
 
         public async Task<IEnumerable<Coin>> ComputeTax(IEnumerable<Message> messages, SignerOptions[] signers, CancellationToken cancellationToken = default)
         {
-            var transaction = _transactionBuilder.CreateTransaction(messages);
-            _transactionBuilder.AddEmptySignatures(transaction, signers);
+            var transaction = this._transactionBuilder.CreateTransaction(messages);
+            this._transactionBuilder.AddEmptySignatures(transaction, signers);
 
             var simulationRequest = new TransactionRequest(SerializeTransaction(transaction));
-            var simulationResponse = await this.Post<TransactionRequest, ComputeTaxResponse, ErrorResponse>($"/terra/tx/v1beta1/compute_tax", simulationRequest, cancellationToken).ConfigureAwait(false);
+            var simulationResponse = await Post<TransactionRequest, ComputeTaxResponse, ErrorResponse>($"/terra/tx/v1beta1/compute_tax", simulationRequest, cancellationToken).ConfigureAwait(false);
 
             if (simulationResponse.ResponseOK == null) throw new InvalidOperationException("Couldn't compute tax for transaction");
 
@@ -69,28 +72,48 @@ namespace Terra.NET.API.Impl
 
         public async Task<(uint? ErrorCode, TransactionSimulation? Result)> SimulateTransaction(IEnumerable<Message> messages, SignerOptions[] signers, TransactionSimulationOptions? simulationOptions = null, CancellationToken cancellationToken = default)
         {
-            var transaction = _transactionBuilder.CreateTransaction(messages, simulationOptions?.Memo, simulationOptions?.TimeoutHeight);
-            _transactionBuilder.AddEmptySignatures(transaction, signers);
+            var transaction = this._transactionBuilder.CreateTransaction(messages, simulationOptions?.Memo, simulationOptions?.TimeoutHeight);
+            this._transactionBuilder.AddEmptySignatures(transaction, signers);
 
             var simulationRequest = new TransactionRequest(SerializeTransaction(transaction));
-            var simulationResponse = await this.Post<TransactionRequest, TransactionSimulationResponse, ErrorResponse>($"/cosmos/tx/v1beta1/simulate", simulationRequest, cancellationToken).ConfigureAwait(false);
-
-            if (simulationResponse.ResponseOK == null && simulationResponse.ResponseError == null) throw new InvalidOperationException("Couldn't simulate transaction");
-
-            if (simulationResponse.ResponseOK != null)
+            TransactionSimulationResponse? simulationResponse;
+            ErrorResponse? simulationErrorResponse;
+            try
             {
-                var simulationGasUsage = new TransactionGasUsage(simulationResponse.ResponseOK.GasInfo.GasWanted, simulationResponse.ResponseOK.GasInfo.GasUsed);
+                (simulationResponse, simulationErrorResponse) = await Post<TransactionRequest, TransactionSimulationResponse, ErrorResponse>($"/cosmos/tx/v1beta1/simulate", simulationRequest, cancellationToken).ConfigureAwait(false);
+            }
+            catch (InvalidResponseException ex)
+            {
+                uint errorCode;
+                if (ex.RawResponse.StartsWith("error code: "))
+                {
+                    var prefixLength = "error code: ".Length;
+                    uint.TryParse(ex.RawResponse.Substring(prefixLength, ex.RawResponse.Length - prefixLength), out errorCode);
+                }
+                else
+                {
+                    errorCode = uint.MaxValue;
+                }
+
+                return (errorCode, null);
+            }
+
+            if (simulationResponse == null && simulationErrorResponse == null) throw new InvalidOperationException("Couldn't simulate transaction");
+
+            if (simulationResponse != null)
+            {
+                var simulationGasUsage = new TransactionGasUsage(simulationResponse.GasInfo.GasWanted, simulationResponse.GasInfo.GasUsed);
                 var simulationResult = new TransactionSimulationResult(
-                    simulationResponse.ResponseOK.Result.Data,
-                    simulationResponse.ResponseOK.Result.Log,
-                    simulationResponse.ResponseOK.Result.Events.Select(te => new TransactionEvent(te.Type, te.Attributes.Select(tea => new TransactionEventAttribute(tea.Key, tea.Value)).ToArray())).ToArray()
+                    simulationResponse.Result.Data,
+                    simulationResponse.Result.Log,
+                    simulationResponse.Result.Events.Select(te => new TransactionEvent(te.Type, te.Attributes.Select(tea => new TransactionEventAttribute(tea.Key, tea.Value)).ToArray())).ToArray()
                 );
 
                 return (null, new TransactionSimulation(simulationGasUsage, simulationResult));
             }
-            else if (simulationResponse.ResponseError != null)
+            else if (simulationErrorResponse != null)
             {
-                return (simulationResponse.ResponseError.Code, null);
+                return (simulationErrorResponse.Code, null);
             }
             else throw new InvalidOperationException();
         }
@@ -98,7 +121,7 @@ namespace Terra.NET.API.Impl
         public async Task<(uint? ErrorCode, TransactionSimulation? Result)> SimulateTransaction(SignedTransaction transaction, CancellationToken cancellationToken = default)
         {
             var simulationRequest = new TransactionRequest(Convert.ToBase64String(transaction.Payload));
-            var simulationResponse = await this.Post<TransactionRequest, TransactionSimulationResponse, ErrorResponse>($"/cosmos/tx/v1beta1/simulate", simulationRequest, cancellationToken).ConfigureAwait(false);
+            var simulationResponse = await Post<TransactionRequest, TransactionSimulationResponse, ErrorResponse>($"/cosmos/tx/v1beta1/simulate", simulationRequest, cancellationToken).ConfigureAwait(false);
 
             if (simulationResponse.ResponseOK == null && simulationResponse.ResponseError == null) throw new InvalidOperationException("Couldn't simulate transaction");
 
@@ -123,7 +146,7 @@ namespace Terra.NET.API.Impl
         public async Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransaction(SignedTransaction transaction, CancellationToken cancellationToken = default)
         {
             var broadcastRequest = new TransactionRequest(Convert.ToBase64String(transaction.Payload), "BROADCAST_MODE_BLOCK");
-            var broadcastResponse = await this.Post<TransactionRequest, TransactionBroadcastResponse, ErrorResponse>($"/cosmos/tx/v1beta1/txs", broadcastRequest, cancellationToken).ConfigureAwait(false);
+            var broadcastResponse = await Post<TransactionRequest, TransactionBroadcastResponse, ErrorResponse>($"/cosmos/tx/v1beta1/txs", broadcastRequest, cancellationToken).ConfigureAwait(false);
 
             if (broadcastResponse.ResponseOK == null && broadcastResponse.ResponseError == null) throw new InvalidOperationException("Couldn't broadcast transaction");
 
@@ -136,14 +159,14 @@ namespace Terra.NET.API.Impl
                     result.Data,
                     result.Info,
                     result.Logs.Select(log => new TransactionLog(
-                        log.MessageIndex, 
-                        log.Log, 
+                        log.MessageIndex,
+                        log.Log,
                         log.Events.Select(te => new TransactionEvent(te.Type, te.Attributes.Select(tea => new TransactionEventAttribute(tea.Key, tea.Value)).ToArray())).ToArray())
                     ).ToArray(),
                     result.Events.Select(te => new TransactionEvent(te.Type, te.Attributes.Select(tea => new TransactionEventAttribute(tea.Key, tea.Value)).ToArray())).ToArray()
                 );
 
-                return (null, new TransactionBroadcast(gasUsage, broadcastResult));
+                return (null, new TransactionBroadcast(transaction, gasUsage, broadcastResult));
             }
             else if (broadcastResponse.ResponseError != null)
             {
@@ -156,7 +179,7 @@ namespace Terra.NET.API.Impl
         {
             var endpoint = $"v1/txs?account={accountAddress}";
 
-            var transactionsResponse = await this.Get<ListTransactionsResponse>(endpoint, cancellationToken);
+            var transactionsResponse = await Get<ListTransactionsResponse>(endpoint, cancellationToken);
 
             if (transactionsResponse == null) yield break;
 
@@ -167,11 +190,11 @@ namespace Terra.NET.API.Impl
                     yield return transaction.ToModel();
                 }
 
-                if (Options.ThrottlingEnumeratorsInMilliseconds.HasValue)
-                    await Task.Delay(Options.ThrottlingEnumeratorsInMilliseconds.Value, cancellationToken).ConfigureAwait(false);
+                if (this.Options.ThrottlingEnumeratorsInMilliseconds.HasValue)
+                    await Task.Delay(this.Options.ThrottlingEnumeratorsInMilliseconds.Value, cancellationToken).ConfigureAwait(false);
 
                 if (transactionsResponse.Limit >= transactionsResponse.Transactions.Length)
-                    transactionsResponse = await this.Get<ListTransactionsResponse>($"{endpoint}&offset={transactionsResponse.Transactions.Min(tx => tx.Id)}", cancellationToken);
+                    transactionsResponse = await Get<ListTransactionsResponse>($"{endpoint}&offset={transactionsResponse.Transactions.Min(tx => tx.Id)}", cancellationToken);
                 else break;
             }
         }
@@ -182,7 +205,7 @@ namespace Terra.NET.API.Impl
             var transactionsEndpoint = $"v1/txs?block={0}";
             var transactionsOffsetEndpoint = $"v1/txs?block={0}&offset={1}";
 
-            var latestBlockResponse = await this.Get<GetLatestBlockResponse>(blocksLatestEndpoint, cancellationToken);
+            var latestBlockResponse = await Get<GetLatestBlockResponse>(blocksLatestEndpoint, cancellationToken);
             if (latestBlockResponse == null) throw new InvalidOperationException();
 
             long latestBlockHeight = latestBlockResponse.Block.Header.Height;
@@ -190,7 +213,7 @@ namespace Terra.NET.API.Impl
 
             long currentHeight = fromHeight ?? base.Options.StartingBlockHeightForTransactionSearch;
 
-            var transactionsResponse = await this.Get<ListTransactionsResponse>(string.Format(transactionsEndpoint, currentHeight));
+            var transactionsResponse = await Get<ListTransactionsResponse>(string.Format(transactionsEndpoint, currentHeight));
 
             while (transactionsResponse != null && transactionsResponse.Transactions?.Length > 0)
             {
@@ -199,17 +222,17 @@ namespace Terra.NET.API.Impl
                     yield return transaction.ToModel();
                 }
 
-                if (Options.ThrottlingEnumeratorsInMilliseconds.HasValue)
-                    await Task.Delay(Options.ThrottlingEnumeratorsInMilliseconds.Value, cancellationToken).ConfigureAwait(false);
+                if (this.Options.ThrottlingEnumeratorsInMilliseconds.HasValue)
+                    await Task.Delay(this.Options.ThrottlingEnumeratorsInMilliseconds.Value, cancellationToken).ConfigureAwait(false);
 
                 if (transactionsResponse.Limit >= transactionsResponse.Transactions.Length)
                 {
-                    transactionsResponse = await this.Get<ListTransactionsResponse>(string.Format(transactionsOffsetEndpoint, currentHeight, transactionsResponse.Transactions.Min(tx => tx.Id)), cancellationToken);
+                    transactionsResponse = await Get<ListTransactionsResponse>(string.Format(transactionsOffsetEndpoint, currentHeight, transactionsResponse.Transactions.Min(tx => tx.Id)), cancellationToken);
                 }
                 else
                 {
                     currentHeight++;
-                    transactionsResponse = await this.Get<ListTransactionsResponse>(string.Format(transactionsEndpoint, currentHeight));
+                    transactionsResponse = await Get<ListTransactionsResponse>(string.Format(transactionsEndpoint, currentHeight));
                 }
             }
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Text;
 using System.Text.Json;
+using Terra.NET.Exceptions;
 
 namespace Terra.NET.API
 {
@@ -11,11 +12,11 @@ namespace Terra.NET.API
 
         public BaseApiSection(TerraApiOptions options, HttpClient httpClient, ILogger<BaseApiSection> logger)
         {
-            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            _logger = logger;
+            this._httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            this._logger = logger;
 
-            Options = options;
-            JsonSerializerOptions = options.JsonSerializerOptions;
+            this.Options = options;
+            this.JsonSerializerOptions = options.JsonSerializerOptions;
         }
 
         protected JsonSerializerOptions JsonSerializerOptions { get; init; }
@@ -24,16 +25,19 @@ namespace Terra.NET.API
 
         protected async Task<T?> Get<T>(string endpoint, CancellationToken cancellationToken = default)
         {
-            var httpResponse = await _httpClient.GetAsync(endpoint, cancellationToken);
+            var httpResponse = await this._httpClient.GetAsync(endpoint, cancellationToken);
 
-            if (httpResponse.StatusCode == System.Net.HttpStatusCode.NotFound)
+            if (httpResponse.IsSuccessStatusCode == false)
+            {
+                _logger.LogError($"GET {endpoint}: {httpResponse.StatusCode} - {httpResponse.ReasonPhrase}");
                 return default;
-
+            }
+            
             httpResponse.EnsureSuccessStatusCode();
 
 #if DEBUG_API
             var stringResponse = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-            _logger.LogInformation($"Get {endpoint} received {stringResponse}");
+            this._logger.LogInformation($"Get {endpoint} received {stringResponse}");
 #endif
 
             var streamResponse = await httpResponse.Content.ReadAsStreamAsync(cancellationToken);
@@ -46,15 +50,15 @@ namespace Terra.NET.API
             using var httpContent = new StringContent(serializedRequest, Encoding.UTF8, "application/json");
 
 #if DEBUG_API
-            _logger.LogInformation($"Post {endpoint} sending {serializedRequest}");
+            this._logger.LogInformation($"Post {endpoint} sending {serializedRequest}");
 #endif
 
-            using var httpResponse = await _httpClient.PostAsync(endpoint, httpContent).ConfigureAwait(false);
+            using var httpResponse = await this._httpClient.PostAsync(endpoint, httpContent).ConfigureAwait(false);
             httpResponse.EnsureSuccessStatusCode();
 
 #if DEBUG_API
             var stringResponse = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-            _logger.LogInformation($"Get {endpoint} received {stringResponse}");
+            this._logger.LogInformation($"Get {endpoint} received {stringResponse}");
 #endif
 
             var streamResponse = await httpResponse.Content.ReadAsStreamAsync(cancellationToken);
@@ -67,14 +71,14 @@ namespace Terra.NET.API
             using var httpContent = new StringContent(serializedRequest, Encoding.UTF8, "application/json");
 
 #if DEBUG_API
-            _logger.LogInformation($"Post {endpoint} sending {serializedRequest}");
+            this._logger.LogInformation($"Post {endpoint} sending {serializedRequest}");
 #endif
 
-            using var httpResponse = await _httpClient.PostAsync(endpoint, httpContent).ConfigureAwait(false);
+            using var httpResponse = await this._httpClient.PostAsync(endpoint, httpContent).ConfigureAwait(false);
 
 #if DEBUG_API
             var stringResponse = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-            _logger.LogInformation($"Get {endpoint} received {stringResponse}");
+            this._logger.LogInformation($"Get {endpoint} received {stringResponse}");
 #endif
 
             if (httpResponse.IsSuccessStatusCode)
@@ -84,8 +88,19 @@ namespace Terra.NET.API
             }
             else
             {
-                var streamResponse = await httpResponse.Content.ReadAsStreamAsync(cancellationToken);
-                return (ResponseOK: default, ResponseError: await JsonSerializer.DeserializeAsync<TErr>(streamResponse, options: this.JsonSerializerOptions, cancellationToken: cancellationToken));
+                try
+                {
+                    var streamResponse = await httpResponse.Content.ReadAsStreamAsync(cancellationToken);
+                    return (ResponseOK: default, ResponseError: await JsonSerializer.DeserializeAsync<TErr>(streamResponse, options: this.JsonSerializerOptions, cancellationToken: cancellationToken));
+                }
+                catch (JsonException ex)
+                {
+#if DEBUG_API == false
+                    var stringResponse = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
+#endif
+                    _logger.LogError($"Invalid json detected: {stringResponse}");
+                    throw new InvalidResponseException(stringResponse);
+                }
             }
         }
     }

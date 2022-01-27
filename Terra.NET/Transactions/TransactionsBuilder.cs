@@ -3,7 +3,7 @@ using Cosmos.SDK.Protos.Tx.Signing;
 using Microsoft.Extensions.Logging;
 using Terra.NET.API.Serialization.Protos.Mappers;
 
-namespace Terra.NET.API.Internal
+namespace Terra.NET.Transactions
 {
     internal class TransactionsBuilder
     {
@@ -31,7 +31,7 @@ namespace Terra.NET.API.Internal
                 }
             };
 
-            transaction.Body.Messages.AddRange(messages.Select(msg => msg.ToJson().PackAny(_options.JsonSerializerOptions)));
+            transaction.Body.Messages.AddRange(messages.Select(msg => msg.ToJson().PackAny(this._options.JsonSerializerOptions)));
 
             return transaction;
         }

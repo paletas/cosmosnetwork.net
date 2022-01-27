@@ -5,14 +5,14 @@ namespace Terra.NET
 {
     public class PublicKey
     {
-        private byte[] _key;
+        private readonly byte[] _key;
 
         public PublicKey(byte[] key)
         {
             this._key = key;
         }
 
-        public byte[] RawKey => _key;
+        public byte[] RawKey => this._key;
 
         public byte[] RawAddress
         {
