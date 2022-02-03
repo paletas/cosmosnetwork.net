@@ -134,13 +134,13 @@ namespace Terra.NET
             return this._transactionsApi.SimulateTransaction(transaction, cancellationToken);
         }
 
-        public async Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransaction(IEnumerable<Message> messages, BroadcastTransactionOptions? broadcastOptions = null, CancellationToken cancellationToken = default)
+        public async Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransactionBlock(IEnumerable<Message> messages, BroadcastTransactionOptions? broadcastOptions = null, CancellationToken cancellationToken = default)
         {
             var signedTransaction = await CreateSignedTransaction(messages, new CreateTransactionOptions(broadcastOptions?.Memo, broadcastOptions?.TimeoutHeight, broadcastOptions?.Fees, Gas: broadcastOptions?.Gas, GasPrices: null, broadcastOptions?.FeesDenoms), cancellationToken).ConfigureAwait(false);
 
             try
             {
-                return await this._transactionsApi.BroadcastTransaction(signedTransaction, cancellationToken).ConfigureAwait(false);
+                return await this._transactionsApi.BroadcastTransactionBlock(signedTransaction, cancellationToken).ConfigureAwait(false);
             }
             finally
             {
@@ -148,11 +148,37 @@ namespace Terra.NET
             }
         }
 
-        public Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransaction(SignedTransaction transaction, CancellationToken cancellationToken = default)
+        public Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransactionBlock(SignedTransaction transaction, CancellationToken cancellationToken = default)
         {
             try
             {
-                return this._transactionsApi.BroadcastTransaction(transaction, cancellationToken);
+                return this._transactionsApi.BroadcastTransactionBlock(transaction, cancellationToken);
+            }
+            finally
+            {
+                this.Sequence++;
+            }
+        }
+
+        public async Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransactionAsyncAndWait(IEnumerable<Message> messages, BroadcastTransactionOptions? broadcastOptions = null, CancellationToken cancellationToken = default)
+        {
+            var signedTransaction = await CreateSignedTransaction(messages, new CreateTransactionOptions(broadcastOptions?.Memo, broadcastOptions?.TimeoutHeight, broadcastOptions?.Fees, Gas: broadcastOptions?.Gas, GasPrices: null, broadcastOptions?.FeesDenoms), cancellationToken).ConfigureAwait(false);
+
+            try
+            {
+                return await this._transactionsApi.BroadcastTransactionAsyncAndWait(signedTransaction, cancellationToken).ConfigureAwait(false);
+            }
+            finally
+            {
+                this.Sequence++;
+            }
+        }
+
+        public Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransactionAsyncAndWait(SignedTransaction transaction, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                return this._transactionsApi.BroadcastTransactionAsyncAndWait(transaction, cancellationToken);
             }
             finally
             {

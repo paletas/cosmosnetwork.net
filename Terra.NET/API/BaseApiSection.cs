@@ -29,15 +29,15 @@ namespace Terra.NET.API
 
             if (httpResponse.IsSuccessStatusCode == false)
             {
-                _logger.LogError($"GET {endpoint}: {httpResponse.StatusCode} - {httpResponse.ReasonPhrase}");
+                this._logger.LogError($"GET {endpoint}: {httpResponse.StatusCode} - {httpResponse.ReasonPhrase}");
                 return default;
             }
-            
+
             httpResponse.EnsureSuccessStatusCode();
 
 #if DEBUG_API
             var stringResponse = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-            this._logger.LogInformation($"Get {endpoint} received {stringResponse}");
+            this._logger.LogTrace($"Get {endpoint} received {stringResponse}");
 #endif
 
             var streamResponse = await httpResponse.Content.ReadAsStreamAsync(cancellationToken);
@@ -50,7 +50,7 @@ namespace Terra.NET.API
             using var httpContent = new StringContent(serializedRequest, Encoding.UTF8, "application/json");
 
 #if DEBUG_API
-            this._logger.LogInformation($"Post {endpoint} sending {serializedRequest}");
+            this._logger.LogTrace($"Post {endpoint} sending {serializedRequest}");
 #endif
 
             using var httpResponse = await this._httpClient.PostAsync(endpoint, httpContent).ConfigureAwait(false);
@@ -58,7 +58,7 @@ namespace Terra.NET.API
 
 #if DEBUG_API
             var stringResponse = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-            this._logger.LogInformation($"Get {endpoint} received {stringResponse}");
+            this._logger.LogTrace($"Post {endpoint} received {stringResponse}");
 #endif
 
             var streamResponse = await httpResponse.Content.ReadAsStreamAsync(cancellationToken);
@@ -71,14 +71,14 @@ namespace Terra.NET.API
             using var httpContent = new StringContent(serializedRequest, Encoding.UTF8, "application/json");
 
 #if DEBUG_API
-            this._logger.LogInformation($"Post {endpoint} sending {serializedRequest}");
+            this._logger.LogTrace($"Post {endpoint} sending {serializedRequest}");
 #endif
 
             using var httpResponse = await this._httpClient.PostAsync(endpoint, httpContent).ConfigureAwait(false);
 
 #if DEBUG_API
             var stringResponse = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-            this._logger.LogInformation($"Get {endpoint} received {stringResponse}");
+            this._logger.LogTrace($"Post {endpoint} received {stringResponse}");
 #endif
 
             if (httpResponse.IsSuccessStatusCode)
@@ -93,12 +93,12 @@ namespace Terra.NET.API
                     var streamResponse = await httpResponse.Content.ReadAsStreamAsync(cancellationToken);
                     return (ResponseOK: default, ResponseError: await JsonSerializer.DeserializeAsync<TErr>(streamResponse, options: this.JsonSerializerOptions, cancellationToken: cancellationToken));
                 }
-                catch (JsonException ex)
+                catch (JsonException)
                 {
 #if DEBUG_API == false
                     var stringResponse = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
 #endif
-                    _logger.LogError($"Invalid json detected: {stringResponse}");
+                    this._logger.LogError($"Invalid json detected: {stringResponse}");
                     throw new InvalidResponseException(stringResponse);
                 }
             }

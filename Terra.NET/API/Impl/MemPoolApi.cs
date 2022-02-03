@@ -12,7 +12,7 @@ namespace Terra.NET.API.Impl
 
         public async IAsyncEnumerable<MemPoolTransaction> GetPendingTransactions([EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            var transactions = await this.Get<MemPoolTransactionsResponse>("v1/mempool", cancellationToken).ConfigureAwait(false);
+            var transactions = await Get<MemPoolTransactionsResponse>("/v1/mempool", cancellationToken).ConfigureAwait(false);
             if (transactions == null) throw new InvalidOperationException();
 
             foreach (var transaction in transactions.Transactions)

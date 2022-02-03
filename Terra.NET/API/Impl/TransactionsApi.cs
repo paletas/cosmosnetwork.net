@@ -143,7 +143,7 @@ namespace Terra.NET.API.Impl
             else throw new InvalidOperationException();
         }
 
-        public async Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransaction(SignedTransaction transaction, CancellationToken cancellationToken = default)
+        public async Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransactionBlock(SignedTransaction transaction, CancellationToken cancellationToken = default)
         {
             var broadcastRequest = new TransactionRequest(Convert.ToBase64String(transaction.Payload), "BROADCAST_MODE_BLOCK");
             var broadcastResponse = await Post<TransactionRequest, TransactionBroadcastResponse, ErrorResponse>($"/cosmos/tx/v1beta1/txs", broadcastRequest, cancellationToken).ConfigureAwait(false);
@@ -155,7 +155,7 @@ namespace Terra.NET.API.Impl
                 var result = broadcastResponse.ResponseOK.Result;
 
                 var gasUsage = new TransactionGasUsage(result.GasWanted, result.GasUsed);
-                var broadcastResult = new TransactionBroadcastResult(
+                var broadcastResult = new TransactionResult(
                     result.Data,
                     result.Info,
                     result.Logs.Select(log => new TransactionLog(
@@ -167,6 +167,57 @@ namespace Terra.NET.API.Impl
                 );
 
                 return (null, new TransactionBroadcast(transaction, gasUsage, broadcastResult));
+            }
+            else if (broadcastResponse.ResponseError != null)
+            {
+                return (broadcastResponse.ResponseError.Code, null);
+            }
+            else throw new InvalidOperationException();
+        }
+        
+        public async Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransactionAsyncAndWait(SignedTransaction transaction, CancellationToken cancellationToken = default)
+        {
+            var broadcastRequest = new TransactionRequest(Convert.ToBase64String(transaction.Payload), "BROADCAST_MODE_ASYNC");
+            var broadcastResponse = await Post<TransactionRequest, TransactionBroadcastResponse, ErrorResponse>($"/cosmos/tx/v1beta1/txs", broadcastRequest, cancellationToken).ConfigureAwait(false);
+
+            if (broadcastResponse.ResponseOK == null && broadcastResponse.ResponseError == null) throw new InvalidOperationException("Couldn't broadcast transaction");
+
+            if (broadcastResponse.ResponseOK != null)
+            {
+                var result = broadcastResponse.ResponseOK.Result;
+                var transactionHash = result.TransactionHash;
+
+                var tx = await this.GetTransaction(transactionHash, cancellationToken);
+                while (tx == null)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                    tx = await this.GetTransaction(transactionHash, cancellationToken);
+                }
+
+                var gasUsage = new TransactionGasUsage(tx.GasWanted, tx.GasUsed);
+                var txResult = new TransactionResult(tx.RawLog, string.Empty, tx.Logs, tx.Logs.SelectMany(l => l.Events).ToArray());
+                return (null, new TransactionBroadcast(transaction, gasUsage, txResult));
+            }
+            else if (broadcastResponse.ResponseError != null)
+            {
+                return (broadcastResponse.ResponseError.Code, null);
+            }
+            else throw new InvalidOperationException();
+        }
+
+        public async Task<(uint? ErrorCode, string? TransactionHash)> BroadcastTransactionAsync(SignedTransaction transaction, CancellationToken cancellationToken = default)
+        {
+            var broadcastRequest = new TransactionRequest(Convert.ToBase64String(transaction.Payload), "BROADCAST_MODE_ASYNC");
+            var broadcastResponse = await Post<TransactionRequest, TransactionBroadcastResponse, ErrorResponse>($"/cosmos/tx/v1beta1/txs", broadcastRequest, cancellationToken).ConfigureAwait(false);
+
+            if (broadcastResponse.ResponseOK == null && broadcastResponse.ResponseError == null) throw new InvalidOperationException("Couldn't broadcast transaction");
+
+            if (broadcastResponse.ResponseOK != null)
+            {
+                var result = broadcastResponse.ResponseOK.Result;
+                var transactionHash = result.TransactionHash;
+
+                return (null, transactionHash);
             }
             else if (broadcastResponse.ResponseError != null)
             {
@@ -194,16 +245,25 @@ namespace Terra.NET.API.Impl
                     await Task.Delay(this.Options.ThrottlingEnumeratorsInMilliseconds.Value, cancellationToken).ConfigureAwait(false);
 
                 if (transactionsResponse.Limit >= transactionsResponse.Transactions.Length)
-                    transactionsResponse = await Get<ListTransactionsResponse>($"{endpoint}&offset={transactionsResponse.Transactions.Min(tx => tx.Id)}", cancellationToken);
+                    transactionsResponse = await Get<ListTransactionsResponse>($"{endpoint}&offset={transactionsResponse.Next}", cancellationToken);
                 else break;
             }
         }
 
+        public async Task<BlockTransaction?> GetTransaction(string transactionHash, CancellationToken cancellationToken = default)
+        {
+            var endpoint = $"/cosmos/tx/v1beta1/txs/{transactionHash}";
+
+            var transactionResponse = await Get<Serialization.Json.BlockTransaction>(endpoint, cancellationToken);
+
+            return transactionResponse?.ToModel();
+        }
+
         public async IAsyncEnumerable<BlockTransaction> GetTransactions(long? fromHeight = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            var blocksLatestEndpoint = $"/blocks/latest";
-            var transactionsEndpoint = $"v1/txs?block={0}";
-            var transactionsOffsetEndpoint = $"v1/txs?block={0}&offset={1}";
+            string blocksLatestEndpoint = $"/blocks/latest";
+            string transactionsEndpoint = $"/cosmos/tx/v1beta1/txs?events=tx.height%3D{0}";
+            string transactionsOffsetEndpoint = $"/cosmos/tx/v1beta1/txs?events=tx.height%3D{0}&pagination.offset={1}";
 
             var latestBlockResponse = await Get<GetLatestBlockResponse>(blocksLatestEndpoint, cancellationToken);
             if (latestBlockResponse == null) throw new InvalidOperationException();
@@ -213,7 +273,7 @@ namespace Terra.NET.API.Impl
 
             long currentHeight = fromHeight ?? base.Options.StartingBlockHeightForTransactionSearch;
 
-            var transactionsResponse = await Get<ListTransactionsResponse>(string.Format(transactionsEndpoint, currentHeight));
+            var transactionsResponse = await Get<ListTransactionsResponse>(string.Format(transactionsEndpoint, currentHeight), cancellationToken);
 
             while (transactionsResponse != null && transactionsResponse.Transactions?.Length > 0)
             {
@@ -227,12 +287,12 @@ namespace Terra.NET.API.Impl
 
                 if (transactionsResponse.Limit >= transactionsResponse.Transactions.Length)
                 {
-                    transactionsResponse = await Get<ListTransactionsResponse>(string.Format(transactionsOffsetEndpoint, currentHeight, transactionsResponse.Transactions.Min(tx => tx.Id)), cancellationToken);
+                    transactionsResponse = await Get<ListTransactionsResponse>(string.Format(transactionsOffsetEndpoint, currentHeight, transactionsResponse.Next), cancellationToken);
                 }
                 else
                 {
                     currentHeight++;
-                    transactionsResponse = await Get<ListTransactionsResponse>(string.Format(transactionsEndpoint, currentHeight));
+                    transactionsResponse = await Get<ListTransactionsResponse>(string.Format(transactionsEndpoint, currentHeight), cancellationToken);
                 }
             }
         }

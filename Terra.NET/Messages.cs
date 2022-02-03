@@ -13,11 +13,11 @@
         }
     }
 
-    public record MessageExecuteContract<T>(Coin[] Coins, TerraAddress Sender, TerraAddress Contract, T ExecuteMessage) : Message()
+    public record MessageExecuteContract(Coin[] Coins, TerraAddress Sender, TerraAddress Contract, object ExecuteMessage) : Message()
     {
         internal override API.Serialization.Json.Message ToJson()
         {
-            return new API.Serialization.Json.MessageExecuteContract<T>(
+            return new API.Serialization.Json.MessageExecuteContract(
                 this.Coins.Select(coin => new API.Serialization.Json.DenomAmount(coin.Denom, coin.Amount)).ToArray(),
                 this.Sender.Address,
                 this.Contract.Address,

@@ -26,8 +26,10 @@ namespace Terra.NET.API.Serialization.Json
     };
 
     internal record MessageSend(string FromAddress, string ToAddress, DenomAmount[] Coins)
-        : Message("/cosmos.bank.v1beta1.MsgSend")
+        : Message(MESSAGETYPE_DESCRIPTOR)
     {
+        public const string MESSAGETYPE_DESCRIPTOR = "/cosmos.bank.v1beta1.MsgSend";
+
         internal override IMessage ToProto(JsonSerializerOptions? serializerOptions = null)
         {
             var send = new MsgSend
@@ -45,9 +47,11 @@ namespace Terra.NET.API.Serialization.Json
         }
     }
 
-    internal record MessageExecuteContract<T>(DenomAmount[] Coins, string Sender, string Contract, [property: JsonPropertyName("execute_msg")] T ExecuteMessage)
-        : Message("/terra.wasm.v1beta1.MsgExecuteContract")
+    internal record MessageExecuteContract(DenomAmount[] Coins, string Sender, string Contract, [property: JsonPropertyName("execute_msg")] object ExecuteMessage)
+        : Message(MESSAGETYPE_DESCRIPTOR)
     {
+        public const string MESSAGETYPE_DESCRIPTOR = "/terra.wasm.v1beta1.MsgExecuteContract";
+
         internal override IMessage ToProto(JsonSerializerOptions? serializerOptions = null)
         {
             string executeMessageJson = JsonSerializer.Serialize(this.ExecuteMessage, serializerOptions);
@@ -64,13 +68,15 @@ namespace Terra.NET.API.Serialization.Json
 
         internal override NET.Message ToModel()
         {
-            return new NET.MessageExecuteContract<T>(this.Coins.Select(c => c.ToModel()).ToArray(), this.Sender, this.Contract, this.ExecuteMessage);
+            return new NET.MessageExecuteContract(this.Coins.Select(c => c.ToModel()).ToArray(), this.Sender, this.Contract, this.ExecuteMessage);
         }
     }
 
     internal record MessageSwap(string Trader, string AskDenom, DenomAmount OfferCoin)
-        : Message("/terra.market.v1beta1.MsgSwap")
+        : Message(MESSAGETYPE_DESCRIPTOR)
     {
+        public const string MESSAGETYPE_DESCRIPTOR = "/terra.market.v1beta1.MsgSwap";
+
         internal override NET.Message ToModel()
         {
             return new NET.MessageSwap(this.Trader, this.AskDenom, this.OfferCoin.ToModel());
