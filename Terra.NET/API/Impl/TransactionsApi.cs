@@ -12,18 +12,13 @@ namespace Terra.NET.API.Impl
     {
         private readonly TransactionsBuilder _transactionBuilder;
         private readonly IBlockchainApi _blockchainApi;
+        private readonly IBlocksApi _blocksApi;
 
-        public TransactionsApi(TerraApiOptions options, HttpClient httpClient, ILogger<TransactionsApi> logger, TransactionsBuilder transactionBuilder, IBlockchainApi blockchainApi) : base(options, httpClient, logger)
+        public TransactionsApi(TerraApiOptions options, HttpClient httpClient, ILogger<TransactionsApi> logger, TransactionsBuilder transactionBuilder, IBlockchainApi blockchainApi, IBlocksApi blocksApi) : base(options, httpClient, logger)
         {
             this._transactionBuilder = transactionBuilder;
             this._blockchainApi = blockchainApi;
-        }
-
-        public async Task<Transaction> CreateTransaction(IEnumerable<Message> messages, SignerOptions[] signers, CreateTransactionOptions transactionOptions, CancellationToken cancellationToken = default)
-        {
-            var fees = transactionOptions.Fees ?? await EstimateFee(messages, signers, new EstimateFeesOptions(Memo: transactionOptions.Memo, FeesDenoms: transactionOptions.FeesDenoms), cancellationToken).ConfigureAwait(false);
-
-            return new StandardTransaction(messages.ToArray(), transactionOptions.Memo, transactionOptions.TimeoutHeight, fees, signers);
+            this._blocksApi = blocksApi;
         }
 
         public async Task<Fee> EstimateFee(IEnumerable<Message> messages, SignerOptions[] signers, EstimateFeesOptions? estimateOptions = null, CancellationToken cancellationToken = default)
@@ -50,7 +45,7 @@ namespace Terra.NET.API.Impl
                 gas = (ulong)Math.Ceiling(gas * gasAdjustment);
             }
 
-            return new Fee(gas, gasPrices.Where(gp => feeDenoms.Contains(gp.Denom)).Select(gp => new Coin(gp.Denom, (ulong)Math.Ceiling(gp.Amount * gas), true)).ToArray());
+            return new Fee(gas, gasPrices.Where(gp => feeDenoms.Contains(gp.Denom)).Select(gp => new NativeCoin(gp.Denom, (ulong)Math.Ceiling(gp.Amount * gas))).ToArray());
         }
 
         public async Task<IEnumerable<Coin>> ComputeTax(IEnumerable<Message> messages, SignerOptions[] signers, CancellationToken cancellationToken = default)
@@ -160,7 +155,7 @@ namespace Terra.NET.API.Impl
                     result.Info,
                     result.Logs.Select(log => new TransactionLog(
                         log.MessageIndex,
-                        log.Log,
+                        log.Log.ToString(),
                         log.Events.Select(te => new TransactionEvent(te.Type, te.Attributes.Select(tea => new TransactionEventAttribute(tea.Key, tea.Value)).ToArray())).ToArray())
                     ).ToArray(),
                     result.Events.Select(te => new TransactionEvent(te.Type, te.Attributes.Select(tea => new TransactionEventAttribute(tea.Key, tea.Value)).ToArray())).ToArray()
@@ -174,7 +169,7 @@ namespace Terra.NET.API.Impl
             }
             else throw new InvalidOperationException();
         }
-        
+
         public async Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransactionAsyncAndWait(SignedTransaction transaction, CancellationToken cancellationToken = default)
         {
             var broadcastRequest = new TransactionRequest(Convert.ToBase64String(transaction.Payload), "BROADCAST_MODE_ASYNC");
@@ -187,11 +182,11 @@ namespace Terra.NET.API.Impl
                 var result = broadcastResponse.ResponseOK.Result;
                 var transactionHash = result.TransactionHash;
 
-                var tx = await this.GetTransaction(transactionHash, cancellationToken);
+                var tx = await GetTransaction(transactionHash, cancellationToken);
                 while (tx == null)
                 {
                     await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
-                    tx = await this.GetTransaction(transactionHash, cancellationToken);
+                    tx = await GetTransaction(transactionHash, cancellationToken);
                 }
 
                 var gasUsage = new TransactionGasUsage(tx.GasWanted, tx.GasUsed);
@@ -226,7 +221,7 @@ namespace Terra.NET.API.Impl
             else throw new InvalidOperationException();
         }
 
-        public async IAsyncEnumerable<BlockTransaction> GetAccountTransactions(TerraAddress accountAddress, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        public async IAsyncEnumerable<BlockTransaction> GetTransactions(TerraAddress accountAddress, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             var endpoint = $"v1/txs?account={accountAddress}";
 
@@ -259,21 +254,12 @@ namespace Terra.NET.API.Impl
             return transactionResponse?.ToModel();
         }
 
-        public async IAsyncEnumerable<BlockTransaction> GetTransactions(long? fromHeight = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        public async IAsyncEnumerable<BlockTransaction> GetTransactions(ulong height, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            string blocksLatestEndpoint = $"/blocks/latest";
-            string transactionsEndpoint = $"/cosmos/tx/v1beta1/txs?events=tx.height%3D{0}";
-            string transactionsOffsetEndpoint = $"/cosmos/tx/v1beta1/txs?events=tx.height%3D{0}&pagination.offset={1}";
+            const string transactionsEndpoint = "/v1/txs?block={0}";
+            const string transactionsOffsetEndpoint = "/v1/txs?block={0}&offset={1}";
 
-            var latestBlockResponse = await Get<GetLatestBlockResponse>(blocksLatestEndpoint, cancellationToken);
-            if (latestBlockResponse == null) throw new InvalidOperationException();
-
-            long latestBlockHeight = latestBlockResponse.Block.Header.Height;
-            if (fromHeight != null && fromHeight > latestBlockHeight) throw new ArgumentOutOfRangeException(nameof(fromHeight));
-
-            long currentHeight = fromHeight ?? base.Options.StartingBlockHeightForTransactionSearch;
-
-            var transactionsResponse = await Get<ListTransactionsResponse>(string.Format(transactionsEndpoint, currentHeight), cancellationToken);
+            var transactionsResponse = await Get<ListTransactionsResponse>(string.Format(transactionsEndpoint, height), cancellationToken);
 
             while (transactionsResponse != null && transactionsResponse.Transactions?.Length > 0)
             {
@@ -285,14 +271,13 @@ namespace Terra.NET.API.Impl
                 if (this.Options.ThrottlingEnumeratorsInMilliseconds.HasValue)
                     await Task.Delay(this.Options.ThrottlingEnumeratorsInMilliseconds.Value, cancellationToken).ConfigureAwait(false);
 
-                if (transactionsResponse.Limit >= transactionsResponse.Transactions.Length)
+                if (transactionsResponse.Next is null)
                 {
-                    transactionsResponse = await Get<ListTransactionsResponse>(string.Format(transactionsOffsetEndpoint, currentHeight, transactionsResponse.Next), cancellationToken);
+                    break;
                 }
                 else
                 {
-                    currentHeight++;
-                    transactionsResponse = await Get<ListTransactionsResponse>(string.Format(transactionsEndpoint, currentHeight), cancellationToken);
+                    transactionsResponse = await Get<ListTransactionsResponse>(string.Format(transactionsOffsetEndpoint, height, transactionsResponse.Next), cancellationToken);
                 }
             }
         }

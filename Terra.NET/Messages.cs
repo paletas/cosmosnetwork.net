@@ -1,36 +1,51 @@
 ﻿namespace Terra.NET
 {
-    public abstract record Message()
+    public abstract record Message(MessageTypeEnum Type)
     {
         internal abstract API.Serialization.Json.Message ToJson();
     };
 
-    public record MessageSend(TerraAddress FromAddress, TerraAddress ToAddress, Coin[] Coins) : Message()
+    public enum MessageTypeEnum
     {
-        internal override API.Serialization.Json.Message ToJson()
-        {
-            return new API.Serialization.Json.MessageSend(this.FromAddress.Address, this.ToAddress.Address, this.Coins.Select(coin => new API.Serialization.Json.DenomAmount(coin.Denom, coin.Amount)).ToArray());
-        }
-    }
+        BankSend,
+        BankMultiSend,
 
-    public record MessageExecuteContract(Coin[] Coins, TerraAddress Sender, TerraAddress Contract, object ExecuteMessage) : Message()
-    {
-        internal override API.Serialization.Json.Message ToJson()
-        {
-            return new API.Serialization.Json.MessageExecuteContract(
-                this.Coins.Select(coin => new API.Serialization.Json.DenomAmount(coin.Denom, coin.Amount)).ToArray(),
-                this.Sender.Address,
-                this.Contract.Address,
-                this.ExecuteMessage
-            );
-        }
-    }
+        MarketSwap,
+        MarketSwapSend,
 
-    public record MessageSwap(TerraAddress Trader, string AskDenom, Coin OfferCoin) : Message()
-    {
-        internal override API.Serialization.Json.Message ToJson()
-        {
-            return new API.Serialization.Json.MessageSwap(this.Trader.Address, this.AskDenom, new API.Serialization.Json.DenomAmount(this.OfferCoin.Denom, this.OfferCoin.Amount));
-        }
+        OracleExchangeRateVote,
+        OracleExchangeRatePrevote,
+        OracleDelegateFeedConsent,
+
+        StakingDelegate,
+        StakingUndelegate,
+        StakingCreateValidator,
+        StakingBeginRedelegate,
+        StakingSetWithdrawAddress,
+        StakingEditValidator,
+
+        DistributionFundCommunityPool,
+        DistributionWithdrawRewards,
+        DistributionWithdrawCommission,
+
+        AuthzExecute,
+        AuthzGrant,
+        AuthzRevoke,
+
+        FeeGrantAllowance,
+        FeeGrantRevokeAllowance,
+
+        WasmStoreCode,
+        WasmMigrateCode,
+        WasmInstantiateContract,
+        WasmMigrateContract,
+        WasmExecuteContract,
+        WasmClearContractAdmin,
+        WasmUpdateContractAdmin,
+
+        GovDeposit,
+        GovSubmitProposal,
+        GovVote,
+        GovWeightedVote
     }
 }

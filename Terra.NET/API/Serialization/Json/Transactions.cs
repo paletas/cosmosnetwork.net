@@ -1,30 +1,23 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Terra.NET.API.Serialization.Json.Converters;
 
 namespace Terra.NET.API.Serialization.Json
 {
-    internal record BlockTransaction([property: JsonPropertyName("tx")] Transaction Transaction, [property: JsonPropertyName("tx_response")] TransactionResponse Response)
+    internal record BlockTransaction([property: JsonPropertyName("tx")] TransactionPack Transaction, ulong Height, [property: JsonPropertyName("txhash")] string TransactionHash, string RawLog, TransactionLog[] Logs, ulong GasWanted, ulong GasUsed, TransactionEvent[] Events, [property: JsonPropertyName("timestamp")] DateTime Timestamp)
     {
         internal Terra.NET.BlockTransaction ToModel()
         {
             return new Terra.NET.BlockTransaction(
                 this.Transaction.ToModel(),
-                this.Response.Height,
-                this.Response.TransactionHash,
-                this.Response.GasUsed,
-                this.Response.GasWanted,
-                this.Response.Timestamp,
-                this.Response.RawLog,
-                this.Response.Logs.Select(log => log.ToModel()).ToArray()
+                this.Height,
+                this.TransactionHash,
+                this.GasUsed,
+                this.GasWanted,
+                this.Timestamp,
+                this.RawLog,
+                this.Logs.Select(log => log.ToModel()).ToArray()
             );
-        }
-    };
-
-    internal record Transaction(TransactionBody Body, AuthInfo AuthInfo, string[] Signatures)
-    {
-        internal Terra.NET.Transaction ToModel()
-        {
-            return new Terra.NET.Transaction(Terra.NET.TransactionTypeEnum.Standard, this.Body.Memo, this.Body.TimeoutHeight, this.AuthInfo.Fee.ToModel());
         }
     };
 
@@ -51,7 +44,7 @@ namespace Terra.NET.API.Serialization.Json
                 this.Value.Memo,
                 null,
                 this.Value.Fees.ToModel(),
-                this.Value.Signatures
+                this.Value.Signatures.Select(sig => sig.ToModel()).ToArray()
             );
         }
     };
@@ -88,11 +81,11 @@ namespace Terra.NET.API.Serialization.Json
         }
     };
 
-    public record TransactionLog([property: JsonPropertyName("msg_index")] ulong MessageIndex, string Log, TransactionEvent[] Events)
+    public record TransactionLog([property: JsonPropertyName("msg_index")] ulong MessageIndex, JsonDocument Log, TransactionEvent[] Events)
     {
         public Terra.NET.TransactionLog ToModel()
         {
-            return new NET.TransactionLog(this.MessageIndex, this.Log, this.Events.Select(evt => evt.ToModel()).ToArray());
+            return new NET.TransactionLog(this.MessageIndex, this.Log.ToString(), this.Events.Select(evt => evt.ToModel()).ToArray());
         }
     };
 

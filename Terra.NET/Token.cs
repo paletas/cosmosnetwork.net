@@ -4,7 +4,7 @@
 
     public record DenomUnit(string Denom, ushort Decimals, string[] Aliases);
 
-    public record Coin(string Denom, ulong Amount, bool IsNative);
+    public abstract record Coin(string Denom, ulong Amount, bool IsNative);
 
     public record CoinDecimal(string Denom, decimal Amount, bool IsNative);
 

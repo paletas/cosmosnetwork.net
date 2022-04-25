@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Terra.NET.API.Serialization.Json
+namespace Terra.NET.API.Serialization.Json.Converters
 {
     internal class BigIntegerConverter : JsonConverter<BigInteger>
     {

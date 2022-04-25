@@ -1,7 +1,6 @@
 ﻿using Cosmos.SDK.Protos.Tx;
 using Cosmos.SDK.Protos.Tx.Signing;
 using Google.Protobuf;
-using Terra.NET.API.Serialization.Protos.Mappers;
 
 namespace Terra.NET.Keys
 {
@@ -17,7 +16,7 @@ namespace Terra.NET.Keys
             this.PublicKey = new PublicKey(publicKey);
         }
 
-        private Signature CreateSignature(string chain, SignerOptions signer, SignerInfo signerInfo, SignerModeEnum signerMode, AuthInfo authInfo, TxBody txBody)
+        private TransactionSigner CreateSignature(string chain, SignerOptions signer, SignerInfo signerInfo, SignerModeEnum signerMode, AuthInfo authInfo, TxBody txBody)
         {
             var authInfoCopy = new AuthInfo();
             authInfoCopy.Fee = authInfo.Fee;
@@ -34,7 +33,7 @@ namespace Terra.NET.Keys
             byte[] signBytes = SignPayload(signDoc.ToByteArray());
             string signBase64 = Convert.ToBase64String(signBytes);
 
-            return new Signature(this.PublicKey, new SignatureDescriptor(signerMode, signBase64), signer.Sequence);
+            return new TransactionSigner(this.PublicKey, new SignatureDescriptor(signerMode, signBase64), signer.Sequence);
         }
 
         public abstract byte[] SignPayload(byte[] payload);
@@ -48,7 +47,7 @@ namespace Terra.NET.Keys
             {
                 var signerInfo = new SignerInfo
                 {
-                    PublicKey = signer.PublicKey.PackAny(),
+                    PublicKey = signer.PublicKey.ToJson().PackAny(),
                     ModeInfo = new ModeInfo { Single = new ModeInfo.Types.Single { Mode = ToJson(signerMode) } },
                     Sequence = signer.Sequence
                 };

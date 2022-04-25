@@ -12,6 +12,10 @@ namespace Terra.NET
             this._key = key;
         }
 
+        public PublicKey(string key)
+            : this(Convert.FromBase64String(key))
+        { }
+
         public byte[] RawKey => this._key;
 
         public byte[] RawAddress
@@ -25,6 +29,11 @@ namespace Terra.NET
         public string Address
         {
             get { return Converter.EncodeBech32("terra", this.RawAddress); }
+        }
+
+        internal Terra.NET.API.Serialization.Json.PublicKey ToJson()
+        {
+            return new Terra.NET.API.Serialization.Json.PublicKey(string.Empty, Convert.ToBase64String(this.RawKey));
         }
     }
 

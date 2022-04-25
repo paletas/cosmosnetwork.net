@@ -23,12 +23,15 @@ namespace Terra.NET
 
             this.SmartContracts = new SmartContractsApi(options, httpClient, loggerFactory.CreateLogger<SmartContractsApi>());
             this.Blockchain = new BlockchainApi(options, httpClient, loggerFactory.CreateLogger<BlockchainApi>());
-            this.Transactions = new TransactionsApi(options, httpClient, loggerFactory.CreateLogger<TransactionsApi>(), this._transactionsBuilder, this.Blockchain);
+            this.Blocks = new BlocksApi(options, httpClient, loggerFactory.CreateLogger<BlocksApi>());
+            this.Transactions = new TransactionsApi(options, httpClient, loggerFactory.CreateLogger<TransactionsApi>(), this._transactionsBuilder, this.Blockchain, this.Blocks);
             this.Wallet = new WalletApi(options, httpClient, loggerFactory.CreateLogger<WalletApi>(), this.Transactions, this._transactionsBuilder);
             this.MemPool = new MemPoolApi(options, httpClient, loggerFactory.CreateLogger<MemPoolApi>());
         }
 
         public TerraApiOptions Options { get; init; }
+
+        public IBlocksApi Blocks { get; init; }
 
         public ITransactionsApi Transactions { get; init; }
 

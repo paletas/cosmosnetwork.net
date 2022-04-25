@@ -13,7 +13,7 @@
 
         internal virtual Terra.NET.Coin ToModel()
         {
-            return new Terra.NET.Coin(this.Denom, this.Amount, true);
+            return new Terra.NET.NativeCoin(this.Denom, this.Amount);
         }
     };
 

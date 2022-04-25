@@ -6,9 +6,9 @@ namespace Terra.NET
 
     public record MemPoolTransaction(string Hash, DateTime Timestamp, Transaction Details);
 
-    public record Transaction(TransactionTypeEnum TransactionType, string? Memo, ulong? TimeoutHeight, Fee Fees);
+    public abstract record Transaction(TransactionTypeEnum TransactionType, string? Memo, ulong? TimeoutHeight, Fee Fees);
 
-    public record StandardTransaction(Message[] Messages, string? Memo, ulong? TimeoutHeight, Fee Fees, SignerOptions[] Signees)
+    public record StandardTransaction(Message[] Messages, string? Memo, ulong? TimeoutHeight, Fee Fees, TransactionSignature[] Signees)
         : Transaction(TransactionTypeEnum.Standard, Memo, TimeoutHeight, Fees);
 
     public record Fee(ulong GasLimit, Coin[] Amount);

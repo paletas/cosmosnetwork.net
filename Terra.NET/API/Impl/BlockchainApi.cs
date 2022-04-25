@@ -48,7 +48,7 @@ namespace Terra.NET.API.Impl
         {
             var swapSimulation = await Get<SimulateMarketSwapResponse>($"/terra/market/v1beta1/swap?offer_coin={amountFrom}{denomFrom}&ask_denom={denomTo}", cancellationToken).ConfigureAwait(false);
             if (swapSimulation == null) throw new InvalidOperationException();
-            return new Coin(swapSimulation.Result.Denom, swapSimulation.Result.Amount, true);
+            return new NativeCoin(swapSimulation.Result.Denom, swapSimulation.Result.Amount);
         }
     }
 }

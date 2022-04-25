@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Terra.NET.API.Serialization.Json;
+using Terra.NET.API.Serialization.Json.Converters;
 
 namespace Terra.NET
 {
@@ -20,7 +21,7 @@ namespace Terra.NET
             this.JsonSerializerOptions.Converters.Add(new SignerModeConverter());
         }
 
-        public TerraApiOptions(int? throttlingEnumeratorsInSeconds = default, long? startingBlockHeightForTransactionSearch = default)
+        public TerraApiOptions(int? throttlingEnumeratorsInSeconds = default, ulong? startingBlockHeightForTransactionSearch = default)
             : this()
         {
             if (throttlingEnumeratorsInSeconds != default)
@@ -34,7 +35,7 @@ namespace Terra.NET
 
         public int? ThrottlingEnumeratorsInMilliseconds { get; set; } = 1000;
 
-        public long StartingBlockHeightForTransactionSearch { get; set; } = 1;
+        public ulong StartingBlockHeightForTransactionSearch { get; set; } = 1;
 
         public CoinDecimal[]? GasPrices { get; set; } = null;
 

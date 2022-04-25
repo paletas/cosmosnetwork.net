@@ -15,16 +15,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="API\Internal\**" />
+    <EmbeddedResource Remove="API\Internal\**" />
+    <None Remove="API\Internal\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Cryptography.ECDSA.Secp256K1" Version="1.1.3" />
     <PackageReference Include="DevHawk.RIPEMD160" Version="3.0.27" />
-    <PackageReference Include="Google.Protobuf" Version="3.19.1" />
-    <PackageReference Include="Grpc.Core" Version="2.42.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.42.0">
+    <PackageReference Include="Google.Protobuf" Version="3.20.1" />
+    <PackageReference Include="Grpc.Core" Version="2.45.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.45.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Nethereum.HdWallet" Version="4.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
+    <PackageReference Include="Nethereum.HdWallet" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -131,9 +137,5 @@
     <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\upgrade\v1beta1\query.proto" GrpcServices="Client" />
     <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\upgrade\v1beta1\upgrade.proto" GrpcServices="Client" />
     <Protobuf ProtoRoot="API/Serialization/Protos" Access="Internal" Include="API\Serialization\Protos\cosmos\vesting\v1beta1\vesting.proto" GrpcServices="Client" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="API\Internal\" />
   </ItemGroup>
 </Project>

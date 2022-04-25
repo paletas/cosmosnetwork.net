@@ -1,7 +1,6 @@
 ﻿using Cosmos.SDK.Protos.Tx;
 using Cosmos.SDK.Protos.Tx.Signing;
 using Microsoft.Extensions.Logging;
-using Terra.NET.API.Serialization.Protos.Mappers;
 
 namespace Terra.NET.Transactions
 {
@@ -42,7 +41,7 @@ namespace Terra.NET.Transactions
             {
                 var signerInfo = new SignerInfo
                 {
-                    PublicKey = signer.PublicKey?.PackAny(),
+                    PublicKey = signer.PublicKey?.ToJson().PackAny(),
                     Sequence = signer.Sequence,
                     ModeInfo = new ModeInfo
                     {

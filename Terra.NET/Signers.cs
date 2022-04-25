@@ -4,7 +4,10 @@
 
     public record SignOptions(string ChainId);
 
-    public record Signature(PublicKey PublicKey, SignatureDescriptor Data, ulong Sequence);
+    public record TransactionSigner(PublicKey PublicKey, SignatureDescriptor Data, ulong Sequence)
+        : TransactionSignature(PublicKey, Data.Signature);
+
+    public record TransactionSignature(PublicKey? PublicKey, string Signature);
 
     public record SignatureDescriptor(SignerModeEnum Mode, string Signature);
 
