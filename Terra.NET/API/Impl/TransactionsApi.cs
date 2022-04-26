@@ -232,25 +232,15 @@ namespace Terra.NET.API.Impl
 
         public async IAsyncEnumerable<BlockTransaction> GetTransactions(ulong height, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            var endpoint = $"/cosmos/tx/v1beta1/txs?tx.height={height}";
+            var block = await this._blocksApi.GetBlock(height, cancellationToken);
 
-            var transactionsResponse = await Get<ListTransactionsResponse>(endpoint, cancellationToken);
+            if (block is null) yield break;
 
-            if (transactionsResponse == null) yield break;
-
-            while (transactionsResponse != null && transactionsResponse.Transactions?.Length > 0)
+            foreach (var tx in block.Details.Data.Transactions)
             {
-                foreach (var transaction in transactionsResponse.Transactions)
-                {
-                    yield return transaction.ToModel();
-                }
+                var txHash = HashExtensions.HashToHex(tx);
 
-                if (this.Options.ThrottlingEnumeratorsInMilliseconds.HasValue)
-                    await Task.Delay(this.Options.ThrottlingEnumeratorsInMilliseconds.Value, cancellationToken).ConfigureAwait(false);
-
-                if (transactionsResponse.Pagination.NextKey is not null)
-                    transactionsResponse = await Get<ListTransactionsResponse>($"{endpoint}&pagination.key={transactionsResponse.Pagination.NextKey}", cancellationToken);
-                else break;
+                yield return await this.GetTransaction(txHash, cancellationToken) ?? throw new TerraApiException();
             }
         }
 
