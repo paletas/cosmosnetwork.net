@@ -16,7 +16,7 @@
         public override byte[] SignPayload(byte[] payload)
         {
             int recoveryId;
-            var hash = Cryptography.ECDSA.Sha256Manager.GetHash(payload);
+            var hash = HashExtensions.SHA256(payload);
             return Cryptography.ECDSA.Secp256K1Manager.SignCompact(hash, this.PrivateKey, out recoveryId);
         }
 

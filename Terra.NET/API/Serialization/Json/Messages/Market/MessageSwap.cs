@@ -10,7 +10,7 @@ namespace Terra.NET.API.Serialization.Json.Messages.Market
         : Message(TERRA_DESCRIPTOR, COSMOS_DESCRIPTOR)
     {
         public const string TERRA_DESCRIPTOR = "market/MsgSwap";
-        public const string COSMOS_DESCRIPTOR = "/cosmos.market.v1beta1.MsgSwap";
+        public const string COSMOS_DESCRIPTOR = "/terra.market.v1beta1.MsgSwap";
 
         internal override NET.Message ToModel()
         {

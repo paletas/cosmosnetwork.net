@@ -4,52 +4,32 @@ using Terra.NET.API.Serialization.Json.Converters;
 
 namespace Terra.NET.API.Serialization.Json
 {
-    internal record BlockTransaction([property: JsonPropertyName("tx")] TransactionPack Transaction, ulong Height, [property: JsonPropertyName("txhash")] string TransactionHash, string RawLog, TransactionLog[] Logs, ulong GasWanted, ulong GasUsed, TransactionEvent[] Events, [property: JsonPropertyName("timestamp")] DateTime Timestamp)
+    internal record BlockTransaction([property: JsonPropertyName("tx")] Transaction Transaction, [property: JsonPropertyName("tx_response")] TransactionResponse Response)
     {
         internal Terra.NET.BlockTransaction ToModel()
         {
             return new Terra.NET.BlockTransaction(
-                this.Transaction.ToModel(),
-                this.Height,
-                this.TransactionHash,
-                this.GasUsed,
-                this.GasWanted,
-                this.Timestamp,
-                this.RawLog,
-                this.Logs.Select(log => log.ToModel()).ToArray()
+                new NET.Transaction(
+                    this.Transaction.Body.Messages.Select(msg => msg.ToModel()).ToArray(),
+                    this.Transaction.Body.Memo,
+                    this.Transaction.Body.TimeoutHeight,
+                    this.Transaction.AuthInfo.Fee.ToModel(),
+                    this.Transaction.AuthInfo.Signers.Select((sig, ix) => new NET.TransactionSignature(sig.PublicKey.ToModel(), this.Transaction.Signatures[ix])).ToArray()
+                ),
+                this.Response.Height,
+                this.Response.TransactionHash,
+                this.Response.GasUsed,
+                this.Response.GasWanted,
+                this.Response.Timestamp,
+                this.Response.RawLog,
+                this.Response.Logs.Select(log => log.ToModel()).ToArray()
             );
         }
     };
+
+    internal record Transaction(TransactionBody Body, AuthInfo AuthInfo, string[] Signatures);
 
     internal record TransactionBody([property: JsonConverter(typeof(MessagesConverter))] Message[] Messages, string Memo, ulong? TimeoutHeight);
-
-    internal record MemPoolTransaction([property: JsonPropertyName("chainId")] string ChainId, [property: JsonPropertyName("txhash")] string Hash, DateTime Timestamp, [property: JsonPropertyName("tx")] TransactionPack Details)
-    {
-        internal Terra.NET.MemPoolTransaction ToModel()
-        {
-            return new Terra.NET.MemPoolTransaction(
-                this.Hash,
-                this.Timestamp,
-                this.Details.ToModel()
-            );
-        }
-    };
-
-    internal record TransactionPack([property: JsonPropertyName("type")] string TransactionType, StandardTransaction Value)
-    {
-        internal Terra.NET.Transaction ToModel()
-        {
-            return new Terra.NET.StandardTransaction(
-                this.Value.Messages.Select(msg => msg.ToModel()).ToArray(),
-                this.Value.Memo,
-                null,
-                this.Value.Fees.ToModel(),
-                this.Value.Signatures.Select(sig => sig.ToModel()).ToArray()
-            );
-        }
-    };
-
-    internal record StandardTransaction([property: JsonPropertyName("fee")] Fee Fees, [property: JsonPropertyName("msg"), JsonConverter(typeof(MessagesConverter))] Message[] Messages, string Memo, SignerOptions[] Signatures, ulong? TimeoutHeight);
 
     internal record Fee(ulong Gas, DenomAmount[] Amount)
     {
@@ -59,7 +39,7 @@ namespace Terra.NET.API.Serialization.Json
         }
     };
 
-    internal record AuthInfo([property: JsonPropertyName("signer_infos")] SignerInfo[] Signers, Fee? Fee);
+    internal record AuthInfo([property: JsonPropertyName("signer_infos")] SignerInfo[] Signers, Fee Fee);
 
     public record TransactionGasUsage(ulong GasWanted, ulong GasUsed);
 

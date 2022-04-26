@@ -25,11 +25,11 @@ namespace Terra.NET.API
 
         protected async Task<T?> Get<T>(string endpoint, CancellationToken cancellationToken = default)
         {
-            var httpResponse = await this._httpClient.GetAsync(endpoint, cancellationToken);
+            var httpResponse = await this._httpClient.GetAsync(PrepareEndpoint(endpoint), cancellationToken);
 
             if (httpResponse.IsSuccessStatusCode == false)
             {
-                this._logger.LogError($"GET {endpoint}: {httpResponse.StatusCode} - {httpResponse.ReasonPhrase}");
+                this._logger.LogError("GET {endpoint}: {statusCode} - {reasonPhrase}", endpoint, httpResponse.StatusCode, httpResponse.ReasonPhrase);
                 return default;
             }
 
@@ -53,7 +53,7 @@ namespace Terra.NET.API
             this._logger.LogTrace($"Post {endpoint} sending {serializedRequest}");
 #endif
 
-            using var httpResponse = await this._httpClient.PostAsync(endpoint, httpContent).ConfigureAwait(false);
+            using var httpResponse = await this._httpClient.PostAsync(PrepareEndpoint(endpoint), httpContent).ConfigureAwait(false);
             httpResponse.EnsureSuccessStatusCode();
 
 #if DEBUG_API
@@ -74,7 +74,7 @@ namespace Terra.NET.API
             this._logger.LogTrace($"Post {endpoint} sending {serializedRequest}");
 #endif
 
-            using var httpResponse = await this._httpClient.PostAsync(endpoint, httpContent).ConfigureAwait(false);
+            using var httpResponse = await this._httpClient.PostAsync(PrepareEndpoint(endpoint), httpContent).ConfigureAwait(false);
 
 #if DEBUG_API
             var stringResponse = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
@@ -102,6 +102,12 @@ namespace Terra.NET.API
                     throw new InvalidResponseException(stringResponse);
                 }
             }
+        }
+
+        private static string PrepareEndpoint(string endpoint)
+        {
+            if (endpoint.StartsWith('/')) return endpoint[1..];
+            return endpoint;
         }
     }
 }

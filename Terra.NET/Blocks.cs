@@ -4,7 +4,7 @@
 
     public record BlockIdentification(string Hash, BlockIdentificationParts Parts);
 
-    public record BlockIdentificationParts(uint Total, string Hash);
+    public record BlockIdentificationParts(long Total, string Hash);
 
     public record BlockDetails(BlockHeader Header, BlockData Data, BlockCommit LastCommit);
 
@@ -34,5 +34,13 @@
 
     public record BlockCommit(ulong Height, uint Round, BlockIdentification BlockId, BlockSignature[] Signatures);
 
-    public record BlockSignature(uint BlockIdFlag, string ValidatorAddress, DateTime Timestamp, string Signature);
+    public record BlockSignature(BlockFlagEnum BlockFlag, string ValidatorAddress, DateTime Timestamp, string Signature);
+
+    public enum BlockFlagEnum
+    {
+        Unknown = 1,
+        Absent = 2,
+        Commit = 3,
+        Nil = 4
+    }
 }

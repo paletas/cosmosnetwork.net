@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Terra.NET.API.Serialization.Json
 {
@@ -10,7 +11,7 @@ namespace Terra.NET.API.Serialization.Json
         }
     }
 
-    internal record BlockIdentification(string Hash, BlockIdentificationParts Parts)
+    internal record BlockIdentification(string Hash, [property: JsonPropertyName("part_set_header")] BlockIdentificationParts Parts)
     {
         internal Terra.NET.BlockIdentification ToModel()
         {
@@ -18,7 +19,7 @@ namespace Terra.NET.API.Serialization.Json
         }
     }
 
-    internal record BlockIdentificationParts(uint Total, string Hash)
+    internal record BlockIdentificationParts(long Total, string Hash)
     {
         internal Terra.NET.BlockIdentificationParts ToModel()
         {
@@ -98,11 +99,26 @@ namespace Terra.NET.API.Serialization.Json
         }
     }
 
-    internal record BlockSignature(uint BlockIdFlag, string ValidatorAddress, DateTime Timestamp, string Signature)
+    internal record BlockSignature(BlockFlagEnum BlockIdFlag, string ValidatorAddress, DateTime Timestamp, string Signature)
     {
         internal Terra.NET.BlockSignature ToModel()
         {
-            return new NET.BlockSignature(this.BlockIdFlag, this.ValidatorAddress, this.Timestamp, this.Signature);
+            return new NET.BlockSignature((NET.BlockFlagEnum) this.BlockIdFlag, this.ValidatorAddress, this.Timestamp, this.Signature);
         }
+    }
+
+    internal enum BlockFlagEnum
+    {
+        [EnumMember(Value = "BLOCK_ID_FLAG_UNKNOWN")]
+        Unknown = 1,
+
+        [EnumMember(Value = "BLOCK_ID_FLAG_ABSENT")]
+        Absent = 2,
+
+        [EnumMember(Value = "BLOCK_ID_FLAG_COMMIT")]
+        Commit = 3,
+
+        [EnumMember(Value = "BLOCK_ID_FLAG_NIL")]
+        Nil = 4
     }
 }

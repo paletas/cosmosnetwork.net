@@ -11,7 +11,7 @@ namespace Terra.NET.API.Serialization.Json.Messages.Wasm
         : Message(TERRA_DESCRIPTOR, COSMOS_DESCRIPTOR)
     {
         public const string TERRA_DESCRIPTOR = "wasm/MsgInstantiateContract";
-        public const string COSMOS_DESCRIPTOR = "/cosmos.wasm.v1beta1.MsgInstantiateContract";
+        public const string COSMOS_DESCRIPTOR = "/terra.wasm.v1beta1.MsgInstantiateContract";
 
         internal override NET.Message ToModel()
         {

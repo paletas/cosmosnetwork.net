@@ -2,8 +2,6 @@
 {
     public interface ITransactionsApi
     {
-        IAsyncEnumerable<BlockTransaction> GetTransactions(TerraAddress accountAddress, CancellationToken cancellationToken = default);
-
         IAsyncEnumerable<BlockTransaction> GetTransactions(ulong fromHeight, CancellationToken cancellationToken = default);
 
         Task<BlockTransaction?> GetTransaction(string transactionHash, CancellationToken cancellationToken = default);

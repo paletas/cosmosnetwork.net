@@ -221,9 +221,18 @@ namespace Terra.NET.API.Impl
             else throw new InvalidOperationException();
         }
 
-        public async IAsyncEnumerable<BlockTransaction> GetTransactions(TerraAddress accountAddress, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        public async Task<BlockTransaction?> GetTransaction(string transactionHash, CancellationToken cancellationToken = default)
         {
-            var endpoint = $"v1/txs?account={accountAddress}";
+            var endpoint = $"/cosmos/tx/v1beta1/txs/{transactionHash}";
+
+            var transactionResponse = await Get<Serialization.Json.BlockTransaction>(endpoint, cancellationToken);
+
+            return transactionResponse?.ToModel();
+        }
+
+        public async IAsyncEnumerable<BlockTransaction> GetTransactions(ulong height, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            var endpoint = $"/cosmos/tx/v1beta1/txs?tx.height={height}";
 
             var transactionsResponse = await Get<ListTransactionsResponse>(endpoint, cancellationToken);
 
@@ -239,46 +248,9 @@ namespace Terra.NET.API.Impl
                 if (this.Options.ThrottlingEnumeratorsInMilliseconds.HasValue)
                     await Task.Delay(this.Options.ThrottlingEnumeratorsInMilliseconds.Value, cancellationToken).ConfigureAwait(false);
 
-                if (transactionsResponse.Limit >= transactionsResponse.Transactions.Length)
-                    transactionsResponse = await Get<ListTransactionsResponse>($"{endpoint}&offset={transactionsResponse.Next}", cancellationToken);
+                if (transactionsResponse.Pagination.NextKey is not null)
+                    transactionsResponse = await Get<ListTransactionsResponse>($"{endpoint}&pagination.key={transactionsResponse.Pagination.NextKey}", cancellationToken);
                 else break;
-            }
-        }
-
-        public async Task<BlockTransaction?> GetTransaction(string transactionHash, CancellationToken cancellationToken = default)
-        {
-            var endpoint = $"/cosmos/tx/v1beta1/txs/{transactionHash}";
-
-            var transactionResponse = await Get<Serialization.Json.BlockTransaction>(endpoint, cancellationToken);
-
-            return transactionResponse?.ToModel();
-        }
-
-        public async IAsyncEnumerable<BlockTransaction> GetTransactions(ulong height, [EnumeratorCancellation] CancellationToken cancellationToken = default)
-        {
-            const string transactionsEndpoint = "/v1/txs?block={0}";
-            const string transactionsOffsetEndpoint = "/v1/txs?block={0}&offset={1}";
-
-            var transactionsResponse = await Get<ListTransactionsResponse>(string.Format(transactionsEndpoint, height), cancellationToken);
-
-            while (transactionsResponse != null && transactionsResponse.Transactions?.Length > 0)
-            {
-                foreach (var transaction in transactionsResponse.Transactions)
-                {
-                    yield return transaction.ToModel();
-                }
-
-                if (this.Options.ThrottlingEnumeratorsInMilliseconds.HasValue)
-                    await Task.Delay(this.Options.ThrottlingEnumeratorsInMilliseconds.Value, cancellationToken).ConfigureAwait(false);
-
-                if (transactionsResponse.Next is null)
-                {
-                    break;
-                }
-                else
-                {
-                    transactionsResponse = await Get<ListTransactionsResponse>(string.Format(transactionsOffsetEndpoint, height, transactionsResponse.Next), cancellationToken);
-                }
             }
         }
 

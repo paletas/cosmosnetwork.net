@@ -11,7 +11,7 @@ namespace Terra.NET.API.Impl
 
         public async Task<Block?> GetBlock(ulong height, CancellationToken cancellationToken = default)
         {
-            var block = await base.Get<Serialization.Json.Block>($"/blocks/{height}", cancellationToken).ConfigureAwait(false);
+            var block = await base.Get<Serialization.Json.Block>($"/cosmos/base/tendermint/v1beta1/blocks/{height}", cancellationToken).ConfigureAwait(false);
             if (block == null) return null;
 
             return block.ToModel();
@@ -19,7 +19,7 @@ namespace Terra.NET.API.Impl
 
         public async Task<Block> GetLatestBlock(CancellationToken cancellationToken = default)
         {
-            var block = await base.Get<Serialization.Json.Block>($"/blocks/latest", cancellationToken).ConfigureAwait(false);
+            var block = await base.Get<Serialization.Json.Block>($"/cosmos/base/tendermint/v1beta1/blocks/latest", cancellationToken).ConfigureAwait(false);
             if (block == null) throw new TerraApiException("expected a block");
 
             return block.ToModel();

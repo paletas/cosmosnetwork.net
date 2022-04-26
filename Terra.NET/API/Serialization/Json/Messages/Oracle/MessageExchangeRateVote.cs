@@ -11,7 +11,7 @@ namespace Terra.NET.API.Serialization.Json.Messages.Oracle
         : Message(TERRA_DESCRIPTOR, COSMOS_DESCRIPTOR)
     {
         public const string TERRA_DESCRIPTOR = "oracle/MsgAggregateExchangeRateVote";
-        public const string COSMOS_DESCRIPTOR = "/cosmos.oracle.v1beta1.MsgAggregateExchangeRateVote";
+        public const string COSMOS_DESCRIPTOR = "/terra.oracle.v1beta1.MsgAggregateExchangeRateVote";
 
         internal override NET.Message ToModel()
         {

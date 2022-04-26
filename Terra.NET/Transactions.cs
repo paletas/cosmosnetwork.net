@@ -4,24 +4,13 @@ namespace Terra.NET
 {
     public record BlockTransaction(Transaction Details, ulong Height, string Hash, ulong GasUsed, ulong GasWanted, DateTime Timestamp, string RawLog, TransactionLog[] Logs);
 
-    public record MemPoolTransaction(string Hash, DateTime Timestamp, Transaction Details);
-
-    public abstract record Transaction(TransactionTypeEnum TransactionType, string? Memo, ulong? TimeoutHeight, Fee Fees);
-
-    public record StandardTransaction(Message[] Messages, string? Memo, ulong? TimeoutHeight, Fee Fees, TransactionSignature[] Signees)
-        : Transaction(TransactionTypeEnum.Standard, Memo, TimeoutHeight, Fees);
+    public record Transaction(Message[] Messages, string? Memo, ulong? TimeoutHeight, Fee Fees, TransactionSignature[] Signees);
 
     public record Fee(ulong GasLimit, Coin[] Amount);
 
     public record TransactionSimulation(TransactionGasUsage? GasUsage, TransactionSimulationResult? Result);
 
     public record TransactionBroadcast(SignedTransaction? Transaction, TransactionGasUsage? GasUsage, TransactionResult? Result);
-
-    public enum TransactionTypeEnum
-    {
-        [EnumMember(Value = "core/StdTx")]
-        Standard
-    }
 
     public record CreateTransactionOptions(string? Memo = null, ulong? TimeoutHeight = null, Fee? Fees = null, ulong? Gas = null, CoinDecimal[]? GasPrices = null, string[]? FeesDenoms = null);
 
