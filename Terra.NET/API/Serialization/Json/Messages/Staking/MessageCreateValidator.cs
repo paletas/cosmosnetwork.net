@@ -8,7 +8,7 @@ namespace Terra.NET.API.Serialization.Json.Messages.Staking
     [MessageDescriptor(TerraType = TERRA_DESCRIPTOR, CosmosType = COSMOS_DESCRIPTOR)]
     internal record MessageCreateValidator(
         string DelegatorAddress, string ValidatorAddress, [property: JsonPropertyName("min_self_delegation")] ulong MinimumSelfDelegation,
-        ValidatorDescription Description, ValidatorComission Comission, DenomAmount Value,
+        ValidatorDescription Description, ValidatorComission Commission, DenomAmount Value,
         [property: JsonPropertyName("pubkey")] PublicKey PublicKey
     ) : Message(TERRA_DESCRIPTOR, COSMOS_DESCRIPTOR)
     {
@@ -20,7 +20,7 @@ namespace Terra.NET.API.Serialization.Json.Messages.Staking
             return new NET.Messages.Staking.MessageCreateValidator(
                 this.DelegatorAddress, this.ValidatorAddress, this.MinimumSelfDelegation,
                 new NET.Messages.Staking.ValidatorDescription(this.Description.Moniker, this.Description.Identity, this.Description.Details, this.Description.Website, this.Description.SecurityContact),
-                new NET.Messages.Staking.ValidatorComission(this.Comission.Rate, this.Comission.MaxRate, this.Comission.MaxRateChange),
+                new NET.Messages.Staking.ValidatorComission(this.Commission.Rate, this.Commission.MaxRate, this.Commission.MaxRateChange),
                 new NativeCoin(this.Value.Denom, this.Value.Amount),
                 this.PublicKey.ToModel()
             );
@@ -43,9 +43,9 @@ namespace Terra.NET.API.Serialization.Json.Messages.Staking
                 },
                 Commission = new CommissionRates
                 {
-                    Rate = this.Comission.Rate.ToString(),
-                    MaxRate = this.Comission.MaxRate.ToString(),
-                    MaxChangeRate = this.Comission.MaxRateChange.ToString()
+                    Rate = this.Commission.Rate.ToString(),
+                    MaxRate = this.Commission.MaxRate.ToString(),
+                    MaxChangeRate = this.Commission.MaxRateChange.ToString()
                 },
                 Value = this.Value.ToProto(),
                 Pubkey = this.PublicKey.PackAny()

@@ -7,7 +7,7 @@ using TerraMoney.SDK.Core.Protos.WASM;
 namespace Terra.NET.API.Serialization.Json.Messages.Wasm
 {
     [MessageDescriptor(TerraType = TERRA_DESCRIPTOR, CosmosType = COSMOS_DESCRIPTOR)]
-    internal record MessageInstantiateContract([property: JsonPropertyName("sender")] string SenderAddress, [property: JsonPropertyName("admin")] string AdminAddress, ulong CodeId, JsonDocument InitMsg, DenomAmount[] InitCoins)
+    internal record MessageInstantiateContract([property: JsonPropertyName("sender")] string SenderAddress, [property: JsonPropertyName("admin")] string? AdminAddress, ulong CodeId, JsonDocument InitMsg, DenomAmount[] InitCoins)
         : Message(TERRA_DESCRIPTOR, COSMOS_DESCRIPTOR)
     {
         public const string TERRA_DESCRIPTOR = "wasm/MsgInstantiateContract";
@@ -19,7 +19,7 @@ namespace Terra.NET.API.Serialization.Json.Messages.Wasm
 
             return new NET.Messages.Wasm.MessageInstantiateContract(
                 this.SenderAddress,
-                this.AdminAddress,
+                this.AdminAddress!,
                 this.CodeId,
                 initMessageJson,
                 this.InitCoins.Select(coin => coin.ToModel()).ToArray());

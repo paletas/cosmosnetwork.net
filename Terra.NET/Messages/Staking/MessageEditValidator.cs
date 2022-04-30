@@ -1,8 +1,8 @@
 ﻿namespace Terra.NET.Messages.Staking
 {
     public record MessageEditValidator(
-        TerraAddress Validator, ulong MinimumSelfDelegation,
-        ValidatorDescription Description, decimal ComissionRate
+        TerraAddress Validator, ulong? MinimumSelfDelegation,
+        ValidatorDescription Description, decimal? ComissionRate
     ) : Message(MessageTypeEnum.StakingEditValidator)
     {
         internal override API.Serialization.Json.Message ToJson()

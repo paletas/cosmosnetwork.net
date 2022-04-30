@@ -4,6 +4,7 @@
     {
         public static implicit operator TerraAddress(string address)
         {
+            if (address is null) return null;
             return new TerraAddress(address);
         }
 

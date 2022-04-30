@@ -31,19 +31,19 @@ namespace Terra.NET.API.Serialization.Json.Messages.Gov
 
     internal enum VoteOptionEnum
     {
-        [EnumMember(Value = "OptionEmpty")]
+        [EnumMember(Value = "VOTE_OPTION_UNSPECIFIED")]
         Unspecified = 0,
 
-        [EnumMember(Value = "OptionYes")]
+        [EnumMember(Value = "VOTE_OPTION_YES")]
         Yes = 1,
 
-        [EnumMember(Value = "OptionAbstain")]
+        [EnumMember(Value = "VOTE_OPTION_ABSTAIN")]
         Abstain = 2,
 
-        [EnumMember(Value = "OptionNo")]
+        [EnumMember(Value = "VOTE_OPTION_NO")]
         No = 3,
 
-        [EnumMember(Value = "OptionNoWithVeto")]
+        [EnumMember(Value = "VOTE_OPTION_NO_WITH_VETO")]
         NoWithVeto = 4
     }
 }

@@ -20,7 +20,7 @@ namespace Terra.NET.API.Serialization.Json
         }
     }
 
-    internal record PublicKey(string Type, string Value)
+    internal record PublicKey([property: JsonPropertyName("@type")] string Type, [property: JsonPropertyName("key")] string Value)
     {
         public PubKey ToProto()
         {

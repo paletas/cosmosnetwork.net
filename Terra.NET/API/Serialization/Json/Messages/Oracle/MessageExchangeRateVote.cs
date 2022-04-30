@@ -50,7 +50,7 @@ namespace Terra.NET.API.Serialization.Json.Messages.Oracle
             for (int ix = 0; ix < splittedRates.Length; ix++)
             {
                 var rate = splittedRates[ix];
-                swapRates[ix] = new DenomSwapRate(rate.Substring(rate.Length - 5, 4), decimal.Parse(rate[0..^6]));
+                swapRates[ix] = new DenomSwapRate(rate[^4..], decimal.Parse(rate[0..^4]));
             }
 
             return swapRates;
