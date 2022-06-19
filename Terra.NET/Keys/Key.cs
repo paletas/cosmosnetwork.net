@@ -33,7 +33,7 @@ namespace Terra.NET.Keys
             byte[] signBytes = SignPayload(signDoc.ToByteArray());
             string signBase64 = Convert.ToBase64String(signBytes);
 
-            return new TransactionSigner(this.PublicKey, new SignatureDescriptor(signerMode, signBase64), signer.Sequence);
+            return new TransactionSigner(this.PublicKey.ToSignatureKey(), new SignatureDescriptor(signerMode, signBase64), signer.Sequence);
         }
 
         public abstract byte[] SignPayload(byte[] payload);

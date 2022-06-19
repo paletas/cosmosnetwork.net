@@ -22,7 +22,8 @@ namespace Terra.NET.API.Serialization.Json
                 this.Response.GasWanted,
                 this.Response.Timestamp,
                 this.Response.RawLog,
-                this.Response.Logs.Select(log => log.ToModel()).ToArray()
+                this.Response.Logs.Select(log => log.ToModel()).ToArray(),
+                this.Response.GetExecutionStatus()
             );
         }
     };
@@ -65,7 +66,7 @@ namespace Terra.NET.API.Serialization.Json
     {
         public Terra.NET.TransactionLog ToModel()
         {
-            return new NET.TransactionLog(this.MessageIndex, this.Log.ToString(), this.Events.Select(evt => evt.ToModel()).ToArray());
+            return new NET.TransactionLog(this.MessageIndex, this.Log?.ToString(), this.Events.Select(evt => evt.ToModel()).ToArray());
         }
     };
 
@@ -74,6 +75,15 @@ namespace Terra.NET.API.Serialization.Json
         internal Terra.NET.TransactionResult ToModel()
         {
             return new TransactionResult(this.Data, this.Info, this.Logs.Select(log => log.ToModel()).ToArray(), this.Events.Select(evt => evt.ToModel()).ToArray());
+        }
+
+        internal TransactionExecutionStatus GetExecutionStatus()
+        {
+            return this.Code switch
+            {
+                0 => TransactionExecutionStatus.Executed,
+                _ => TransactionExecutionStatus.Failed,
+            };
         }
     };
 }

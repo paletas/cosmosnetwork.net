@@ -3,11 +3,12 @@ using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Terra.NET.API.Serialization.Json.Converters;
 
 namespace Terra.NET.API.Serialization.Json.Messages.Gov
 {
     [MessageDescriptor(TerraType = TERRA_DESCRIPTOR, CosmosType = COSMOS_DESCRIPTOR)]
-    internal record MessageSubmitProposal(IProposal Content, [property: JsonPropertyName("proposer")] string ProposerAddress, DenomAmount[] InitialDeposit)
+    internal record MessageSubmitProposal([property: JsonConverter(typeof(ProposalConverter))] IProposal Content, [property: JsonPropertyName("proposer")] string ProposerAddress, DenomAmount[] InitialDeposit)
         : Message(TERRA_DESCRIPTOR, COSMOS_DESCRIPTOR)
     {
         public const string TERRA_DESCRIPTOR = "gov/MsMsgSubmitProposalSwap";
@@ -60,6 +61,19 @@ namespace Terra.NET.API.Serialization.Json.Messages.Gov
         public NET.Messages.Gov.Proposal ToModel()
         {
             return new NET.Messages.Gov.TextProposal(this.Title, this.Description);
+        }
+    }
+
+    internal record CommunitySpendProposal(string Title, string Description, string Recipient, DenomAmount[] Amount) : IProposal
+    {
+        public Any PackAny()
+        {
+            throw new NotImplementedException();
+        }
+
+        public NET.Messages.Gov.Proposal ToModel()
+        {
+            return new NET.Messages.Gov.CommunitySpendProposal(this.Title, this.Description, this.Recipient, this.Amount.Select(coin => coin.ToModel()).ToArray());
         }
     }
 }

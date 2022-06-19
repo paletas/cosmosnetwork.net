@@ -33,7 +33,12 @@ namespace Terra.NET
 
         internal Terra.NET.API.Serialization.Json.PublicKey ToJson()
         {
-            return new Terra.NET.API.Serialization.Json.PublicKey(string.Empty, Convert.ToBase64String(this.RawKey));
+            return new Terra.NET.API.Serialization.Json.Secp256k1(Convert.ToBase64String(this.RawKey));
+        }
+
+        internal Terra.NET.SignatureKey ToSignatureKey()
+        {
+            return new Secp256k1Key(Convert.ToBase64String(this._key));
         }
     }
 

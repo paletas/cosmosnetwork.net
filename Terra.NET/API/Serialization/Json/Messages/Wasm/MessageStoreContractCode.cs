@@ -5,12 +5,13 @@ using TerraMoney.SDK.Core.Protos.WASM;
 
 namespace Terra.NET.API.Serialization.Json.Messages.Wasm
 {
+
     [MessageDescriptor(TerraType = TERRA_DESCRIPTOR, CosmosType = COSMOS_DESCRIPTOR)]
     internal record MessageStoreContractCode([property: JsonPropertyName("sender")] string SenderAddress, string WasmByteCode)
         : Message(TERRA_DESCRIPTOR, COSMOS_DESCRIPTOR)
     {
         public const string TERRA_DESCRIPTOR = "wasm/MsgStoreCode";
-        public const string COSMOS_DESCRIPTOR = "/terra.wasm.v1beta1.MsgStoreCode";
+        public const string COSMOS_DESCRIPTOR = "/cosmwasm.wasm.v1.MsgStoreCode";
 
         internal override NET.Message ToModel()
         {

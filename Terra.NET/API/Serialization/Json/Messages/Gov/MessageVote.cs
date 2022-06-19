@@ -1,13 +1,12 @@
 ﻿using Cosmos.SDK.Protos.Gov;
 using Google.Protobuf;
-using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Terra.NET.API.Serialization.Json.Messages.Gov
 {
     [MessageDescriptor(TerraType = TERRA_DESCRIPTOR, CosmosType = COSMOS_DESCRIPTOR)]
-    internal record MessageVote(ulong ProposalId, [property: JsonPropertyName("voter")] string VoterAddress, VoteOptionEnum Option)
+    internal record MessageVote(ulong ProposalId, [property: JsonPropertyName("voter")] string VoterAddress, [property: JsonConverter(typeof(JsonStringEnumConverter))] VoteOptionEnum Option)
         : Message(TERRA_DESCRIPTOR, COSMOS_DESCRIPTOR)
     {
         public const string TERRA_DESCRIPTOR = "gov/MsgVote";
@@ -31,20 +30,11 @@ namespace Terra.NET.API.Serialization.Json.Messages.Gov
 
     internal enum VoteOptionEnum
     {
-        [EnumMember(Value = "VOTE_OPTION_UNSPECIFIED")]
-        Unspecified = 0,
-
-        [EnumMember(Value = "VOTE_OPTION_YES")]
-        Yes = 1,
-
-        [EnumMember(Value = "VOTE_OPTION_ABSTAIN")]
-        Abstain = 2,
-
-        [EnumMember(Value = "VOTE_OPTION_NO")]
-        No = 3,
-
-        [EnumMember(Value = "VOTE_OPTION_NO_WITH_VETO")]
-        NoWithVeto = 4
+        VOTE_OPTION_UNSPECIFIED = 0,
+        VOTE_OPTION_YES = 1,
+        VOTE_OPTION_ABSTAIN = 2,
+        VOTE_OPTION_NO = 3,
+        VOTE_OPTION_NO_WITH_VETO = 4
     }
 }
 

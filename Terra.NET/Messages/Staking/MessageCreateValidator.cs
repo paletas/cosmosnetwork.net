@@ -3,7 +3,7 @@
     public record MessageCreateValidator(
         TerraAddress Delegator, TerraAddress Validator, ulong MinimumSelfDelegation,
         ValidatorDescription Description, ValidatorComission Comission, Coin SelfDelegation,
-        PublicKey PublicKey
+        SignatureKey PublicKey
     ) : Message(MessageTypeEnum.StakingCreateValidator)
     {
         internal override API.Serialization.Json.Message ToJson()

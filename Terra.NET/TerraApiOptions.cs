@@ -20,6 +20,7 @@ namespace Terra.NET
             this.JsonSerializerOptions.Converters.Add(new BigIntegerConverter());
             this.JsonSerializerOptions.Converters.Add(new SignerModeConverter());
             this.JsonSerializerOptions.Converters.Add(new BlockFlagConverter());
+            this.JsonSerializerOptions.Converters.Add(new SignerModeConverter());
         }
 
         public TerraApiOptions(int? throttlingEnumeratorsInSeconds = default, ulong? startingBlockHeightForTransactionSearch = default)

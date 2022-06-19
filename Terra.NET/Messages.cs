@@ -46,6 +46,21 @@
         GovDeposit,
         GovSubmitProposal,
         GovVote,
-        GovWeightedVote
+        GovWeightedVote,
+
+        IbcUpdateClient,
+        IbcReceivePacket,
+        IbcTransfer,
+        IbcAcknowledgement,
+        IbcCreateClient,
+        IbcChannelOpenInit,
+        IbcChannelOpenTry,
+        IbcChannelOpenConfirm,
+        IbcChannelOpenAcknowledgement,
+        IbcConnectionOpenInit,
+        IbcConnectionOpenTry,
+        IbcConnectionOpenConfirm,
+        IbcConnectionOpenAcknowledgement,
+        IbcTimeout
     }
 }

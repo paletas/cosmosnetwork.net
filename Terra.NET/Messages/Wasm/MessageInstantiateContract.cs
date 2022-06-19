@@ -2,7 +2,7 @@
 
 namespace Terra.NET.Messages.Wasm
 {
-    public record MessageInstantiateContract(TerraAddress Sender, TerraAddress? Admin, ulong CodeId, string InitMessage, Coin[] InitCoins)
+    public record MessageInstantiateContract(TerraAddress Sender, TerraAddress? Admin, ulong CodeId, string Label, string InitMessage, Coin[] InitCoins)
         : Message(MessageTypeEnum.WasmInstantiateContract)
     {
         internal override API.Serialization.Json.Message ToJson()
@@ -11,6 +11,7 @@ namespace Terra.NET.Messages.Wasm
                 this.Sender.Address,
                 this.Admin?.Address,
                 this.CodeId,
+                this.Label,
                 JsonDocument.Parse(this.InitMessage),
                 this.InitCoins.Select(coin => new API.Serialization.Json.DenomAmount(coin.Denom, coin.Amount)).ToArray()
             );

@@ -1,8 +1,6 @@
-﻿using System.Runtime.Serialization;
-
-namespace Terra.NET
+﻿namespace Terra.NET
 {
-    public record BlockTransaction(Transaction Details, ulong Height, string Hash, ulong GasUsed, ulong GasWanted, DateTime Timestamp, string RawLog, TransactionLog[] Logs);
+    public record BlockTransaction(Transaction Details, ulong Height, string Hash, ulong GasUsed, ulong GasWanted, DateTime Timestamp, string RawLog, TransactionLog[] Logs, TransactionExecutionStatus Status);
 
     public record Transaction(Message[] Messages, string? Memo, ulong? TimeoutHeight, Fee Fees, TransactionSignature[] Signees);
 
@@ -33,4 +31,11 @@ namespace Terra.NET
     public record TransactionLog(ulong MessageIndex, string Log, TransactionEvent[] Events);
 
     public record SignedTransaction(byte[] Payload, Fee Fee);
+
+    public enum TransactionExecutionStatus
+    {
+        MemPool = 1,
+        Executed = 2,
+        Failed = 3
+    }
 }

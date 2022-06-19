@@ -16,7 +16,8 @@ namespace Terra.NET.Messages.Gov
 
     public enum ProposalTypeEnum
     {
-        Text
+        Text,
+        CommunitySpend
     }
 
     public abstract record Proposal(ProposalTypeEnum ProposalType)
@@ -31,6 +32,18 @@ namespace Terra.NET.Messages.Gov
             return new NET.API.Serialization.Json.Messages.Gov.TextProposal(
                 this.Title,
                 this.Description);
+        }
+    }
+
+    public record CommunitySpendProposal(string Title, string Description, TerraAddress Recipient, Coin[] Amount) : Proposal(ProposalTypeEnum.CommunitySpend)
+    {
+        internal override IProposal ToJson()
+        {
+            return new NET.API.Serialization.Json.Messages.Gov.CommunitySpendProposal(
+                this.Title,
+                this.Description,
+                this.Recipient.Address,
+                this.Amount.Select(coin => new API.Serialization.Json.DenomAmount(coin.Denom, coin.Amount)).ToArray());
         }
     }
 }

@@ -6,28 +6,30 @@ using TerraMoney.SDK.Core.Protos.WASM;
 
 namespace Terra.NET.API.Serialization.Json.Messages.Wasm
 {
+
     [MessageDescriptor(TerraType = TERRA_DESCRIPTOR, CosmosType = COSMOS_DESCRIPTOR)]
-    internal record MessageInstantiateContract([property: JsonPropertyName("sender")] string SenderAddress, [property: JsonPropertyName("admin")] string? AdminAddress, ulong CodeId, JsonDocument InitMsg, DenomAmount[] InitCoins)
+    internal record MessageInstantiateContract([property: JsonPropertyName("sender")] string SenderAddress, [property: JsonPropertyName("admin")] string? AdminAddress, ulong CodeId, string Label, JsonDocument Msg, DenomAmount[] Funds)
         : Message(TERRA_DESCRIPTOR, COSMOS_DESCRIPTOR)
     {
         public const string TERRA_DESCRIPTOR = "wasm/MsgInstantiateContract";
-        public const string COSMOS_DESCRIPTOR = "/terra.wasm.v1beta1.MsgInstantiateContract";
+        public const string COSMOS_DESCRIPTOR = "/cosmwasm.wasm.v1.MsgInstantiateContract";
 
         internal override NET.Message ToModel()
         {
-            string initMessageJson = JsonSerializer.Serialize(this.InitMsg);
+            string initMessageJson = JsonSerializer.Serialize(this.Msg);
 
             return new NET.Messages.Wasm.MessageInstantiateContract(
                 this.SenderAddress,
-                this.AdminAddress!,
+                string.IsNullOrWhiteSpace(this.AdminAddress) ? null : new TerraAddress(this.AdminAddress),
                 this.CodeId,
+                this.Label,
                 initMessageJson,
-                this.InitCoins.Select(coin => coin.ToModel()).ToArray());
+                this.Funds.Select(coin => coin.ToModel()).ToArray());
         }
 
         internal override IMessage ToProto(JsonSerializerOptions? serializerOptions = null)
         {
-            string initMessageJson = JsonSerializer.Serialize(this.InitMsg, serializerOptions);
+            string initMessageJson = JsonSerializer.Serialize(this.Msg, serializerOptions);
 
             var initContract = new MsgInstantiateContract
             {
@@ -36,7 +38,7 @@ namespace Terra.NET.API.Serialization.Json.Messages.Wasm
                 CodeId = this.CodeId,
                 InitMsg = ByteString.CopyFrom(initMessageJson, Encoding.UTF8)
             };
-            initContract.InitCoins.AddRange(this.InitCoins.Select(c => c.ToProto()));
+            initContract.InitCoins.AddRange(this.Funds.Select(c => c.ToProto()));
             return initContract;
         }
     }

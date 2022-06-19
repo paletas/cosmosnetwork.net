@@ -155,7 +155,7 @@ namespace Terra.NET.API.Impl
                     result.Info,
                     result.Logs.Select(log => new TransactionLog(
                         log.MessageIndex,
-                        log.Log.ToString(),
+                        log.Log?.ToString(),
                         log.Events.Select(te => new TransactionEvent(te.Type, te.Attributes.Select(tea => new TransactionEventAttribute(tea.Key, tea.Value)).ToArray())).ToArray())
                     ).ToArray(),
                     result.Events.Select(te => new TransactionEvent(te.Type, te.Attributes.Select(tea => new TransactionEventAttribute(tea.Key, tea.Value)).ToArray())).ToArray()

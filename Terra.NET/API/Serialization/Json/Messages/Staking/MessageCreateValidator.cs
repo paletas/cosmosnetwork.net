@@ -2,6 +2,7 @@
 using Google.Protobuf;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Terra.NET.API.Serialization.Json.Converters;
 
 namespace Terra.NET.API.Serialization.Json.Messages.Staking
 {
@@ -9,7 +10,7 @@ namespace Terra.NET.API.Serialization.Json.Messages.Staking
     internal record MessageCreateValidator(
         string DelegatorAddress, string ValidatorAddress, [property: JsonPropertyName("min_self_delegation")] ulong MinimumSelfDelegation,
         ValidatorDescription Description, ValidatorComission Commission, DenomAmount Value,
-        [property: JsonPropertyName("pubkey")] PublicKey PublicKey
+        [property: JsonPropertyName("pubkey"), JsonConverter(typeof(PublicKeyConverter))] PublicKey PublicKey
     ) : Message(TERRA_DESCRIPTOR, COSMOS_DESCRIPTOR)
     {
         public const string TERRA_DESCRIPTOR = "staking/MsgCreateValidator";

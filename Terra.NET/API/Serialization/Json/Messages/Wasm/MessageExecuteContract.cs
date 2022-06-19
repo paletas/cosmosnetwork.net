@@ -6,12 +6,13 @@ using TerraMoney.SDK.Core.Protos.WASM;
 
 namespace Terra.NET.API.Serialization.Json.Messages.Wasm
 {
+
     [MessageDescriptor(TerraType = TERRA_DESCRIPTOR, CosmosType = COSMOS_DESCRIPTOR)]
-    internal record MessageExecuteContract(DenomAmount[] Coins, [property: JsonPropertyName("sender")] string SenderAddress, [property: JsonPropertyName("contract")] string ContractAddress, [property: JsonPropertyName("execute_msg")] JsonDocument ExecuteMessage)
+    internal record MessageExecuteContract([property: JsonPropertyName("funds")] DenomAmount[] Coins, [property: JsonPropertyName("sender")] string SenderAddress, [property: JsonPropertyName("contract")] string ContractAddress, [property: JsonPropertyName("msg")] JsonDocument ExecuteMessage)
         : Message(TERRA_DESCRIPTOR, COSMOS_DESCRIPTOR)
     {
         public const string TERRA_DESCRIPTOR = "wasm/MsgExecuteContract";
-        public const string COSMOS_DESCRIPTOR = "/terra.wasm.v1beta1.MsgExecuteContract";
+        public const string COSMOS_DESCRIPTOR = "/cosmwasm.wasm.v1.MsgExecuteContract";
 
         internal override NET.Message ToModel()
         {

@@ -9,7 +9,7 @@ namespace Terra.NET.API.Serialization.Json.Messages.Distribution
         : Message(TERRA_DESCRIPTOR, COSMOS_DESCRIPTOR)
     {
         public const string TERRA_DESCRIPTOR = "distribution/MsgWithdrawDelegationReward";
-        public const string COSMOS_DESCRIPTOR = "/cosmos.distribution.v1beta1.MsgWithdrawDelegationReward";
+        public const string COSMOS_DESCRIPTOR = "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward";
 
         internal override NET.Message ToModel()
         {
