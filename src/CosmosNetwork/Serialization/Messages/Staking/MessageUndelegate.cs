@@ -4,7 +4,7 @@
     {
         public const string TERRA_DESCRIPTOR = "staking/MsgUndelegate";
 
-        internal override Message ToModel()
+        protected internal override Message ToModel()
         {
             return new CosmosNetwork.Messages.Staking.MessageUndelegate(DelegatorAddress, ValidatorAddress, Amount.ToModel());
         }

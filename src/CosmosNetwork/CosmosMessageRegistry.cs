@@ -1,20 +1,32 @@
 ﻿namespace CosmosNetwork
 {
-    internal class CosmosMessageRegistry
+    public class CosmosMessageRegistry
     {
         private readonly IDictionary<string, Type> _messages
             = new Dictionary<string, Type>();
 
+        public void RegisterMessages(System.Reflection.Assembly assembly)
+        {
+            var messages = assembly.GetTypes().Where(t => typeof(Message).IsAssignableFrom(t)).ToArray();
+
+            foreach (var message in messages) RegisterMessage(message);
+        }
+
         public void RegisterMessage<TM>()
             where TM : Message
         {
-            var messageAttr = GetMessageDescriptor<TM>();
+            RegisterMessage(typeof(TM));
+        }
+
+        public void RegisterMessage(Type messageType)
+        {
+            var messageAttr = GetMessageDescriptor(messageType);
             if (messageAttr is null)
                 throw new InvalidOperationException();
 
-            _messages.Add(messageAttr.CosmosType, typeof(TM));
+            _messages.Add(messageAttr.CosmosType, messageType);
             if (messageAttr.CustomTypeAlias is not null)
-                _messages.Add(messageAttr.CustomTypeAlias, typeof(TM));
+                _messages.Add(messageAttr.CustomTypeAlias, messageType);
         }
 
         public void ReplaceMessage<TO, TN>()
@@ -62,7 +74,12 @@
 
         private CosmosMessageAttribute? GetMessageDescriptor<TM>() where TM : Message
         {
-            return typeof(TM).GetCustomAttributes(false).OfType<CosmosMessageAttribute>().SingleOrDefault();
+            return GetMessageDescriptor(typeof(TM));
+        }
+
+        private CosmosMessageAttribute? GetMessageDescriptor(Type messageType)
+        {
+            return messageType.GetCustomAttributes(false).OfType<CosmosMessageAttribute>().SingleOrDefault();
         }
     }
 }

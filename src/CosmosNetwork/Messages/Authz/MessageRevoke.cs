@@ -8,7 +8,7 @@
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.msgauth.v1beta1.MsgRevoke";
 
-        internal override Serialization.SerializerMessage ToJson()
+        protected internal override Serialization.SerializerMessage ToJson()
         {
             return new Serialization.Messages.Authz.MessageRevoke(Granter.Address, Grantee.Address, MessageTypeUrl);
         }

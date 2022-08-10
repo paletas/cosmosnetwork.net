@@ -5,7 +5,7 @@
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.gov.v1beta1.MsgVote";
 
-        internal override Serialization.SerializerMessage ToJson()
+        protected internal override Serialization.SerializerMessage ToJson()
         {
             return new Serialization.Messages.Gov.MessageVote(
                 ProposalId,

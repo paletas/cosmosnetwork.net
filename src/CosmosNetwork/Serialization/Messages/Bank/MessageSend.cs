@@ -7,7 +7,7 @@ namespace CosmosNetwork.Serialization.Messages.Bank
         string ToAddress,
         [property: JsonPropertyName("amount")] DenomAmount[] Coins) : SerializerMessage
     {
-        internal override Message ToModel()
+        protected internal override Message ToModel()
         {
             return new CosmosNetwork.Messages.Bank.MessageSend(
                 FromAddress,

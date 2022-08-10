@@ -5,7 +5,7 @@ namespace CosmosNetwork.Serialization.Messages.Authz
     internal record MessageExecute([property: JsonPropertyName("grantee")] string GranteeAddress, [property: JsonPropertyName("msgs")] SerializerMessage[] Messages)
         : SerializerMessage
     {
-        internal override Message ToModel()
+        protected internal override Message ToModel()
         {
             return new CosmosNetwork.Messages.Authz.MessageExecute(
                 GranteeAddress,

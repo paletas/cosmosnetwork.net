@@ -1,24 +1,24 @@
 ﻿namespace CosmosNetwork.Serialization
 {
-    internal record DenomAmount(string Denom, ulong Amount)
+    public record DenomAmount(string Denom, ulong Amount)
     {
-        internal virtual Coin ToModel()
+        public virtual Coin ToModel()
         {
             return new NativeCoin(Denom, Amount);
         }
     };
 
-    internal record CustomTokenAmount(string ContractAddress, ulong Amount) : DenomAmount(ContractAddress, Amount)
+    public record CustomTokenAmount(string ContractAddress, ulong Amount) : DenomAmount(ContractAddress, Amount)
     {
-        internal override Coin ToModel()
+        public override Coin ToModel()
         {
             return new CustomCoin(ContractAddress, Amount);
         }
     }
 
-    internal record NativeTokenAmount(string Denom, ulong Amount) : DenomAmount(Denom, Amount)
+    public record NativeTokenAmount(string Denom, ulong Amount) : DenomAmount(Denom, Amount)
     {
-        internal override Coin ToModel()
+        public override Coin ToModel()
         {
             return new NativeCoin(Denom, Amount);
         }

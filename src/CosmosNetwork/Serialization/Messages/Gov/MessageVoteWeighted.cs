@@ -7,7 +7,7 @@ namespace CosmosNetwork.Serialization.Messages.Gov
         [property: JsonPropertyName("voter")] string VoterAddress,
         WeightedVoteOption[] Options) : SerializerMessage
     {
-        internal override Message ToModel()
+        protected internal override Message ToModel()
         {
             return new CosmosNetwork.Messages.Gov.MessageVoteWeighted(
                 ProposalId,

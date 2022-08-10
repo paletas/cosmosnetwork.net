@@ -11,7 +11,7 @@ namespace CosmosNetwork.Serialization.Messages.Gov
     {
         public const string TERRA_DESCRIPTOR = "gov/MsMsgSubmitProposalSwap";
 
-        internal override Message ToModel()
+        protected internal override Message ToModel()
         {
             return new CosmosNetwork.Messages.Gov.MessageSubmitProposal(
                 Content.ToModel(),

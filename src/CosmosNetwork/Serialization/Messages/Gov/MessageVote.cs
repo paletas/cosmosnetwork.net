@@ -9,7 +9,7 @@ namespace CosmosNetwork.Serialization.Messages.Gov
     {
         public const string TERRA_DESCRIPTOR = "gov/MsgVote";
 
-        internal override Message ToModel()
+        protected internal override Message ToModel()
         {
             return new CosmosNetwork.Messages.Gov.MessageVote(ProposalId, VoterAddress, (CosmosNetwork.Messages.Gov.VoteOptionEnum)Option);
         }

@@ -7,7 +7,7 @@
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.msgauth.v1beta1.MsgExecAuthorized";
 
-        internal override Serialization.SerializerMessage ToJson()
+        protected internal override Serialization.SerializerMessage ToJson()
         {
             return new Serialization.Messages.Authz.MessageExecute(Grantee.Address, Messages.Select(msg => msg.ToJson()).ToArray());
         }

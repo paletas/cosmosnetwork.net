@@ -13,7 +13,7 @@ namespace CosmosNetwork.Serialization.Messages.Staking
         [property: JsonPropertyName("pubkey"), JsonConverter(typeof(PublicKeyConverter))] PublicKey PublicKey
     ) : SerializerMessage
     {
-        internal override Message ToModel()
+        protected internal override Message ToModel()
         {
             return new CosmosNetwork.Messages.Staking.MessageCreateValidator(
                 DelegatorAddress, ValidatorAddress, MinimumSelfDelegation,

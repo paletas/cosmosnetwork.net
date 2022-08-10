@@ -9,11 +9,8 @@ namespace CosmosNetwork
 {
     public class CosmosApi
     {
-        public CosmosApi(HttpClient httpClient, ILoggerFactory loggerFactory, CosmosApiOptions? options = default)
+        internal CosmosApi(HttpClient httpClient, ILoggerFactory loggerFactory, CosmosApiOptions options)
         {
-            if (options == default)
-                options = new CosmosApiOptions();
-
             Options = options;
 
             SmartContracts = new SmartContractsApi(options, httpClient, loggerFactory.CreateLogger<SmartContractsApi>());

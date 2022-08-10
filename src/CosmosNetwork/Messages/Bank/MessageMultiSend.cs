@@ -7,7 +7,7 @@
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.bank.v1beta1.MsgMultiSend";
 
-        internal override Serialization.SerializerMessage ToJson()
+        protected internal override Serialization.SerializerMessage ToJson()
         {
             return new Serialization.Messages.Bank.MessageMultiSend(
                 Inputs.Select(i => new Serialization.Messages.Bank.MessageMultiSendInputOutput(

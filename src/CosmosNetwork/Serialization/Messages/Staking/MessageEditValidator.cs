@@ -11,7 +11,7 @@ namespace CosmosNetwork.Serialization.Messages.Staking
         public const string TERRA_DESCRIPTOR = "staking/MsgEditValidator";
         public const string COSMOS_DESCRIPTOR = "/cosmos.staking.v1beta1.MsgEditValidator";
 
-        internal override Message ToModel()
+        protected internal override Message ToModel()
         {
             return new CosmosNetwork.Messages.Staking.MessageEditValidator(
                 ValidatorAddress, MinimumSelfDelegation,

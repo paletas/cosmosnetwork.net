@@ -8,7 +8,7 @@ namespace CosmosNetwork.Serialization.Messages.Staking
         [property: JsonPropertyName("validator_dst_address")] string DestinationValidatorAddress,
         DenomAmount Amount) : SerializerMessage
     {
-        internal override Message ToModel()
+        protected internal override Message ToModel()
         {
             return new CosmosNetwork.Messages.Staking.MessageBeginRedelegate(
                 DelegatorAddress,

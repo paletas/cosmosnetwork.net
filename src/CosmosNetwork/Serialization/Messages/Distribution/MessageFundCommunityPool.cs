@@ -6,7 +6,7 @@ namespace CosmosNetwork.Serialization.Messages.Distribution
         [property: JsonPropertyName("depositor")] string DepositorAddress,
         DenomAmount[] Amount) : SerializerMessage
     {
-        internal override Message ToModel()
+        protected internal override Message ToModel()
         {
             return new CosmosNetwork.Messages.Distribution.MessageFundCommunityPool(
                 DepositorAddress,

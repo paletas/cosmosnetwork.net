@@ -4,7 +4,7 @@
         MessageMultiSendInputOutput[] Inputs,
         MessageMultiSendInputOutput[] Outputs) : SerializerMessage
     {
-        internal override Message ToModel()
+        protected internal override Message ToModel()
         {
             return new CosmosNetwork.Messages.Bank.MessageMultiSend(
                 Inputs.Select(i => i.ToModel()).ToArray(),

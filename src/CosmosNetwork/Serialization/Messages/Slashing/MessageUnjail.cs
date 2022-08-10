@@ -6,7 +6,7 @@ namespace CosmosNetwork.Serialization.Messages.Slashing
     {
         public const string TERRA_DESCRIPTOR = "slashing/MsgUnjail";
 
-        internal override Message ToModel()
+        protected internal override Message ToModel()
         {
             return new CosmosNetwork.Messages.Slashing.MessageUnjail(ValidatorAddress);
         }

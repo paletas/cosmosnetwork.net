@@ -1,7 +1,7 @@
 ﻿namespace CosmosNetwork.Serialization
 {
-    internal abstract record SerializerMessage()
+    public abstract record SerializerMessage()
     {
-        internal abstract CosmosNetwork.Message ToModel();
+        internal protected abstract CosmosNetwork.Message ToModel();
     };
 }

@@ -7,7 +7,7 @@ namespace CosmosNetwork.Serialization.Messages.Authz
         [property: JsonPropertyName("grantee")] string GranteeAddress)
         : SerializerMessage
     {
-        internal override Message ToModel()
+        protected internal override Message ToModel()
         {
             return new CosmosNetwork.Messages.Authz.MessageGrant(
                 GranterAddress,

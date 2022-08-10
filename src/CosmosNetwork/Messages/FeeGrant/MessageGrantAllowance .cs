@@ -7,7 +7,7 @@ namespace CosmosNetwork.Messages.FeeGrant
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.feegrant.v1beta1.MsgGrantAllowance";
 
-        internal override Serialization.SerializerMessage ToJson()
+        protected internal override Serialization.SerializerMessage ToJson()
         {
             return new Serialization.Messages.FeeGrant.MessageGrantAllowance(
                 Granter.Address,

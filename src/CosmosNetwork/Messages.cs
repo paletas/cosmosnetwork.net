@@ -2,6 +2,6 @@
 {
     public abstract record Message()
     {
-        internal abstract Serialization.SerializerMessage ToJson();
+        internal protected abstract Serialization.SerializerMessage ToJson();
     }
 }

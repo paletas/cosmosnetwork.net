@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\src\CosmosNetwork\CosmosNetwork.csproj" />
+  </ItemGroup>
+
 </Project>

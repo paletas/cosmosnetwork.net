@@ -4,7 +4,7 @@
     {
         public const string TERRA_DESCRIPTOR = "distribution/MsgWithdrawValidatorCommission";
 
-        internal override Message ToModel()
+        protected internal override Message ToModel()
         {
             return new CosmosNetwork.Messages.Distribution.MessageWithdrawValidatorCommission(ValidatorAddress);
         }

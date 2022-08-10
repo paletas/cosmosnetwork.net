@@ -12,7 +12,7 @@
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.staking.v1beta1.MsgCreateValidator";
 
-        internal override Serialization.SerializerMessage ToJson()
+        protected internal override Serialization.SerializerMessage ToJson()
         {
             return new Serialization.Messages.Staking.MessageCreateValidator(
                 Delegator.Address, Validator.Address, MinimumSelfDelegation,

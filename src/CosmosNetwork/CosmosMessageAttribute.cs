@@ -1,7 +1,7 @@
 ﻿namespace CosmosNetwork
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    internal class CosmosMessageAttribute : Attribute
+    public class CosmosMessageAttribute : Attribute
     {
         public CosmosMessageAttribute(string cosmosType)
         {

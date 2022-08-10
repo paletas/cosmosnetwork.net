@@ -7,7 +7,7 @@
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward";
 
-        internal override Serialization.SerializerMessage ToJson()
+        protected internal override Serialization.SerializerMessage ToJson()
         {
             return new Serialization.Messages.Distribution.MessageWithdrawDelegatorReward(Delegator.Address, Validator.Address);
         }

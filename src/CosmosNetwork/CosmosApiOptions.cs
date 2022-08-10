@@ -7,8 +7,10 @@ namespace CosmosNetwork
 {
     public class CosmosApiOptions
     {
-        public CosmosApiOptions()
+        public CosmosApiOptions(string chainId)
         {
+            this.ChainId = chainId;
+
             JsonSerializerOptions = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
@@ -23,8 +25,8 @@ namespace CosmosNetwork
             JsonSerializerOptions.Converters.Add(new SignerModeConverter());
         }
 
-        public CosmosApiOptions(int? throttlingEnumeratorsInSeconds = default, ulong? startingBlockHeightForTransactionSearch = default)
-            : this()
+        public CosmosApiOptions(string chainId, int? throttlingEnumeratorsInSeconds = default, ulong? startingBlockHeightForTransactionSearch = default)
+            : this(chainId)
         {
             if (throttlingEnumeratorsInSeconds != default)
                 ThrottlingEnumeratorsInMilliseconds = throttlingEnumeratorsInSeconds;
@@ -33,7 +35,7 @@ namespace CosmosNetwork
                 StartingBlockHeightForTransactionSearch = startingBlockHeightForTransactionSearch.Value;
         }
 
-        public string ChainId { get; set; } = "columbus-5";
+        public string ChainId { get; set; }
 
         public int? ThrottlingEnumeratorsInMilliseconds { get; set; } = 1000;
 
@@ -43,7 +45,7 @@ namespace CosmosNetwork
 
         public decimal GasAdjustment { get; set; } = 1.75M;
 
-        public string[]? DefaultDenoms { get; set; } = new[] { "uusd" };
+        public string[]? DefaultDenoms { get; set; } = new[] { "uatom" };
 
         public JsonSerializerOptions JsonSerializerOptions { get; init; } = null!;
     }

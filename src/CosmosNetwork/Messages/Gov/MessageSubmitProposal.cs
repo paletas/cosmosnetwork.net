@@ -7,7 +7,7 @@ namespace CosmosNetwork.Messages.Gov
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.gov.v1beta1.MsgSubmitProposal";
 
-        internal override Serialization.SerializerMessage ToJson()
+        protected internal override Serialization.SerializerMessage ToJson()
         {
             return new Serialization.Messages.Gov.MessageSubmitProposal(
                 Proposal.ToJson(),
