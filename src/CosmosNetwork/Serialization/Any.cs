@@ -20,12 +20,17 @@ namespace CosmosNetwork.Serialization
         public T? Unpack<T>()
             where T : IHasAny
         {
-            using MemoryStream memoryStream = new(this.Value);
-            return JsonSerializer.Deserialize<T>(memoryStream);
+            return (T?) Unpack(typeof(T));
+        }
+
+        public object? Unpack(Type type)
+        {
+            using MemoryStream memoryStream = new(Value);
+            return JsonSerializer.Deserialize(memoryStream, type);
         }
     }
 
-    internal interface IHasAny
+    public interface IHasAny
     {
         string TypeUrl { get; }
     }

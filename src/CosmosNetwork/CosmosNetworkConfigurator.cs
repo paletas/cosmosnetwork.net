@@ -8,32 +8,32 @@ namespace CosmosNetwork
 
         internal CosmosNetworkConfigurator(string chainId, CosmosMessageRegistry registry, CosmosApiOptions? options = null)
         {
-            this._options = options ?? new CosmosApiOptions(chainId);
+            _options = options ?? new CosmosApiOptions(chainId);
 
-            this.Registry = registry;
+            Registry = registry;
         }
 
         public CosmosMessageRegistry Registry { get; }
 
         public CosmosNetworkConfigurator SetGasOptions(decimal gasAdjustment)
         {
-            this._options.GasAdjustment = gasAdjustment;
-            this._options.GasPrices = null;
+            _options.GasAdjustment = gasAdjustment;
+            _options.GasPrices = null;
 
             return this;
         }
 
         public CosmosNetworkConfigurator SetGasOptions(decimal gasAdjustment, params CoinDecimal[] gasPrices)
         {
-            this._options.GasAdjustment = gasAdjustment;
-            this._options.GasPrices = gasPrices;
+            _options.GasAdjustment = gasAdjustment;
+            _options.GasPrices = gasPrices;
 
             return this;
         }
 
         public CosmosNetworkConfigurator SetDefaultDenom(params string[] denom)
         {
-            this._options.DefaultDenoms = denom;
+            _options.DefaultDenoms = denom;
 
             return this;
         }
@@ -43,14 +43,14 @@ namespace CosmosNetwork
     {
         public static CosmosNetworkConfigurator UseCosmosNetwork(this IServiceCollection services, string chainId, CosmosApiOptions? options = null)
         {
-            var cosmosMessageRegistry = new CosmosMessageRegistry();
+            CosmosMessageRegistry cosmosMessageRegistry = new();
             cosmosMessageRegistry.RegisterMessages(typeof(CosmosNetworkConfigurator).Assembly);
 
-            var cosmosNetworkConfigurator = new CosmosNetworkConfigurator(chainId, cosmosMessageRegistry, options);
-            
-            services.AddSingleton<CosmosNetworkConfigurator>(sp => cosmosNetworkConfigurator);
-            services.AddSingleton<CosmosMessageRegistry>(sp => cosmosMessageRegistry);
-            services.AddScoped<CosmosApi>();
+            CosmosNetworkConfigurator cosmosNetworkConfigurator = new(chainId, cosmosMessageRegistry, options);
+
+            _ = services.AddSingleton<CosmosNetworkConfigurator>(sp => cosmosNetworkConfigurator);
+            _ = services.AddSingleton<CosmosMessageRegistry>(sp => cosmosMessageRegistry);
+            _ = services.AddScoped<CosmosApi>();
 
             return cosmosNetworkConfigurator;
         }

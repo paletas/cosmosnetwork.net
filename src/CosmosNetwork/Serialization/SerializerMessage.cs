@@ -2,6 +2,6 @@
 {
     public abstract record SerializerMessage()
     {
-        internal protected abstract CosmosNetwork.Message ToModel();
+        protected internal abstract CosmosNetwork.Message ToModel();
     };
 }

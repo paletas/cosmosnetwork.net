@@ -7,7 +7,7 @@ namespace CosmosNetwork.Serialization.Json.Converters
     {
         public override PublicKey? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var innerReader = reader; //local copy
+            Utf8JsonReader innerReader = reader; //local copy
 
             if (innerReader.TokenType != JsonTokenType.StartObject)
             {
@@ -24,7 +24,7 @@ namespace CosmosNetwork.Serialization.Json.Converters
                 throw new JsonException();
             }
 
-            var type = innerReader.GetString();
+            string? type = innerReader.GetString();
             PublicKey? returnObj = type switch
             {
                 "/cosmos.crypto.secp256k1.PubKey" => JsonSerializer.Deserialize<Secp256k1>(ref reader, options),
@@ -55,14 +55,17 @@ namespace CosmosNetwork.Serialization.Json.Converters
                 throw new JsonException();
             }
 
-            var serializerOptions = new JsonSerializerOptions(options);
+            JsonSerializerOptions serializerOptions = new(options);
             serializerOptions.Converters.Add(new PublicKeyConverter());
 
-            var keys = new List<PublicKey>();
+            List<PublicKey> keys = new();
             do
             {
-                var key = JsonSerializer.Deserialize<PublicKey>(ref reader, serializerOptions);
-                if (key == null) throw new JsonException();
+                PublicKey? key = JsonSerializer.Deserialize<PublicKey>(ref reader, serializerOptions);
+                if (key == null)
+                {
+                    throw new JsonException();
+                }
 
                 keys.Add(key);
             }

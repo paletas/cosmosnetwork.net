@@ -16,7 +16,7 @@ namespace CosmosNetwork.Serialization
         {
             return new Tendermint.PublicKey
             {
-                Secp256k1 = Convert.FromBase64String(this.Value)
+                Secp256k1 = Convert.FromBase64String(Value)
             };
         }
 
@@ -32,7 +32,7 @@ namespace CosmosNetwork.Serialization
         {
             return new Tendermint.PublicKey
             {
-                Ed25519 = Convert.FromBase64String(this.Value)
+                Ed25519 = Convert.FromBase64String(Value)
             };
         }
 

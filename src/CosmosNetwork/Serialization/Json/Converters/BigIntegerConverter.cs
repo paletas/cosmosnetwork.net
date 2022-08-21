@@ -8,9 +8,8 @@ namespace CosmosNetwork.Serialization.Json.Converters
     {
         public override BigInteger Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var extraLong = reader.GetString();
-            if (extraLong == null) throw new InvalidOperationException();
-            return BigInteger.Parse(extraLong);
+            string? extraLong = reader.GetString();
+            return extraLong == null ? throw new InvalidOperationException() : BigInteger.Parse(extraLong);
         }
 
         public override void Write(Utf8JsonWriter writer, BigInteger value, JsonSerializerOptions options)

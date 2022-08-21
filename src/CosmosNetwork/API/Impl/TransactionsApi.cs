@@ -19,24 +19,35 @@ namespace CosmosNetwork.API.Impl
 
         public async Task<Fee> EstimateFee(IEnumerable<Message> messages, SignerOptions[] signers, EstimateFeesOptions? estimateOptions = null, CancellationToken cancellationToken = default)
         {
-            var gasAdjustment = estimateOptions?.GasAdjustment ?? Options.GasAdjustment;
-            var gasPrices = estimateOptions?.GasPrices ?? Options.GasPrices;
+            decimal gasAdjustment = estimateOptions?.GasAdjustment ?? Options.GasAdjustment;
+            CoinDecimal[]? gasPrices = estimateOptions?.GasPrices ?? Options.GasPrices;
             if (gasPrices == null)
             {
-                var updatedGasPrices = await _blockchainApi.GetGasPrices(cancellationToken).ConfigureAwait(false);
+                IReadOnlyDictionary<string, decimal> updatedGasPrices = await _blockchainApi.GetGasPrices(cancellationToken).ConfigureAwait(false);
                 gasPrices = Options.GasPrices = updatedGasPrices.Select(gas => new CoinDecimal(gas.Key, gas.Value, true)).ToArray();
 
-                if (gasPrices.Length == 0) throw new InvalidOperationException("Gas prices unknown");
+                if (gasPrices.Length == 0)
+                {
+                    throw new InvalidOperationException("Gas prices unknown");
+                }
             }
 
-            var feeDenoms = estimateOptions?.FeesDenoms ?? Options.DefaultDenoms ?? throw new InvalidOperationException("Default denoms are required");
-            var gas = estimateOptions?.Gas ?? default;
+            string[] feeDenoms = estimateOptions?.FeesDenoms ?? Options.DefaultDenoms ?? throw new InvalidOperationException("Default denoms are required");
+            ulong gas = estimateOptions?.Gas ?? default;
 
             if (gas == default)
             {
-                var (errorCode, simulationResult) = await SimulateTransaction(messages, signers, estimateOptions, cancellationToken);
-                if (errorCode.HasValue) throw new EstimateFeeException(errorCode.Value, "Unable to estimate fee");
-                if (simulationResult == null || simulationResult.GasUsage == null) throw new InvalidOperationException();
+                (uint? errorCode, TransactionSimulation simulationResult) = await SimulateTransaction(messages, signers, estimateOptions, cancellationToken);
+                if (errorCode.HasValue)
+                {
+                    throw new EstimateFeeException(errorCode.Value, "Unable to estimate fee");
+                }
+
+                if (simulationResult == null || simulationResult.GasUsage == null)
+                {
+                    throw new InvalidOperationException();
+                }
+
                 gas = simulationResult.GasUsage.GasUsed;
                 gas = (ulong)Math.Ceiling(gas * gasAdjustment);
             }
@@ -44,7 +55,7 @@ namespace CosmosNetwork.API.Impl
             return new Fee(gas, gasPrices.Where(gp => feeDenoms.Contains(gp.Denom)).Select(gp => new NativeCoin(gp.Denom, (ulong)Math.Ceiling(gp.Amount * gas))).ToArray());
         }
 
-        public async Task<IEnumerable<Coin>> ComputeTax(IEnumerable<Message> messages, SignerOptions[] signers, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<Coin>> ComputeTax(IEnumerable<Message> messages, SignerOptions[] signers, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
 
@@ -60,7 +71,7 @@ namespace CosmosNetwork.API.Impl
             //else throw new InvalidOperationException();
         }
 
-        public async Task<(uint? ErrorCode, TransactionSimulation? Result)> SimulateTransaction(IEnumerable<Message> messages, SignerOptions[] signers, TransactionSimulationOptions? simulationOptions = null, CancellationToken cancellationToken = default)
+        public Task<(uint? ErrorCode, TransactionSimulation? Result)> SimulateTransaction(IEnumerable<Message> messages, SignerOptions[] signers, TransactionSimulationOptions? simulationOptions = null, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
 
@@ -109,42 +120,49 @@ namespace CosmosNetwork.API.Impl
 
         public async Task<(uint? ErrorCode, TransactionSimulation? Result)> SimulateTransaction(SignedTransaction transaction, CancellationToken cancellationToken = default)
         {
-            var simulationRequest = new TransactionRequest(Convert.ToBase64String(transaction.Payload));
-            var simulationResponse = await Post<TransactionRequest, TransactionSimulationResponse, ErrorResponse>($"/cosmos/tx/v1beta1/simulate", simulationRequest, cancellationToken).ConfigureAwait(false);
+            TransactionRequest simulationRequest = new(Convert.ToBase64String(transaction.Payload));
+            (TransactionSimulationResponse? ResponseOK, ErrorResponse? ResponseError) = await Post<TransactionRequest, TransactionSimulationResponse, ErrorResponse>($"/cosmos/tx/v1beta1/simulate", simulationRequest, cancellationToken).ConfigureAwait(false);
 
-            if (simulationResponse.ResponseOK == null && simulationResponse.ResponseError == null) throw new InvalidOperationException("Couldn't simulate transaction");
-
-            if (simulationResponse.ResponseOK != null)
+            if (ResponseOK == null && ResponseError == null)
             {
-                var simulationGasUsage = new TransactionGasUsage(simulationResponse.ResponseOK.GasInfo.GasWanted, simulationResponse.ResponseOK.GasInfo.GasUsed);
-                var simulationResult = new TransactionSimulationResult(
-                    simulationResponse.ResponseOK.Result.Data,
-                    simulationResponse.ResponseOK.Result.Log,
-                    simulationResponse.ResponseOK.Result.Events.Select(te => new TransactionEvent(te.Type, te.Attributes.Select(tea => new TransactionEventAttribute(tea.Key, tea.Value)).ToArray())).ToArray()
+                throw new InvalidOperationException("Couldn't simulate transaction");
+            }
+
+            if (ResponseOK != null)
+            {
+                TransactionGasUsage simulationGasUsage = new(ResponseOK.GasInfo.GasWanted, ResponseOK.GasInfo.GasUsed);
+                TransactionSimulationResult simulationResult = new(
+                    ResponseOK.Result.Data,
+                    ResponseOK.Result.Log,
+                    ResponseOK.Result.Events.Select(te => new TransactionEvent(te.Type, te.Attributes.Select(tea => new TransactionEventAttribute(tea.Key, tea.Value)).ToArray())).ToArray()
                 );
 
                 return (null, new TransactionSimulation(simulationGasUsage, simulationResult));
             }
-            else if (simulationResponse.ResponseError != null)
+            else
             {
-                return (simulationResponse.ResponseError.Code, null);
+                return ResponseError != null
+                    ? ((uint? ErrorCode, TransactionSimulation? Result))(ResponseError.Code, null)
+                    : throw new InvalidOperationException();
             }
-            else throw new InvalidOperationException();
         }
 
         public async Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransactionBlock(SignedTransaction transaction, CancellationToken cancellationToken = default)
         {
-            var broadcastRequest = new TransactionRequest(Convert.ToBase64String(transaction.Payload), "BROADCAST_MODE_BLOCK");
-            var broadcastResponse = await Post<TransactionRequest, TransactionBroadcastResponse, ErrorResponse>($"/cosmos/tx/v1beta1/txs", broadcastRequest, cancellationToken).ConfigureAwait(false);
+            TransactionRequest broadcastRequest = new(Convert.ToBase64String(transaction.Payload), "BROADCAST_MODE_BLOCK");
+            (TransactionBroadcastResponse? ResponseOK, ErrorResponse? ResponseError) = await Post<TransactionRequest, TransactionBroadcastResponse, ErrorResponse>($"/cosmos/tx/v1beta1/txs", broadcastRequest, cancellationToken).ConfigureAwait(false);
 
-            if (broadcastResponse.ResponseOK == null && broadcastResponse.ResponseError == null) throw new InvalidOperationException("Couldn't broadcast transaction");
-
-            if (broadcastResponse.ResponseOK != null)
+            if (ResponseOK == null && ResponseError == null)
             {
-                var result = broadcastResponse.ResponseOK.Result;
+                throw new InvalidOperationException("Couldn't broadcast transaction");
+            }
 
-                var gasUsage = new TransactionGasUsage(result.GasWanted, result.GasUsed);
-                var broadcastResult = new TransactionResult(
+            if (ResponseOK != null)
+            {
+                Serialization.Json.TransactionResponse result = ResponseOK.Result;
+
+                TransactionGasUsage gasUsage = new(result.GasWanted, result.GasUsed);
+                TransactionResult broadcastResult = new(
                     result.Data,
                     result.Info,
                     result.Logs.Select(log => new TransactionLog(
@@ -157,82 +175,94 @@ namespace CosmosNetwork.API.Impl
 
                 return (null, new TransactionBroadcast(transaction, gasUsage, broadcastResult));
             }
-            else if (broadcastResponse.ResponseError != null)
+            else
             {
-                return (broadcastResponse.ResponseError.Code, null);
+                return ResponseError != null
+                    ? ((uint? ErrorCode, TransactionBroadcast? Result))(ResponseError.Code, null)
+                    : throw new InvalidOperationException();
             }
-            else throw new InvalidOperationException();
         }
 
         public async Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransactionAsyncAndWait(SignedTransaction transaction, CancellationToken cancellationToken = default)
         {
-            var broadcastRequest = new TransactionRequest(Convert.ToBase64String(transaction.Payload), "BROADCAST_MODE_ASYNC");
-            var broadcastResponse = await Post<TransactionRequest, TransactionBroadcastResponse, ErrorResponse>($"/cosmos/tx/v1beta1/txs", broadcastRequest, cancellationToken).ConfigureAwait(false);
+            TransactionRequest broadcastRequest = new(Convert.ToBase64String(transaction.Payload), "BROADCAST_MODE_ASYNC");
+            (TransactionBroadcastResponse? ResponseOK, ErrorResponse? ResponseError) = await Post<TransactionRequest, TransactionBroadcastResponse, ErrorResponse>($"/cosmos/tx/v1beta1/txs", broadcastRequest, cancellationToken).ConfigureAwait(false);
 
-            if (broadcastResponse.ResponseOK == null && broadcastResponse.ResponseError == null) throw new InvalidOperationException("Couldn't broadcast transaction");
-
-            if (broadcastResponse.ResponseOK != null)
+            if (ResponseOK == null && ResponseError == null)
             {
-                var result = broadcastResponse.ResponseOK.Result;
-                var transactionHash = result.TransactionHash;
+                throw new InvalidOperationException("Couldn't broadcast transaction");
+            }
 
-                var tx = await GetTransaction(transactionHash, cancellationToken);
+            if (ResponseOK != null)
+            {
+                Serialization.Json.TransactionResponse result = ResponseOK.Result;
+                string transactionHash = result.TransactionHash;
+
+                BlockTransaction? tx = await GetTransaction(transactionHash, cancellationToken);
                 while (tx == null)
                 {
                     await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
                     tx = await GetTransaction(transactionHash, cancellationToken);
                 }
 
-                var gasUsage = new TransactionGasUsage(tx.GasWanted, tx.GasUsed);
-                var txResult = new TransactionResult(tx.RawLog, string.Empty, tx.Logs, tx.Logs.SelectMany(l => l.Events).ToArray());
+                TransactionGasUsage gasUsage = new(tx.GasWanted, tx.GasUsed);
+                TransactionResult txResult = new(tx.RawLog, string.Empty, tx.Logs, tx.Logs.SelectMany(l => l.Events).ToArray());
                 return (null, new TransactionBroadcast(transaction, gasUsage, txResult));
             }
-            else if (broadcastResponse.ResponseError != null)
+            else
             {
-                return (broadcastResponse.ResponseError.Code, null);
+                return ResponseError != null
+                    ? ((uint? ErrorCode, TransactionBroadcast? Result))(ResponseError.Code, null)
+                    : throw new InvalidOperationException();
             }
-            else throw new InvalidOperationException();
         }
 
         public async Task<(uint? ErrorCode, string? TransactionHash)> BroadcastTransactionAsync(SignedTransaction transaction, CancellationToken cancellationToken = default)
         {
-            var broadcastRequest = new TransactionRequest(Convert.ToBase64String(transaction.Payload), "BROADCAST_MODE_ASYNC");
-            var broadcastResponse = await Post<TransactionRequest, TransactionBroadcastResponse, ErrorResponse>($"/cosmos/tx/v1beta1/txs", broadcastRequest, cancellationToken).ConfigureAwait(false);
+            TransactionRequest broadcastRequest = new(Convert.ToBase64String(transaction.Payload), "BROADCAST_MODE_ASYNC");
+            (TransactionBroadcastResponse? ResponseOK, ErrorResponse? ResponseError) = await Post<TransactionRequest, TransactionBroadcastResponse, ErrorResponse>($"/cosmos/tx/v1beta1/txs", broadcastRequest, cancellationToken).ConfigureAwait(false);
 
-            if (broadcastResponse.ResponseOK == null && broadcastResponse.ResponseError == null) throw new InvalidOperationException("Couldn't broadcast transaction");
-
-            if (broadcastResponse.ResponseOK != null)
+            if (ResponseOK == null && ResponseError == null)
             {
-                var result = broadcastResponse.ResponseOK.Result;
-                var transactionHash = result.TransactionHash;
+                throw new InvalidOperationException("Couldn't broadcast transaction");
+            }
+
+            if (ResponseOK != null)
+            {
+                Serialization.Json.TransactionResponse result = ResponseOK.Result;
+                string transactionHash = result.TransactionHash;
 
                 return (null, transactionHash);
             }
-            else if (broadcastResponse.ResponseError != null)
+            else
             {
-                return (broadcastResponse.ResponseError.Code, null);
+                return ResponseError != null
+                    ? ((uint? ErrorCode, string? TransactionHash))(ResponseError.Code, null)
+                    : throw new InvalidOperationException();
             }
-            else throw new InvalidOperationException();
         }
 
         public async Task<BlockTransaction?> GetTransaction(string transactionHash, CancellationToken cancellationToken = default)
         {
-            var endpoint = $"/cosmos/tx/v1beta1/txs/{transactionHash}";
+            string endpoint = $"/cosmos/tx/v1beta1/txs/{transactionHash}";
 
-            var transactionResponse = await Get<Serialization.Json.BlockTransaction>(endpoint, cancellationToken);
+            Serialization.Json.BlockTransaction? transactionResponse = await Get<Serialization.Json.BlockTransaction>(endpoint, cancellationToken);
 
             return transactionResponse?.ToModel();
         }
 
         public async IAsyncEnumerable<BlockTransaction> GetTransactions(ulong height, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            var block = await _blocksApi.GetBlock(height, cancellationToken);
+            Block? block = await _blocksApi.GetBlock(height, cancellationToken);
 
-            if (block is null) yield break;
-
-            foreach (var tx in block.Details.Data.Transactions)
+            if (block is null)
             {
-                var txHash = HashExtensions.HashToHex(tx);
+                yield break;
+            }
+
+            foreach (string tx in block.Details.Data.Transactions)
+            {
+                string txHash = HashExtensions.HashToHex(tx);
 
                 yield return await GetTransaction(txHash, cancellationToken) ?? throw new CosmosException();
             }

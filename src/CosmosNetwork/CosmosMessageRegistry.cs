@@ -7,9 +7,12 @@
 
         public void RegisterMessages(System.Reflection.Assembly assembly)
         {
-            var messages = assembly.GetTypes().Where(t => typeof(Message).IsAssignableFrom(t)).ToArray();
+            Type[] messages = assembly.GetTypes().Where(t => typeof(Message).IsAssignableFrom(t)).ToArray();
 
-            foreach (var message in messages) RegisterMessage(message);
+            foreach (Type? message in messages)
+            {
+                RegisterMessage(message);
+            }
         }
 
         public void RegisterMessage<TM>()
@@ -20,30 +23,40 @@
 
         public void RegisterMessage(Type messageType)
         {
-            var messageAttr = GetMessageDescriptor(messageType);
+            CosmosMessageAttribute? messageAttr = GetMessageDescriptor(messageType);
             if (messageAttr is null)
+            {
                 throw new InvalidOperationException();
+            }
 
             _messages.Add(messageAttr.CosmosType, messageType);
             if (messageAttr.CustomTypeAlias is not null)
+            {
                 _messages.Add(messageAttr.CustomTypeAlias, messageType);
+            }
         }
 
         public void ReplaceMessage<TO, TN>()
             where TO : Message
             where TN : Message
         {
-            var previousMessageAttr = GetMessageDescriptor<TO>();
-            var messageAttr = GetMessageDescriptor<TO>();
+            CosmosMessageAttribute? previousMessageAttr = GetMessageDescriptor<TO>();
+            CosmosMessageAttribute? messageAttr = GetMessageDescriptor<TO>();
 
             if (previousMessageAttr is null)
+            {
                 throw new InvalidOperationException();
+            }
 
             if (messageAttr is null)
+            {
                 throw new InvalidOperationException();
+            }
 
             if (previousMessageAttr.CosmosType != messageAttr.CosmosType)
+            {
                 throw new InvalidOperationException();
+            }
 
             _messages[previousMessageAttr.CosmosType] = typeof(TN);
             if (messageAttr.CustomTypeAlias is not null)
@@ -61,10 +74,7 @@
 
         internal Type? GetMessageType(string type)
         {
-            if (_messages.ContainsKey(type))
-                return _messages[type];
-            else
-                return null;
+            return _messages.ContainsKey(type) ? _messages[type] : null;
         }
 
         internal string GetMessageTypeName(Type type)

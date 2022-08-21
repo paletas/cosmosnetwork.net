@@ -16,8 +16,8 @@ namespace CosmosNetwork.Keys
 
         private TransactionSigner CreateSignature(string chain, SignerOptions signer, Serialization.SignatureDescriptor signerInfo, SignerModeEnum signerMode, AuthInfo authInfo, TransactionBody txBody)
         {
-            var authInfoCopy = new Serialization.AuthInfo(new List<Serialization.SignatureDescriptor> { signerInfo }, authInfo.Fee);
-            var signDoc = new SignDoc(txBody, authInfoCopy, chain, ulong.Parse(signer.AccountNumber));
+            AuthInfo authInfoCopy = new(new List<Serialization.SignatureDescriptor> { signerInfo }, authInfo.Fee);
+            SignDoc signDoc = new(txBody, authInfoCopy, chain, ulong.Parse(signer.AccountNumber));
 
             byte[] signBytes = SignPayload(signDoc.ToByteArray());
             string signBase64 = Convert.ToBase64String(signBytes);

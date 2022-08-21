@@ -16,9 +16,10 @@ namespace CosmosNetwork.API.Impl
 
         public async Task<DenomMetadata[]> GetNativeDenoms(CancellationToken cancellationToken = default)
         {
-            var metadataDenoms = await Get<DenomMetadataResponse>("/cosmos/bank/v1beta1/denoms_metadata", cancellationToken).ConfigureAwait(false);
-            if (metadataDenoms == null) throw new InvalidOperationException();
-            return metadataDenoms.Metadatas.Select(den =>
+            DenomMetadataResponse? metadataDenoms = await Get<DenomMetadataResponse>("/cosmos/bank/v1beta1/denoms_metadata", cancellationToken).ConfigureAwait(false);
+            return metadataDenoms == null
+                ? throw new InvalidOperationException()
+                : metadataDenoms.Metadatas.Select(den =>
                 new DenomMetadata(
                     den.Description,
                     den.Units.Select(denu => new DenomUnit(denu.Denom, denu.Decimals, denu.Aliases)).ToArray(),
@@ -32,23 +33,22 @@ namespace CosmosNetwork.API.Impl
 
         public async Task<DenomSwapRate> GetSwapRate(string denomFrom, string denomTo, CancellationToken cancellationToken = default)
         {
-            var swapRate = await Get<DenomSwapRate[]>($"/v1/market/swaprate/{denomFrom}", cancellationToken).ConfigureAwait(false);
-            if (swapRate == null) throw new InvalidOperationException();
-            return swapRate.Single(rate => rate.Denom == denomTo);
+            DenomSwapRate[]? swapRate = await Get<DenomSwapRate[]>($"/v1/market/swaprate/{denomFrom}", cancellationToken).ConfigureAwait(false);
+            return swapRate == null ? throw new InvalidOperationException() : swapRate.Single(rate => rate.Denom == denomTo);
         }
 
         public async Task<DenomSwapRate[]> GetSwapRates(string denomFrom, CancellationToken cancellationToken = default)
         {
-            var swapRates = await Get<DenomSwapRate[]>($"/terra/oracle/v1beta1/denoms/{denomFrom}/exchange_rate", cancellationToken).ConfigureAwait(false);
-            if (swapRates == null) throw new InvalidOperationException();
-            return swapRates;
+            DenomSwapRate[]? swapRates = await Get<DenomSwapRate[]>($"/terra/oracle/v1beta1/denoms/{denomFrom}/exchange_rate", cancellationToken).ConfigureAwait(false);
+            return swapRates == null ? throw new InvalidOperationException() : swapRates;
         }
 
         public async Task<Coin> SimulateSwap(string denomFrom, ulong amountFrom, string denomTo, CancellationToken cancellationToken = default)
         {
-            var swapSimulation = await Get<SimulateMarketSwapResponse>($"/terra/market/v1beta1/swap?offer_coin={amountFrom}{denomFrom}&ask_denom={denomTo}", cancellationToken).ConfigureAwait(false);
-            if (swapSimulation == null) throw new InvalidOperationException();
-            return new NativeCoin(swapSimulation.Result.Denom, swapSimulation.Result.Amount);
+            SimulateMarketSwapResponse? swapSimulation = await Get<SimulateMarketSwapResponse>($"/terra/market/v1beta1/swap?offer_coin={amountFrom}{denomFrom}&ask_denom={denomTo}", cancellationToken).ConfigureAwait(false);
+            return swapSimulation == null
+                ? throw new InvalidOperationException()
+                : (Coin)new NativeCoin(swapSimulation.Result.Denom, swapSimulation.Result.Amount);
         }
     }
 }

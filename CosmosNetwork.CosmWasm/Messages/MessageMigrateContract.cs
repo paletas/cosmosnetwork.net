@@ -12,7 +12,7 @@ namespace CosmosNetwork.CosmWasm.Messages
     {
         public const string COSMOS_DESCRIPTOR = "/cosmwasm.wasm.v1.MsgMigrateContract";
 
-        protected override SerializerMessage ToJson()
+        protected override SerializerMessage ToSerialization()
         {
             return new Serialization.MessageMigrateContract(
                 Admin.Address,

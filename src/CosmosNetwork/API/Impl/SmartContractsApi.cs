@@ -14,46 +14,50 @@ namespace CosmosNetwork.API.Impl
 
         public async Task<SmartContractCode?> GetSmartContractCode(string codeId, CancellationToken cancellationToken = default)
         {
-            var endpoint = $"/terra/wasm/v1beta1/codes/{codeId}";
+            string endpoint = $"/terra/wasm/v1beta1/codes/{codeId}";
 
-            var smartContractCode = await Get<GetSmartContractCode>(endpoint, cancellationToken).ConfigureAwait(false);
-            if (smartContractCode == null) return null;
-
-            return smartContractCode.Code.ToModel();
+            GetSmartContractCode? smartContractCode = await Get<GetSmartContractCode>(endpoint, cancellationToken).ConfigureAwait(false);
+            return smartContractCode == null ? null : smartContractCode.Code.ToModel();
         }
 
         public async Task<SmartContract?> GetSmartContract(CosmosAddress contractAddress, CancellationToken cancellationToken = default)
         {
-            var endpoint = $"/terra/wasm/v1beta1/contracts/{contractAddress}";
+            string endpoint = $"/terra/wasm/v1beta1/contracts/{contractAddress}";
 
-            var smartContract = await Get<GetSmartContract>(endpoint, cancellationToken).ConfigureAwait(false);
-            if (smartContract == null) return null;
-
-            return smartContract.SmartContract.ToModel();
+            GetSmartContract? smartContract = await Get<GetSmartContract>(endpoint, cancellationToken).ConfigureAwait(false);
+            return smartContract == null ? null : smartContract.SmartContract.ToModel();
         }
 
         public async IAsyncEnumerable<(SmartContract, SmartContractCode)> ListSmartContracts(long? startFromOffset = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            var endpoint = $"/v1/wasm/contracts";
+            string endpoint = $"/v1/wasm/contracts";
 
-            var firstSearchEndpoint = endpoint;
-            if (startFromOffset != null) firstSearchEndpoint = $"{endpoint}?offset={startFromOffset}";
+            string firstSearchEndpoint = endpoint;
+            if (startFromOffset != null)
+            {
+                firstSearchEndpoint = $"{endpoint}?offset={startFromOffset}";
+            }
 
-            var smartContracts = await Get<ListSmartContracts>(firstSearchEndpoint, cancellationToken).ConfigureAwait(false);
+            ListSmartContracts? smartContracts = await Get<ListSmartContracts>(firstSearchEndpoint, cancellationToken).ConfigureAwait(false);
             while (smartContracts != null && smartContracts.Contracts.Any())
             {
-                foreach (var smartContractDetails in smartContracts.Contracts)
+                foreach (Serialization.Json.SmartContract smartContractDetails in smartContracts.Contracts)
                 {
-                    var smartContract = smartContractDetails.ToModel();
-                    var code = smartContractDetails.Code.ToModel();
+                    SmartContract smartContract = smartContractDetails.ToModel();
+                    SmartContractCode code = smartContractDetails.Code.ToModel();
 
                     yield return (smartContract, code);
                 }
 
-                if (smartContracts.Next == null || smartContracts.Next > smartContracts.Contracts.Max(contract => contract.Id)) break;
+                if (smartContracts.Next == null || smartContracts.Next > smartContracts.Contracts.Max(contract => contract.Id))
+                {
+                    break;
+                }
 
                 if (Options.ThrottlingEnumeratorsInMilliseconds.HasValue)
+                {
                     await Task.Delay(Options.ThrottlingEnumeratorsInMilliseconds.Value, cancellationToken).ConfigureAwait(false);
+                }
 
                 smartContracts = await Get<ListSmartContracts>($"{endpoint}?offset={smartContracts.Next}", cancellationToken).ConfigureAwait(false);
             }
@@ -62,12 +66,12 @@ namespace CosmosNetwork.API.Impl
         public async Task<TResponse?> Query<TRequest, TResponse>(CosmosAddress contractAddress, TRequest request, CancellationToken cancellationToken = default)
             where TResponse : class
         {
-            var requestMessage = JsonSerializer.Serialize(request, JsonSerializerOptions);
-            var encodedMessage = EncodeToUrl(EncodeTo64(requestMessage));
+            string requestMessage = JsonSerializer.Serialize(request, JsonSerializerOptions);
+            string encodedMessage = EncodeToUrl(EncodeTo64(requestMessage));
 
-            var endpoint = $"/terra/wasm/v1beta1/contracts/{contractAddress.Address}/store?query_msg={encodedMessage}";
+            string endpoint = $"/terra/wasm/v1beta1/contracts/{contractAddress.Address}/store?query_msg={encodedMessage}";
 
-            var queryResult = await Get<QueryResult<TResponse>>(endpoint, cancellationToken).ConfigureAwait(false);
+            QueryResult<TResponse>? queryResult = await Get<QueryResult<TResponse>>(endpoint, cancellationToken).ConfigureAwait(false);
             return queryResult?.Result;
         }
 

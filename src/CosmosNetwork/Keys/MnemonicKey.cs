@@ -6,7 +6,7 @@
         {
             options ??= new MnemonicKeyOptions();
 
-            var wallet = new Nethereum.HdWallet.Wallet(mnemonic, string.Empty, GetLunaHdPath(options.CoinType, options.Account, options.Index));
+            Nethereum.HdWallet.Wallet wallet = new(mnemonic, string.Empty, GetLunaHdPath(options.CoinType, options.Account, options.Index));
             byte[] privateKey = wallet.GetPrivateKey((int)options.Index);
             byte[] publicKey = Cryptography.ECDSA.Secp256K1Manager.GetPublicKey(privateKey, true);
 
@@ -15,9 +15,8 @@
 
         public override byte[] SignPayload(byte[] payload)
         {
-            int recoveryId;
-            var hash = HashExtensions.SHA256(payload);
-            return Cryptography.ECDSA.Secp256K1Manager.SignCompact(hash, PrivateKey, out recoveryId);
+            byte[] hash = HashExtensions.SHA256(payload);
+            return Cryptography.ECDSA.Secp256K1Manager.SignCompact(hash, PrivateKey, out _);
         }
 
         private static string GetLunaHdPath(string coinType, uint account, uint index)

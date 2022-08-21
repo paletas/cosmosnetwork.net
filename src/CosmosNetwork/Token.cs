@@ -1,10 +1,18 @@
-﻿namespace CosmosNetwork
+﻿using CosmosNetwork.Serialization;
+
+namespace CosmosNetwork
 {
     public record DenomMetadata(string Description, DenomUnit[] Units, string BaseDenom, string DisplayDenom, string Name, string Symbol);
 
     public record DenomUnit(string Denom, ushort Decimals, string[] Aliases);
 
-    public abstract record Coin(string Denom, ulong Amount, bool IsNative);
+    public abstract record Coin(string Denom, ulong Amount, bool IsNative)
+    {
+        internal DenomAmount ToSerialization()
+        {
+            return new DenomAmount(Denom, Amount);
+        }
+    }
 
     public record CoinDecimal(string Denom, decimal Amount, bool IsNative);
 

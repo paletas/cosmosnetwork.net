@@ -12,16 +12,17 @@ namespace CosmosNetwork.Serialization.Json.Converters
 
         public override BlockFlagEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var strValue = reader.GetString();
-            if (strValue == null) throw new InvalidOperationException();
-            return strValue switch
-            {
-                BLOCK_ID_FLAG_UNKNOWN => BlockFlagEnum.Unknown,
-                BLOCK_ID_FLAG_ABSENT => BlockFlagEnum.Absent,
-                BLOCK_ID_FLAG_COMMIT => BlockFlagEnum.Commit,
-                BLOCK_ID_FLAG_NIL => BlockFlagEnum.Nil,
-                _ => throw new NotSupportedException(),
-            };
+            string? strValue = reader.GetString();
+            return strValue == null
+                ? throw new InvalidOperationException()
+                : strValue switch
+                {
+                    BLOCK_ID_FLAG_UNKNOWN => BlockFlagEnum.Unknown,
+                    BLOCK_ID_FLAG_ABSENT => BlockFlagEnum.Absent,
+                    BLOCK_ID_FLAG_COMMIT => BlockFlagEnum.Commit,
+                    BLOCK_ID_FLAG_NIL => BlockFlagEnum.Nil,
+                    _ => throw new NotSupportedException(),
+                };
         }
 
         public override void Write(Utf8JsonWriter writer, BlockFlagEnum value, JsonSerializerOptions options)

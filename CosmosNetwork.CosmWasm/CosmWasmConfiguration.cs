@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace CosmosNetwork.CosmWasm
+﻿namespace CosmosNetwork.CosmWasm
 {
     public static class CosmWasmConfiguration
     {

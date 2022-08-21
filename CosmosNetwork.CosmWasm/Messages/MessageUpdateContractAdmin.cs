@@ -8,7 +8,7 @@ namespace CosmosNetwork.CosmWasm.Messages
     {
         public const string COSMOS_DESCRIPTOR = "/terra.wasm.v1beta1.MsgUpdateContractAdmin";
 
-        protected override SerializerMessage ToJson()
+        protected override SerializerMessage ToSerialization()
         {
             return new Serialization.MessageUpdateContractAdmin(
                 Admin.Address,

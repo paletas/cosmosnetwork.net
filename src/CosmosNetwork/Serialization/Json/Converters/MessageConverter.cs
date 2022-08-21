@@ -9,7 +9,7 @@ namespace CosmosNetwork.Serialization.Json.Converters
 
         public MessagesConverter(CosmosMessageRegistry messageRegistry)
         {
-            this._messageRegistry = messageRegistry;
+            _messageRegistry = messageRegistry;
         }
 
         public override SerializerMessage[]? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -24,14 +24,17 @@ namespace CosmosNetwork.Serialization.Json.Converters
                 throw new JsonException();
             }
 
-            var serializerOptions = new JsonSerializerOptions(options);
+            JsonSerializerOptions serializerOptions = new(options);
             serializerOptions.Converters.Add(new MessageConverter(_messageRegistry));
 
-            var messages = new List<SerializerMessage>();
+            List<SerializerMessage> messages = new();
             do
             {
-                var message = JsonSerializer.Deserialize<SerializerMessage>(ref reader, serializerOptions);
-                if (message == null) throw new JsonException();
+                SerializerMessage? message = JsonSerializer.Deserialize<SerializerMessage>(ref reader, serializerOptions);
+                if (message == null)
+                {
+                    throw new JsonException();
+                }
 
                 messages.Add(message);
             }
@@ -51,7 +54,7 @@ namespace CosmosNetwork.Serialization.Json.Converters
 
             public MessageConverter(CosmosMessageRegistry messageRegistry)
             {
-                this._messageRegistry = messageRegistry;
+                _messageRegistry = messageRegistry;
             }
 
             public override SerializerMessage Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -63,8 +66,8 @@ namespace CosmosNetwork.Serialization.Json.Converters
                     throw new JsonException();
                 }
 
-                bool isTerraMode = false;
-                if (!innerReader.Read() || innerReader.TokenType != JsonTokenType.PropertyName || innerReader.GetString() != "type" && innerReader.GetString() != "@type")
+                bool isTerraMode;
+                if (!innerReader.Read() || innerReader.TokenType != JsonTokenType.PropertyName || (innerReader.GetString() != "type" && innerReader.GetString() != "@type"))
                 {
                     throw new JsonException();
                 }
@@ -75,8 +78,8 @@ namespace CosmosNetwork.Serialization.Json.Converters
                     if (isTerraMode)
                     {
                         //catchup the reader
-                        reader.Read(); //@type
-                        reader.Read(); //@type value
+                        _ = reader.Read(); //@type
+                        _ = reader.Read(); //@type value
                     }
                 }
 
@@ -100,7 +103,7 @@ namespace CosmosNetwork.Serialization.Json.Converters
                     }
                 }
 
-                var messageType = _messageRegistry.GetMessageType(typeDiscriminator) ??
+                Type messageType = _messageRegistry.GetMessageType(typeDiscriminator) ??
                     throw new JsonException($"message type {typeDiscriminator} not known");
 
                 SerializerMessage baseClass = (SerializerMessage?)JsonSerializer.Deserialize(ref reader, messageType, options) ?? throw new JsonException();

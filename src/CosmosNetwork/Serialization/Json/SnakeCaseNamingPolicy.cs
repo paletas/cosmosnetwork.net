@@ -7,15 +7,22 @@ namespace CosmosNetwork.Serialization.Json
     {
         public override string ConvertName(string name)
         {
-            StringBuilder builder = new StringBuilder();
-            foreach (var @char in name)
+            StringBuilder builder = new();
+            foreach (char @char in name)
             {
-                if (@char >= 'A' && @char <= 'Z')
+                if (@char is >= 'A' and <= 'Z')
                 {
-                    if (builder.Length > 0) builder.Append('_');
-                    builder.Append((char)(@char + 0x20));
+                    if (builder.Length > 0)
+                    {
+                        _ = builder.Append('_');
+                    }
+
+                    _ = builder.Append((char)(@char + 0x20));
                 }
-                else builder.Append(@char);
+                else
+                {
+                    _ = builder.Append(@char);
+                }
             }
             return builder.ToString();
         }

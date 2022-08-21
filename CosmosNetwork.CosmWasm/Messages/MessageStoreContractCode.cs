@@ -8,7 +8,7 @@ namespace CosmosNetwork.CosmWasm.Messages
     {
         public const string COSMOS_DESCRIPTOR = "/cosmwasm.wasm.v1.MsgStoreCode";
 
-        protected override SerializerMessage ToJson()
+        protected override SerializerMessage ToSerialization()
         {
             return new Serialization.MessageStoreContractCode(Sender.Address, WasmByteCode);
         }

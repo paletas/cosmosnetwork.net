@@ -11,15 +11,16 @@ namespace CosmosNetwork.Serialization.Json.Converters
 
         public override SignerModeEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var strValue = reader.GetString();
-            if (strValue == null) throw new InvalidOperationException();
-            return strValue switch
-            {
-                SIGN_MODE_DIRECT => SignerModeEnum.Direct,
-                SIGN_MODE_TEXTUAL => SignerModeEnum.Textual,
-                SIGN_MODE_AMINO_LEGACY => SignerModeEnum.AminoLegacy,
-                _ => throw new NotSupportedException(),
-            };
+            string? strValue = reader.GetString();
+            return strValue == null
+                ? throw new InvalidOperationException()
+                : strValue switch
+                {
+                    SIGN_MODE_DIRECT => SignerModeEnum.Direct,
+                    SIGN_MODE_TEXTUAL => SignerModeEnum.Textual,
+                    SIGN_MODE_AMINO_LEGACY => SignerModeEnum.AminoLegacy,
+                    _ => throw new NotSupportedException(),
+                };
         }
 
         public override void Write(Utf8JsonWriter writer, SignerModeEnum value, JsonSerializerOptions options)

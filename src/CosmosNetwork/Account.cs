@@ -13,10 +13,7 @@ namespace CosmosNetwork
             _balances = balances;
         }
 
-        public ulong? this[string denom]
-        {
-            get { return this.SingleOrDefault(b => b.Denom == denom)?.Amount; }
-        }
+        public ulong? this[string denom] => this.SingleOrDefault(b => b.Denom == denom)?.Amount;
 
         public IEnumerator<Coin> GetEnumerator()
         {

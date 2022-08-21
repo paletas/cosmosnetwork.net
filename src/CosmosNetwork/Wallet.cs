@@ -17,9 +17,9 @@ namespace CosmosNetwork
             _transactionsApi = transactionsApi;
         }
 
-        public PublicKey? PublicKey { get { return _key?.PublicKey; } }
+        public PublicKey? PublicKey => _key?.PublicKey;
 
-        public string? AccountAdddress { get { return PublicKey?.Address; } }
+        public string? AccountAdddress => PublicKey?.Address;
 
         internal string? AccountNumber { get; private set; }
 
@@ -29,15 +29,17 @@ namespace CosmosNetwork
         {
             _key = new MnemonicKey(mnemonicKey);
 
-            if (AccountAdddress == null) throw new InvalidOperationException("Unable to determine Account Address");
-
-            return Task.CompletedTask;
+            return AccountAdddress == null ? throw new InvalidOperationException("Unable to determine Account Address") : Task.CompletedTask;
         }
 
         public async Task<AccountInformation?> GetAccountInformation(CancellationToken cancellationToken = default)
         {
-            if (AccountAdddress == null) throw new InvalidOperationException("Unable to determine Account Address");
-            var accountInformation = await _walletApi.GetAccountInformation(AccountAdddress, cancellationToken).ConfigureAwait(false);
+            if (AccountAdddress == null)
+            {
+                throw new InvalidOperationException("Unable to determine Account Address");
+            }
+
+            AccountInformation? accountInformation = await _walletApi.GetAccountInformation(AccountAdddress, cancellationToken).ConfigureAwait(false);
             if (accountInformation != null)
             {
                 AccountNumber = accountInformation.AccountNumber;
@@ -48,37 +50,63 @@ namespace CosmosNetwork
 
         public Task<AccountBalances> GetBalances(CancellationToken cancellationToken = default)
         {
-            if (AccountAdddress == null) throw new InvalidOperationException("Unable to determine Account Address");
-            return _walletApi.GetAccountBalances(AccountAdddress, cancellationToken);
+            return AccountAdddress == null
+                ? throw new InvalidOperationException("Unable to determine Account Address")
+                : _walletApi.GetAccountBalances(AccountAdddress, cancellationToken);
         }
 
         public async Task<SignedTransaction> CreateSignedTransaction(IEnumerable<Message> messages, CreateTransactionOptions transactionOptions, CancellationToken cancellationToken = default)
         {
-            if (_key == null) throw new InvalidOperationException("Need to setup wallet key first");
-
-            if (PublicKey == null) throw new InvalidOperationException("Private key needs to be set");
-            if (AccountNumber == null || Sequence == null)
+            if (_key == null)
             {
-                await GetAccountInformation(cancellationToken).ConfigureAwait(false);
-
-                if (AccountNumber == null) throw new InvalidOperationException("AccountNumber needs to be set");
-                if (Sequence == null) throw new InvalidOperationException("AccountSequence needs to be set");
+                throw new InvalidOperationException("Need to setup wallet key first");
             }
 
-            var signers = new SignerOptions[] { new(AccountNumber, Sequence.Value, PublicKey) };
+            if (PublicKey == null)
+            {
+                throw new InvalidOperationException("Private key needs to be set");
+            }
+
+            if (AccountNumber == null || Sequence == null)
+            {
+                _ = await GetAccountInformation(cancellationToken).ConfigureAwait(false);
+
+                if (AccountNumber == null)
+                {
+                    throw new InvalidOperationException("AccountNumber needs to be set");
+                }
+
+                if (Sequence == null)
+                {
+                    throw new InvalidOperationException("AccountSequence needs to be set");
+                }
+            }
+
+            _ = new SignerOptions[] { new(AccountNumber, Sequence.Value, PublicKey) };
 
             throw new NotImplementedException();
         }
 
         public async Task<(uint? ErrorCode, TransactionSimulation? Result)> SimulateTransaction(IEnumerable<Message> messages, TransactionSimulationOptions? simulationOptions = null, CancellationToken cancellationToken = default)
         {
-            if (PublicKey == null) throw new InvalidOperationException("Private key needs to be set");
+            if (PublicKey == null)
+            {
+                throw new InvalidOperationException("Private key needs to be set");
+            }
+
             if (AccountNumber == null || Sequence == null)
             {
-                await GetAccountInformation(cancellationToken).ConfigureAwait(false);
+                _ = await GetAccountInformation(cancellationToken).ConfigureAwait(false);
 
-                if (AccountNumber == null) throw new InvalidOperationException("AccountNumber needs to be set");
-                if (Sequence == null) throw new InvalidOperationException("AccountSequence needs to be set");
+                if (AccountNumber == null)
+                {
+                    throw new InvalidOperationException("AccountNumber needs to be set");
+                }
+
+                if (Sequence == null)
+                {
+                    throw new InvalidOperationException("AccountSequence needs to be set");
+                }
             }
 
             return await _transactionsApi.SimulateTransaction(
@@ -95,7 +123,7 @@ namespace CosmosNetwork
 
         public async Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransactionBlock(IEnumerable<Message> messages, BroadcastTransactionOptions? broadcastOptions = null, CancellationToken cancellationToken = default)
         {
-            var signedTransaction = await CreateSignedTransaction(messages, new CreateTransactionOptions(broadcastOptions?.Memo, broadcastOptions?.TimeoutHeight, broadcastOptions?.Fees, Gas: broadcastOptions?.Gas, GasPrices: null, broadcastOptions?.FeesDenoms), cancellationToken).ConfigureAwait(false);
+            SignedTransaction signedTransaction = await CreateSignedTransaction(messages, new CreateTransactionOptions(broadcastOptions?.Memo, broadcastOptions?.TimeoutHeight, broadcastOptions?.Fees, Gas: broadcastOptions?.Gas, GasPrices: null, broadcastOptions?.FeesDenoms), cancellationToken).ConfigureAwait(false);
 
             try
             {
@@ -121,7 +149,7 @@ namespace CosmosNetwork
 
         public async Task<(uint? ErrorCode, TransactionBroadcast? Result)> BroadcastTransactionAsyncAndWait(IEnumerable<Message> messages, BroadcastTransactionOptions? broadcastOptions = null, CancellationToken cancellationToken = default)
         {
-            var signedTransaction = await CreateSignedTransaction(messages, new CreateTransactionOptions(broadcastOptions?.Memo, broadcastOptions?.TimeoutHeight, broadcastOptions?.Fees, Gas: broadcastOptions?.Gas, GasPrices: null, broadcastOptions?.FeesDenoms), cancellationToken).ConfigureAwait(false);
+            SignedTransaction signedTransaction = await CreateSignedTransaction(messages, new CreateTransactionOptions(broadcastOptions?.Memo, broadcastOptions?.TimeoutHeight, broadcastOptions?.Fees, Gas: broadcastOptions?.Gas, GasPrices: null, broadcastOptions?.FeesDenoms), cancellationToken).ConfigureAwait(false);
 
             try
             {
@@ -147,13 +175,24 @@ namespace CosmosNetwork
 
         public async Task<Fee> EstimateFee(IEnumerable<Message> messages, EstimateFeesOptions? estimateOptions = null, CancellationToken cancellationToken = default)
         {
-            if (PublicKey == null) throw new InvalidOperationException("Private key needs to be set");
+            if (PublicKey == null)
+            {
+                throw new InvalidOperationException("Private key needs to be set");
+            }
+
             if (AccountNumber == null || Sequence == null)
             {
-                await GetAccountInformation(cancellationToken).ConfigureAwait(false);
+                _ = await GetAccountInformation(cancellationToken).ConfigureAwait(false);
 
-                if (AccountNumber == null) throw new InvalidOperationException("AccountNumber needs to be set");
-                if (Sequence == null) throw new InvalidOperationException("AccountSequence needs to be set");
+                if (AccountNumber == null)
+                {
+                    throw new InvalidOperationException("AccountNumber needs to be set");
+                }
+
+                if (Sequence == null)
+                {
+                    throw new InvalidOperationException("AccountSequence needs to be set");
+                }
             }
 
             return await _transactionsApi.EstimateFee(

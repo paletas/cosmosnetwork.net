@@ -9,7 +9,7 @@ namespace CosmosNetwork
     {
         public CosmosApiOptions(string chainId)
         {
-            this.ChainId = chainId;
+            ChainId = chainId;
 
             JsonSerializerOptions = new JsonSerializerOptions
             {
@@ -29,10 +29,14 @@ namespace CosmosNetwork
             : this(chainId)
         {
             if (throttlingEnumeratorsInSeconds != default)
+            {
                 ThrottlingEnumeratorsInMilliseconds = throttlingEnumeratorsInSeconds;
+            }
 
             if (startingBlockHeightForTransactionSearch.HasValue)
+            {
                 StartingBlockHeightForTransactionSearch = startingBlockHeightForTransactionSearch.Value;
+            }
         }
 
         public string ChainId { get; set; }

@@ -11,18 +11,14 @@ namespace CosmosNetwork.API.Impl
 
         public async Task<Block?> GetBlock(ulong height, CancellationToken cancellationToken = default)
         {
-            var block = await Get<Serialization.Json.Block>($"/cosmos/base/tendermint/v1beta1/blocks/{height}", cancellationToken).ConfigureAwait(false);
-            if (block == null) return null;
-
-            return block.ToModel();
+            Serialization.Json.Block? block = await Get<Serialization.Json.Block>($"/cosmos/base/tendermint/v1beta1/blocks/{height}", cancellationToken).ConfigureAwait(false);
+            return block == null ? null : block.ToModel();
         }
 
         public async Task<Block> GetLatestBlock(CancellationToken cancellationToken = default)
         {
-            var block = await Get<Serialization.Json.Block>($"/cosmos/base/tendermint/v1beta1/blocks/latest", cancellationToken).ConfigureAwait(false);
-            if (block == null) throw new CosmosException("expected a block");
-
-            return block.ToModel();
+            Serialization.Json.Block? block = await Get<Serialization.Json.Block>($"/cosmos/base/tendermint/v1beta1/blocks/latest", cancellationToken).ConfigureAwait(false);
+            return block == null ? throw new CosmosException("expected a block") : block.ToModel();
         }
     }
 }

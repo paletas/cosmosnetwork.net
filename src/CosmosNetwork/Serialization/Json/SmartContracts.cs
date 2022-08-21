@@ -42,7 +42,9 @@ namespace CosmosNetwork.Serialization.Json
         {
             Uri? repositoryUrl = null;
             if (Information.RepositoryUrl != null)
+            {
                 repositoryUrl = new Uri(Information.RepositoryUrl);
+            }
 
             return new CosmosNetwork.SmartContractCode(
                 CodeId,

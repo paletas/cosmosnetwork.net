@@ -18,8 +18,8 @@ namespace CosmosNetwork.Serialization
         [ProtoMember(1, Name = "public_key")]
         public Any PublicKeyPacked
         {
-            get { return Any.Pack(this.PublicKey); }
-            set { this.PublicKey = value.Unpack<Tendermint.PublicKey>() ?? throw new InvalidOperationException(); }
+            get => Any.Pack(PublicKey);
+            set => PublicKey = value.Unpack<Tendermint.PublicKey>() ?? throw new InvalidOperationException();
         }
     }
 
@@ -33,43 +33,17 @@ namespace CosmosNetwork.Serialization
         [ProtoMember(2, Name = "single")]
         public SingleMode? Single
         {
-            get
-            {
-                if (this.Discriminator == ModeInfoDiscriminatorEnum.Single)
-                {
-                    return this._discriminatedObject.Object as SingleMode;
-                }
-                else
-                {
-                    return null;
-                }
-            }
+            get => Discriminator == ModeInfoDiscriminatorEnum.Single ? _discriminatedObject.Object as SingleMode : null;
 
-            set
-            {
-                _discriminatedObject = new DiscriminatedUnionObject((int)ModeInfoDiscriminatorEnum.Single, value);
-            }
+            set => _discriminatedObject = new DiscriminatedUnionObject((int)ModeInfoDiscriminatorEnum.Single, value);
         }
 
         [ProtoMember(3, Name = "multi")]
         public MultiMode? Multi
         {
-            get
-            {
-                if (this.Discriminator == ModeInfoDiscriminatorEnum.Multi)
-                {
-                    return this._discriminatedObject.Object as MultiMode;
-                }
-                else
-                {
-                    return null;
-                }
-            }
+            get => Discriminator == ModeInfoDiscriminatorEnum.Multi ? _discriminatedObject.Object as MultiMode : null;
 
-            set
-            {
-                _discriminatedObject = new DiscriminatedUnionObject((int)ModeInfoDiscriminatorEnum.Multi, value);
-            }
+            set => _discriminatedObject = new DiscriminatedUnionObject((int)ModeInfoDiscriminatorEnum.Multi, value);
         }
     }
 
@@ -121,7 +95,7 @@ namespace CosmosNetwork.Serialization
     {
         public TransactionSignature ToModel()
         {
-            var publicKey = PublicKey.ToModel();
+            SignatureKey publicKey = PublicKey.ToModel();
             return new CosmosNetwork.TransactionSignature(publicKey, Signature);
         }
     }
