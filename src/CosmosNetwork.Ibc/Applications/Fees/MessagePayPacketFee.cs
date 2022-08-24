@@ -9,7 +9,7 @@
     {
         protected override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
-            return new Serialization.Applications.MessagePayPacketFee(
+            return new Serialization.Applications.Fees.MessagePayPacketFee(
                 Fee.ToSerialization(),
                 SourcePortId,
                 SourceChannelId,

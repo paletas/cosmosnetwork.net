@@ -5,11 +5,15 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosNetwork", "src\CosmosNetwork\CosmosNetwork.csproj", "{7CD01460-C29F-40AA-A076-92FEA83A0DBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosNetwork.Ibc", "src\CosmosNetwork.Ibc\CosmosNetwork.Ibc.csproj", "{21BC8331-E00B-43CF-A7A1-DEFE8957D394}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosNetwork.Ibc", "src\CosmosNetwork.Ibc\CosmosNetwork.Ibc.csproj", "{21BC8331-E00B-43CF-A7A1-DEFE8957D394}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosNetwork.CosmWasm", "src\CosmosNetwork.CosmWasm\CosmosNetwork.CosmWasm.csproj", "{377C5331-2014-4FA1-A6E7-A9EBEDBBB240}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosNetwork.CosmWasm", "src\CosmosNetwork.CosmWasm\CosmosNetwork.CosmWasm.csproj", "{377C5331-2014-4FA1-A6E7-A9EBEDBBB240}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosNetwork.Networks.TerraClassic", "src\CosmosNetwork.Networks.TerraClassic\CosmosNetwork.Networks.TerraClassic.csproj", "{4F31BD68-B5C3-4237-AB84-F0E56739E885}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosNetwork.Tendermint.Types", "src\CosmosNetwork.Tendermint.Types\CosmosNetwork.Tendermint.Types.csproj", "{F391478B-066A-4DF1-891E-1F1A75D633AF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosNetwork.Confio.Types", "src\CosmosNetwork.Confio.Types\CosmosNetwork.Confio.Types.csproj", "{3917103F-697F-4C11-A15A-C8237F0B301A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{4F31BD68-B5C3-4237-AB84-F0E56739E885}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F31BD68-B5C3-4237-AB84-F0E56739E885}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F31BD68-B5C3-4237-AB84-F0E56739E885}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F391478B-066A-4DF1-891E-1F1A75D633AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F391478B-066A-4DF1-891E-1F1A75D633AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F391478B-066A-4DF1-891E-1F1A75D633AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F391478B-066A-4DF1-891E-1F1A75D633AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3917103F-697F-4C11-A15A-C8237F0B301A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3917103F-697F-4C11-A15A-C8237F0B301A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3917103F-697F-4C11-A15A-C8237F0B301A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3917103F-697F-4C11-A15A-C8237F0B301A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

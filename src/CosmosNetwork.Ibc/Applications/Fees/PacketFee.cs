@@ -7,7 +7,7 @@
     {
         internal Serialization.Applications.Fees.PacketFee ToSerialization()
         {
-            return new Serialization.Applications.PacketFee(
+            return new Serialization.Applications.Fees.PacketFee(
                 Fee.ToSerialization(),
                 RefundAddress.Address,
                 Relayers);

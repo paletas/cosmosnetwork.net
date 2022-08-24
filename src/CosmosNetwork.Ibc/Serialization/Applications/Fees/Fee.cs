@@ -11,7 +11,7 @@ namespace CosmosNetwork.Ibc.Serialization.Applications.Fees
     {
         public Ibc.Applications.Fees.Fee ToModel()
         {
-            return new Ibc.Applications.Fee(
+            return new Ibc.Applications.Fees.Fee(
                 ReceiverFee.Select(fee => fee.ToModel()).ToArray(),
                 AcknowledgeFee.Select(fee => fee.ToModel()).ToArray(),
                 TimeoutFee.Select(fee => fee.ToModel()).ToArray());

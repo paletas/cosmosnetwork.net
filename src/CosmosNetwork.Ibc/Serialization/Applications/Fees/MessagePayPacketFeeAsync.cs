@@ -9,7 +9,7 @@ namespace CosmosNetwork.Ibc.Serialization.Applications.Fees
     {
         protected override Message ToModel()
         {
-            return new Ibc.Applications.MessagePayPacketFeeAsync(
+            return new Ibc.Applications.Fees.MessagePayPacketFeeAsync(
                 PacketId.ToModel(),
                 PacketFee.ToModel());
         }

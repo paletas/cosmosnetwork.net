@@ -4,7 +4,7 @@ using ProtoBuf;
 namespace CosmosNetwork.Serialization.Tendermint
 {
     [ProtoContract]
-    internal class PublicKey : IHasAny
+    public class PublicKey : IHasAny
     {
         private ProtoBuf.DiscriminatedUnionObject _discriminatedObject = new();
 
@@ -34,11 +34,12 @@ namespace CosmosNetwork.Serialization.Tendermint
             {
                 PublicKeyDiscriminator.Ed25519 => new CosmosNetwork.Ed25519Key(Convert.ToBase64String(Ed25519!)),
                 PublicKeyDiscriminator.Secp256k1 => new CosmosNetwork.Ed25519Key(Convert.ToBase64String(Secp256k1!)),
+                _ => throw new NotImplementedException(),
             };
         }
     }
 
-    internal enum PublicKeyDiscriminator
+    public enum PublicKeyDiscriminator
     {
         Ed25519 = 2,
         Secp256k1 = 3

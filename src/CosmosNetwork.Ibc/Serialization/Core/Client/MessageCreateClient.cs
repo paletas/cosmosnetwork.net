@@ -1,4 +1,5 @@
-﻿using CosmosNetwork.Serialization;
+﻿using CosmosNetwork.Ibc.Serialization.LightClients;
+using CosmosNetwork.Serialization;
 using CosmosNetwork.Serialization.Proto;
 using ProtoBuf;
 
@@ -9,30 +10,30 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Client
         [property: ProtoMember(3, Name = "signer")] string Signer) : SerializerMessage
     {
         [ProtoIgnore]
-        public byte[] ClientState { get; set; } = null!;
+        public IClientState ClientState { get; set; } = null!;
 
         [ProtoMember(1, Name = "client_state")]
         public Any ClientStatePacked
         {
-            get => Any.Pack(null, this.ClientState);
-            set => this.ClientState = value.ToArray();
+            get => Any.Pack(this.ClientState);
+            set => this.ClientState = value.UnpackClientState();
         }
 
         [ProtoIgnore]
-        public byte[] ConsensusState { get; set; } = null!;
+        public IConsensusState ConsensusState { get; set; } = null!;
 
         [ProtoMember(2, Name = "consensus_state")]
         public Any ConsensusStatePacked
         {
-            get => Any.Pack(null, this.ConsensusState);
-            set => this.ConsensusState = value.ToArray();
+            get => Any.Pack(this.ConsensusState);
+            set => this.ConsensusState = value.UnpackConsensusState();
         }
 
         protected override Message ToModel()
         {
             return new Ibc.Core.Client.MessageCreateClient(
-                this.ClientState,
-                this.ConsensusState,
+                this.ClientState.ToModel(),
+                this.ConsensusState.ToModel(),
                 this.Signer);
         }
     }

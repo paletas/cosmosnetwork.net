@@ -1,18 +1,19 @@
-﻿using CosmosNetwork.Serialization;
+﻿using CosmosNetwork.Ibc.LightClients;
+using CosmosNetwork.Serialization;
 
 namespace CosmosNetwork.Ibc.Core.Client
 {
     public record MessageCreateClient(
-        byte[] ClientState,
-        byte[] ConsensusState,
+        IClientState ClientState,
+        IConsensusState ConsensusState,
         string Signer) : Message
     {
         protected override SerializerMessage ToSerialization()
         {
             return new Serialization.Core.Client.MessageCreateClient(this.Signer)
             {
-                ClientState = this.ClientState,
-                ConsensusState = this.ConsensusState
+                ClientState = this.ClientState.ToSerialization(),
+                ConsensusState = this.ConsensusState.ToSerialization()
             };
         }
     }

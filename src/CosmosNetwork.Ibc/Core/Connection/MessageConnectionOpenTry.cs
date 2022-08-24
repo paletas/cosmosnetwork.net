@@ -1,4 +1,5 @@
 ﻿using CosmosNetwork.Ibc.Core.Client;
+using CosmosNetwork.Ibc.LightClients;
 using CosmosNetwork.Serialization;
 
 namespace CosmosNetwork.Ibc.Core.Connection
@@ -6,7 +7,7 @@ namespace CosmosNetwork.Ibc.Core.Connection
     public record MessageConnectionOpenTry(
         string ClientId,
         string PreviousConnectionId,
-        byte[] ClientState,
+        IClientState ClientState,
         Counterparty Counterparty,
         ulong DelayPeriod,
         Version[] CounterpartyVersions,
@@ -32,7 +33,7 @@ namespace CosmosNetwork.Ibc.Core.Connection
                 this.ConsensusHeight.ToSerialization(),
                 this.Signer)
             {
-                ClientState = this.ClientState
+                ClientState = this.ClientState.ToSerialization()
             };
         }
     }

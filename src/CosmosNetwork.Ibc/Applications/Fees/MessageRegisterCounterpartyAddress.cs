@@ -9,7 +9,7 @@ namespace CosmosNetwork.Ibc.Applications.Fees
     {
         protected override SerializerMessage ToSerialization()
         {
-            return new Serialization.Applications.MessageRegisterCounterpartyAddress(
+            return new Serialization.Applications.Fees.MessageRegisterCounterpartyAddress(
                 Address.Address,
                 CounterpartyAddress.Address,
                 ChannelId);

@@ -101,7 +101,7 @@ namespace CosmosNetwork.Serialization
         }
     }
 
-    internal enum KeyTypeEnum
+    public enum KeyTypeEnum
     {
         Secp256k1,
         Ed25519,

@@ -7,12 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CosmosNetwork.Confio.Types\CosmosNetwork.Confio.Types.csproj" />
+    <ProjectReference Include="..\CosmosNetwork.Tendermint.Types\CosmosNetwork.Tendermint.Types.csproj" />
     <ProjectReference Include="..\CosmosNetwork\CosmosNetwork.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="LightClients\" />
-    <Folder Include="Serialization\LightClients\" />
   </ItemGroup>
 
 </Project>

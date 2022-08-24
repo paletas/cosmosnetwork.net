@@ -1,4 +1,5 @@
-﻿using CosmosNetwork.Serialization;
+﻿using CosmosNetwork.Ibc.Serialization.LightClients;
+using CosmosNetwork.Serialization;
 using CosmosNetwork.Serialization.Proto;
 using ProtoBuf;
 
@@ -10,20 +11,20 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Client
         [property: ProtoMember(3, Name = "signer")] string Signer) : SerializerMessage
     {
         [ProtoIgnore]
-        public byte[] Header { get; set; } = null!;
+        public IHeader Header { get; set; } = null!;
 
         [ProtoMember(2, Name = "header")]
         public Any HeaderPacked
         {
-            get => Any.Pack(null, this.Header);
-            set => this.Header = value.ToArray();
+            get => Any.Pack(this.Header);
+            set => this.Header = value.UnpackHeader();
         }
 
         protected override Message ToModel()
         {
             return new Ibc.Core.Client.MessageUpdateClient(
                 this.ClientId,
-                this.Header,
+                this.Header.ToModel(),
                 this.Signer);
         }
     }

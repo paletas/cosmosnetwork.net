@@ -1,4 +1,5 @@
 ﻿using CosmosNetwork.Ibc.Core.Client;
+using CosmosNetwork.Ibc.LightClients;
 using CosmosNetwork.Serialization;
 
 namespace CosmosNetwork.Ibc.Core.Connection
@@ -7,7 +8,7 @@ namespace CosmosNetwork.Ibc.Core.Connection
         string ConnectionId,
         string PreviousConnectionId,
         Version Version,
-        byte[] ClientState,
+        IClientState ClientState,
         Height ProofHeight,
         byte[] ProofTry,
         byte[] ProofClient,
@@ -28,7 +29,7 @@ namespace CosmosNetwork.Ibc.Core.Connection
                 this.ConsensusHeight.ToSerialization(),
                 this.Signer)
             {
-                ClientState = this.ClientState
+                ClientState = this.ClientState.ToSerialization()
             };
         }
     }

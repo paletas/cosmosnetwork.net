@@ -7,7 +7,7 @@
     {
         internal Serialization.Applications.Fees.Fee ToSerialization()
         {
-            return new Serialization.Applications.Fee(
+            return new Serialization.Applications.Fees.Fee(
                 ReceiverFee.Select(fee => fee.ToSerialization()).ToArray(),
                 AcknowledgeFee.Select(fee => fee.ToSerialization()).ToArray(),
                 TimeoutFee.Select(fee => fee.ToSerialization()).ToArray());

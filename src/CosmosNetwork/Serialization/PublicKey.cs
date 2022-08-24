@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Serialization
 {
-    internal abstract record PublicKey(KeyTypeEnum Type)
+    public abstract record PublicKey(KeyTypeEnum Type)
     {
         public abstract SignatureKey ToModel();
 

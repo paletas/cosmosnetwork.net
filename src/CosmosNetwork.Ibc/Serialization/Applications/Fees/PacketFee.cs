@@ -1,5 +1,4 @@
-﻿using CosmosNetwork.Serialization;
-using ProtoBuf;
+﻿using ProtoBuf;
 
 namespace CosmosNetwork.Ibc.Serialization.Applications.Fees
 {
@@ -11,7 +10,7 @@ namespace CosmosNetwork.Ibc.Serialization.Applications.Fees
     {
         public Ibc.Applications.Fees.PacketFee ToModel()
         {
-            return new Ibc.Applications.PacketFee(
+            return new Ibc.Applications.Fees.PacketFee(
                 Fee.ToModel(),
                 RefundAddress,
                 Relayers);

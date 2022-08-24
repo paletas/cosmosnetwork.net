@@ -11,7 +11,7 @@ namespace CosmosNetwork.Ibc.Serialization.Applications.Fees
     {
         protected override Message ToModel()
         {
-            return new Ibc.Applications.MessagePayPacketFee(
+            return new Ibc.Applications.Fees.MessagePayPacketFee(
                 Fee.ToModel(),
                 SourcePortId,
                 SourceChannelId,

@@ -1,4 +1,5 @@
 ﻿using CosmosNetwork.Ibc.Serialization.Core.Client;
+using CosmosNetwork.Ibc.Serialization.LightClients;
 using CosmosNetwork.Serialization;
 using CosmosNetwork.Serialization.Proto;
 using ProtoBuf;
@@ -20,13 +21,13 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Connection
         [property: ProtoMember(12, Name = "signer")] string Signer) : SerializerMessage
     {
         [ProtoIgnore]
-        public byte[] ClientState { get; set; } = null!;
+        public IClientState ClientState { get; set; } = null!;
 
         [ProtoMember(3, Name = "client_state")]
         public Any ClientStatePacked
         {
-            get => Any.Pack(null, this.ClientState);
-            set => this.ClientState = value.ToArray();
+            get => Any.Pack(this.ClientState);
+            set => this.ClientState = value.UnpackClientState();
         }
 
         protected override Message ToModel()
@@ -34,7 +35,7 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Connection
             return new Ibc.Core.Connection.MessageConnectionOpenTry(
                 this.ClientId,
                 this.PreviousConnectionId,
-                this.ClientState,
+                this.ClientState.ToModel(),
                 this.Counterparty.ToModel(),
                 this.DelayPeriod,
                 this.CounterpartyVersions.Select(cv => cv.ToModel()).ToArray(),
