@@ -1,4 +1,4 @@
-﻿using CosmosNetwork.Serialization;
+﻿using CosmosNetwork.Serialization.Proto;
 
 namespace CosmosNetwork.Modules.Gov.Serialization.Proposals
 {

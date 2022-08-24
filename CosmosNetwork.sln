@@ -5,11 +5,11 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosNetwork", "src\CosmosNetwork\CosmosNetwork.csproj", "{7CD01460-C29F-40AA-A076-92FEA83A0DBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosNetwork.Ibc", "CosmosNetwork.Ibc\CosmosNetwork.Ibc.csproj", "{21BC8331-E00B-43CF-A7A1-DEFE8957D394}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosNetwork.Ibc", "src\CosmosNetwork.Ibc\CosmosNetwork.Ibc.csproj", "{21BC8331-E00B-43CF-A7A1-DEFE8957D394}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosNetwork.CosmWasm", "CosmosNetwork.CosmWasm\CosmosNetwork.CosmWasm.csproj", "{377C5331-2014-4FA1-A6E7-A9EBEDBBB240}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosNetwork.CosmWasm", "src\CosmosNetwork.CosmWasm\CosmosNetwork.CosmWasm.csproj", "{377C5331-2014-4FA1-A6E7-A9EBEDBBB240}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosNetwork.Networks.TerraClassic", "CosmosNetwork.Networks.TerraClassic\CosmosNetwork.Networks.TerraClassic.csproj", "{4F31BD68-B5C3-4237-AB84-F0E56739E885}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosNetwork.Networks.TerraClassic", "src\CosmosNetwork.Networks.TerraClassic\CosmosNetwork.Networks.TerraClassic.csproj", "{4F31BD68-B5C3-4237-AB84-F0E56739E885}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,14 +1,13 @@
-﻿using CosmosNetwork.Modules.Gov.Proposals;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Modules.Gov.Serialization.Proposals.Json
 {
     internal class ProposalConverter : JsonConverter<IProposal>
     {
-        private readonly ProposalRegistry _registry;
+        private readonly ProposalsRegistry _registry;
 
-        public ProposalConverter(ProposalRegistry registry)
+        public ProposalConverter(ProposalsRegistry registry)
         {
             _registry = registry;
         }
@@ -33,6 +32,8 @@ namespace CosmosNetwork.Modules.Gov.Serialization.Proposals.Json
             }
 
             string? type = innerReader.GetString();
+            if (type is null) throw new JsonException();
+
             Type proposalType = _registry.GetProposalByTypeName(type);
             return (IProposal?)JsonSerializer.Deserialize(ref reader, proposalType, options);
         }

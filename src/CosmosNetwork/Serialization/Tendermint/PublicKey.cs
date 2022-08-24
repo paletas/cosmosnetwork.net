@@ -1,3 +1,4 @@
+using CosmosNetwork.Serialization.Proto;
 using ProtoBuf;
 
 namespace CosmosNetwork.Serialization.Tendermint

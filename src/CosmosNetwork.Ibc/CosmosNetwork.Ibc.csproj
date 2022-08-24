@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CosmosNetwork\CosmosNetwork.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="LightClients\" />
+    <Folder Include="Serialization\LightClients\" />
+  </ItemGroup>
+
+</Project>

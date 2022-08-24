@@ -2,9 +2,9 @@
 {
     internal record TextProposal(string Title, string Description) : IProposalImplementation
     {
-        private const string TextProposalAnyType = "cosmos.gov.v1beta1.TextProposal";
+        private const string ProposalType = "cosmos.gov.v1beta1.TextProposal";
 
-        public string TypeUrl => TextProposalAnyType;
+        public string TypeUrl => ProposalType;
 
         public Gov.Proposals.IProposal ToModel()
         {

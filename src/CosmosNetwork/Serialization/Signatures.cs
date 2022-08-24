@@ -1,4 +1,5 @@
 ﻿using CosmosNetwork.Serialization.Json.Converters;
+using CosmosNetwork.Serialization.Proto;
 using ProtoBuf;
 using System.Text.Json.Serialization;
 

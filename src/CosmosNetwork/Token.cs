@@ -8,7 +8,7 @@ namespace CosmosNetwork
 
     public abstract record Coin(string Denom, ulong Amount, bool IsNative)
     {
-        internal DenomAmount ToSerialization()
+        public DenomAmount ToSerialization()
         {
             return new DenomAmount(Denom, Amount);
         }
