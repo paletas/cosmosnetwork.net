@@ -2,6 +2,7 @@
 
 namespace CosmosNetwork.Ibc.Core.Connection
 {
+    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageConnectionOpenInit(
         string ClientId,
         Counterparty Counterparty,
@@ -9,6 +10,8 @@ namespace CosmosNetwork.Ibc.Core.Connection
         ulong DelayPeriod,
         string Signer) : Message
     {
+        public const string COSMOS_DESCRIPTOR = "/ibc.core.connection.v1.MsgConnectionOpenInit";
+
         protected override SerializerMessage ToSerialization()
         {
             return new Serialization.Core.Connection.MessageConnectionOpenInit(

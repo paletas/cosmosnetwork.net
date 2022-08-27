@@ -7,7 +7,7 @@ namespace CosmosNetwork.Modules.Slashing
     {
         public void ConfigureModule(CosmosMessageRegistry messageRegistry)
         {
-            messageRegistry.RegisterMessage<MessageUnjail>();
+            messageRegistry.RegisterMessage<MessageUnjail, Serialization.MessageUnjail>();
         }
     }
 }

@@ -103,7 +103,7 @@ namespace CosmosNetwork.Serialization.Json.Converters
                     }
                 }
 
-                Type messageType = _messageRegistry.GetMessageType(typeDiscriminator) ??
+                Type messageType = _messageRegistry.GetSerializerMessageType(typeDiscriminator) ??
                     throw new JsonException($"message type {typeDiscriminator} not known");
 
                 SerializerMessage baseClass = (SerializerMessage?)JsonSerializer.Deserialize(ref reader, messageType, options) ?? throw new JsonException();
@@ -123,7 +123,7 @@ namespace CosmosNetwork.Serialization.Json.Converters
             {
                 writer.WriteStartObject();
 
-                writer.WriteString("type", _messageRegistry.GetMessageTypeName(value.GetType()));
+                writer.WriteString("type", _messageRegistry.GetSerializerMessageTypeName(value.GetType()));
                 writer.WritePropertyName("value");
                 JsonSerializer.Serialize(writer, value, options);
 

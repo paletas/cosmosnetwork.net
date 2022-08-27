@@ -11,7 +11,7 @@ namespace CosmosNetwork.Modules.Staking.Serialization
         ValidatorDescription Description,
         ValidatorComission Commission,
         DenomAmount Value,
-        [property: JsonPropertyName("pubkey"), JsonConverter(typeof(PublicKeyConverter))] CosmosNetwork.Serialization.PublicKey PublicKey
+        [property: JsonPropertyName("pubkey"), JsonConverter(typeof(PublicKeyConverter))] CosmosNetwork.Serialization.Json.PublicKey PublicKey
     ) : SerializerMessage
     {
         protected internal override Message ToModel()

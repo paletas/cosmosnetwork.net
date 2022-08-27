@@ -30,7 +30,7 @@ namespace CosmosNetwork.Serialization.Json
 
     internal record Transaction(TransactionBody Body, AuthInfo AuthInfo, string[] Signatures);
 
-    internal record TransactionBody([property: JsonConverter(typeof(MessagesConverter))] SerializerMessage[] Messages, string Memo, ulong? TimeoutHeight);
+    internal record TransactionBody(SerializerMessage[] Messages, string Memo, ulong? TimeoutHeight);
 
     internal record Fee(ulong Gas, DenomAmount[] Amount)
     {

@@ -1,6 +1,7 @@
 ﻿using CosmosNetwork.Serialization.Json.Converters;
 using CosmosNetwork.Serialization.Proto;
 using ProtoBuf;
+using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Serialization
@@ -10,12 +11,14 @@ namespace CosmosNetwork.Serialization
         [ProtoIgnore]
         public Tendermint.PublicKey PublicKey { get; set; } = null!;
 
+        [JsonPropertyName("mode_info")]
         [ProtoMember(2, Name = "data")]
         public SignatureData Data { get; set; } = null!;
 
         [ProtoMember(3, Name = "sequence")]
         public ulong Sequence { get; set; }
 
+        [JsonIgnore]
         [ProtoMember(1, Name = "public_key")]
         public Any PublicKeyPacked
         {
@@ -63,21 +66,27 @@ namespace CosmosNetwork.Serialization
 
     }
 
+    [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     [ProtoContract]
     internal enum SignModeEnum
     {
+        [EnumMember(Value = "SIGN_MODE_UNSPECIFIED")] 
         [ProtoEnum(Name = "SIGN_MODE_UNSPECIFIED")]
         Unspecified = 0,
 
+        [EnumMember(Value = "SIGN_MODE_DIRECT")]
         [ProtoEnum(Name = "SIGN_MODE_DIRECT")]
         Direct = 1,
 
+        [EnumMember(Value = "SIGN_MODE_TEXTUAL")]
         [ProtoEnum(Name = "SIGN_MODE_TEXTUAL")]
         Textual = 2,
 
+        [EnumMember(Value = "SIGN_MODE_LEGACY_AMINO_JSON")]
         [ProtoEnum(Name = "SIGN_MODE_LEGACY_AMINO_JSON")]
         LegacyAmino = 127,
 
+        [EnumMember(Value = "SIGN_MODE_EIP_191")]
         [ProtoEnum(Name = "SIGN_MODE_EIP_191")]
         Eip191 = 191
     }
@@ -88,17 +97,6 @@ namespace CosmosNetwork.Serialization
         [property: ProtoMember(2, Name = "mode_infos")] SignatureData[] ModeInfos)
     {
 
-    }
-
-    internal record SignerOptions(
-        [property: JsonPropertyName("pub_key"), JsonConverter(typeof(PublicKeyConverter))] PublicKey PublicKey,
-        string Signature)
-    {
-        public TransactionSignature ToModel()
-        {
-            SignatureKey publicKey = PublicKey.ToModel();
-            return new CosmosNetwork.TransactionSignature(publicKey, Signature);
-        }
     }
 
     public enum KeyTypeEnum

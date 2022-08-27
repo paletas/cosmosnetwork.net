@@ -7,26 +7,11 @@ namespace CosmosNetwork
 {
     public class CosmosApiOptions
     {
-        public CosmosApiOptions(string chainId)
+        public CosmosApiOptions()
         {
-            ChainId = chainId;
-
-            JsonSerializerOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-                NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                PropertyNamingPolicy = new SnakeCaseNamingPolicy()
-            };
-
-            JsonSerializerOptions.Converters.Add(new BigIntegerConverter());
-            JsonSerializerOptions.Converters.Add(new SignerModeConverter());
-            JsonSerializerOptions.Converters.Add(new BlockFlagConverter());
-            JsonSerializerOptions.Converters.Add(new SignerModeConverter());
         }
 
-        public CosmosApiOptions(string chainId, int? throttlingEnumeratorsInSeconds = default, ulong? startingBlockHeightForTransactionSearch = default)
-            : this(chainId)
+        public CosmosApiOptions(int? throttlingEnumeratorsInSeconds = default, ulong? startingBlockHeightForTransactionSearch = default)
         {
             if (throttlingEnumeratorsInSeconds != default)
             {
@@ -39,7 +24,9 @@ namespace CosmosNetwork
             }
         }
 
-        public string ChainId { get; set; }
+        internal CosmosMessageRegistry MessageRegistry { get; set; }
+
+        public string? ChainId { get; set; }
 
         public int? ThrottlingEnumeratorsInMilliseconds { get; set; } = 1000;
 
@@ -51,6 +38,29 @@ namespace CosmosNetwork
 
         public string[]? DefaultDenoms { get; set; } = new[] { "uatom" };
 
-        public JsonSerializerOptions JsonSerializerOptions { get; init; } = null!;
+        private JsonSerializerOptions? _jsonSerializerOptions;
+        public JsonSerializerOptions JsonSerializerOptions
+        {
+            get { return _jsonSerializerOptions ?? CreateSerializerOptions(); }
+        }
+
+        private JsonSerializerOptions CreateSerializerOptions()
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                PropertyNamingPolicy = new SnakeCaseNamingPolicy()
+            };
+
+            options.Converters.Add(new BigIntegerConverter());
+            options.Converters.Add(new SignerModeConverter());
+            options.Converters.Add(new BlockFlagConverter());
+            options.Converters.Add(new SignerModeConverter());
+            options.Converters.Add(new MessagesConverter(this.MessageRegistry ?? throw new InvalidOperationException()));
+
+            return options;
+        }
     }
 }

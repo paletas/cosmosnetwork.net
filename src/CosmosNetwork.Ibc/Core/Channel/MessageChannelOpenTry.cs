@@ -3,6 +3,7 @@ using CosmosNetwork.Serialization;
 
 namespace CosmosNetwork.Ibc.Core.Channel
 {
+    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageChannelOpenTry(
         string PortId,
         string PreviousChannelId,
@@ -12,6 +13,8 @@ namespace CosmosNetwork.Ibc.Core.Channel
         Height ProofHeight,
         string Signer) : Message
     {
+        public const string COSMOS_DESCRIPTOR = "/ibc.core.channel.v1.MsgChannelOpenTry";
+
         protected override SerializerMessage ToSerialization()
         {
             return new Serialization.Core.Channel.MessageChannelOpenTry(

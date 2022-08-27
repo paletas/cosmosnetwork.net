@@ -3,6 +3,7 @@ using CosmosNetwork.Serialization;
 
 namespace CosmosNetwork.Ibc.Applications.Transfer
 {
+    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageTransfer(
         string SourcePort,
         string SourceChannel,
@@ -12,6 +13,8 @@ namespace CosmosNetwork.Ibc.Applications.Transfer
         Height TimeoutHeight,
         ulong TimeoutTimestamp) : Message
     {
+        public const string COSMOS_DESCRIPTOR = "/ibc.applications.transfer.v1.MsgTransfer";
+
         protected override SerializerMessage ToSerialization()
         {
             return new Serialization.Applications.Transfer.MessageTransfer(

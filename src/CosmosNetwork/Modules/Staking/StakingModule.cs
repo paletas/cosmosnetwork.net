@@ -6,12 +6,11 @@ namespace CosmosNetwork.Modules.Staking
     {
         public void ConfigureModule(CosmosMessageRegistry messageRegistry)
         {
-            messageRegistry.RegisterMessage<MessageBeginRedelegate>();
-            messageRegistry.RegisterMessage<MessageCreateValidator>();
-            messageRegistry.RegisterMessage<MessageDelegate>();
-            messageRegistry.RegisterMessage<MessageEditValidator>();
-            messageRegistry.RegisterMessage<MessageUndelegate>();
-            messageRegistry.RegisterMessage<MessageBeginRedelegate>();
+            messageRegistry.RegisterMessage<MessageBeginRedelegate, Serialization.MessageBeginRedelegate>();
+            messageRegistry.RegisterMessage<MessageCreateValidator, Serialization.MessageCreateValidator>();
+            messageRegistry.RegisterMessage<MessageDelegate, Serialization.MessageDelegate>();
+            messageRegistry.RegisterMessage<MessageEditValidator, Serialization.MessageEditValidator>();
+            messageRegistry.RegisterMessage<MessageUndelegate, Serialization.MessageUndelegate>();
         }
     }
 }

@@ -20,7 +20,7 @@
 
     public abstract record SignatureKey(SignatureTypeEnum Type)
     {
-        public abstract Serialization.PublicKey ToSerialization();
+        public abstract Serialization.Json.PublicKey ToSerialization();
 
         public abstract PublicKey[] GetPublicKeys();
     }
@@ -39,9 +39,9 @@
             return new[] { new PublicKey(Key) };
         }
 
-        public override Serialization.PublicKey ToSerialization()
+        public override Serialization.Json.PublicKey ToSerialization()
         {
-            return new Serialization.Secp256k1(Key);
+            return new Serialization.Json.Secp256k1(Key);
         }
     }
 
@@ -52,9 +52,9 @@
             return new[] { new PublicKey(Key) };
         }
 
-        public override Serialization.PublicKey ToSerialization()
+        public override Serialization.Json.PublicKey ToSerialization()
         {
-            return new Serialization.Ed25519(Key);
+            return new Serialization.Json.Ed25519(Key);
         }
     }
 
@@ -65,9 +65,9 @@
             return Keys.SelectMany(k => k.GetPublicKeys()).ToArray();
         }
 
-        public override Serialization.PublicKey ToSerialization()
+        public override Serialization.Json.PublicKey ToSerialization()
         {
-            return new Serialization.MultisigKey(Threshold, Keys.Select(k => k.ToSerialization()).ToArray());
+            return new Serialization.Json.MultisigKey(Threshold, Keys.Select(k => k.ToSerialization()).ToArray());
         }
     }
 }

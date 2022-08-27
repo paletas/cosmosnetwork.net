@@ -6,13 +6,13 @@ namespace CosmosNetwork.CosmWasm
     {
         public void ConfigureModule(CosmosMessageRegistry messageRegistry)
         {
-            messageRegistry.RegisterMessage<MessageClearContractAdmin>();
-            messageRegistry.RegisterMessage<MessageExecuteContract>();
-            messageRegistry.RegisterMessage<MessageInstantiateContract>();
-            messageRegistry.RegisterMessage<MessageMigrateContract>();
-            messageRegistry.RegisterMessage<MessageMigrateContractCode>();
-            messageRegistry.RegisterMessage<MessageStoreContractCode>();
-            messageRegistry.RegisterMessage<MessageUpdateContractAdmin>();
+            messageRegistry.RegisterMessage<MessageClearContractAdmin, Serialization.MessageClearContractAdmin>();
+            messageRegistry.RegisterMessage<MessageExecuteContract, Serialization.MessageExecuteContract>();
+            messageRegistry.RegisterMessage<MessageInstantiateContract, Serialization.MessageInstantiateContract>();
+            messageRegistry.RegisterMessage<MessageMigrateContract, Serialization.MessageMigrateContract>();
+            messageRegistry.RegisterMessage<MessageMigrateContractCode, Serialization.MessageMigrateContractCode>();
+            messageRegistry.RegisterMessage<MessageStoreContractCode, Serialization.MessageStoreContractCode>();
+            messageRegistry.RegisterMessage<MessageUpdateContractAdmin, Serialization.MessageUpdateContractAdmin>();
         }
     }
 }

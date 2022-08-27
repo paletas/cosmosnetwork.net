@@ -1,13 +1,15 @@
 ﻿using CosmosNetwork.Ibc.Serialization.Core.Client;
 using CosmosNetwork.Tendermint.Types.Serialization;
+using ProtoBuf;
 
 namespace CosmosNetwork.Ibc.Serialization.LightClients.Tendermint
 {
+    [ProtoContract]
     internal record Header(
-        SignedHeader SignedHeader,
-        ValidatorSet ValidatorSet,
-        Height TrustedHeight,
-        ValidatorSet TrustedValidators) : IHeader
+        [property: ProtoMember(1, Name = "signed_header")] SignedHeader SignedHeader,
+        [property: ProtoMember(2, Name = "validator_set")] ValidatorSet ValidatorSet,
+        [property: ProtoMember(3, Name = "trusted_height")] Height TrustedHeight,
+        [property: ProtoMember(4, Name = "trusted_validators")] ValidatorSet TrustedValidators) : IHeader
     {
         public const string AnyType = "/ibc.lightclients.tendermint.v1.Header";
 

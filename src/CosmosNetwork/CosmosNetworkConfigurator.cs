@@ -8,6 +8,7 @@ using CosmosNetwork.Modules.Slashing;
 using CosmosNetwork.Modules.Staking;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace CosmosNetwork
 {
@@ -16,9 +17,9 @@ namespace CosmosNetwork
         private readonly IServiceCollection _services;
         private readonly CosmosApiOptions _options;
 
-        internal CosmosNetworkConfigurator(IServiceCollection services, string chainId, CosmosMessageRegistry registry, CosmosApiOptions? options = null)
+        internal CosmosNetworkConfigurator(IServiceCollection services, string chainId, CosmosMessageRegistry registry, CosmosApiOptions options)
         {
-            _options = options ?? new CosmosApiOptions(chainId);
+            _options = options;
             _services = services;
             Registry = registry;
         }
@@ -48,23 +49,23 @@ namespace CosmosNetwork
             return this;
         }
 
-        public CosmosNetworkConfigurator AddModule<T>()
+        public CosmosNetworkConfigurator AddModule<T>(T module)
             where T : class, ICosmosModule
         {
-            _services.AddSingleton<T>();
-            _services.AddSingleton<ICosmosModule, T>(sp => sp.GetRequiredService<T>());
+            _services.AddSingleton<T>(module);
+            _services.AddSingleton<ICosmosModule>(module);
 
             return this;
         }
 
-        public CosmosNetworkConfigurator ReplaceModule<TE, TN>()
+        public CosmosNetworkConfigurator ReplaceModule<TE, TN>(TN newModule)
             where TE : class, ICosmosModule
             where TN : class, ICosmosModule
         {
             _services.RemoveAll<TE>();
 
-            _services.AddSingleton<TN>();
-            _services.AddSingleton<ICosmosModule, TN>(sp => sp.GetRequiredService<TN>());
+            _services.AddSingleton<TN>(newModule);
+            _services.AddSingleton<ICosmosModule>(newModule);
 
             return this;
         }
@@ -80,27 +81,33 @@ namespace CosmosNetwork
 
     public static class CosmosNetworkConfiguration
     {
-        public static CosmosNetworkConfigurator AddCosmosNetwork(this IServiceCollection services, string chainId, CosmosApiOptions? options = null)
+        public static CosmosNetworkConfigurator AddCosmosNetwork(this IServiceCollection services, string chainId, string endpoint, CosmosApiOptions? options = null)
         {
             CosmosMessageRegistry cosmosMessageRegistry = new();
 
             CosmosNetworkConfigurator cosmosNetworkConfigurator = new(services, chainId, cosmosMessageRegistry, options);
 
-            cosmosNetworkConfigurator.AddModule<AuthzModule>();
-            cosmosNetworkConfigurator.AddModule<BankModule>();
-            cosmosNetworkConfigurator.AddModule<DistributionModule>();
-            cosmosNetworkConfigurator.AddModule<FeeGrantModule>();
-            cosmosNetworkConfigurator.AddModule<GovModule>();
-            cosmosNetworkConfigurator.AddModule<SlashingModule>();
-            cosmosNetworkConfigurator.AddModule<StakingModule>();
+            options ??= new CosmosApiOptions();
+            options.ChainId = chainId;
+            options.MessageRegistry = cosmosMessageRegistry;
+
+            AuthzModule authzModule;
+
+            cosmosNetworkConfigurator.AddModule(authzModule = new AuthzModule(services));
+            cosmosNetworkConfigurator.AddModule(new BankModule(authzModule));
+            cosmosNetworkConfigurator.AddModule(new DistributionModule());
+            cosmosNetworkConfigurator.AddModule(new FeeGrantModule(services));
+            cosmosNetworkConfigurator.AddModule(new GovModule(services));
+            cosmosNetworkConfigurator.AddModule(new SlashingModule());
+            cosmosNetworkConfigurator.AddModule(new StakingModule());
 
             services.AddSingleton(sp => cosmosMessageRegistry);
-            services.AddScoped<CosmosApi>();
+            services.AddSingleton(sp => new CosmosApi(new HttpClient() { BaseAddress = new Uri(endpoint) }, sp.GetRequiredService<ILoggerFactory>(), options));
 
             return cosmosNetworkConfigurator;
         }
 
-        public static void UseCosmosNetwork(this IServiceProvider provider)
+        public static void UseCosmosNetwork(this IServiceProvider provider, string? endpoint = null)
         {
             var modules = provider.GetServices<ICosmosModule>();
             foreach (var module in modules)

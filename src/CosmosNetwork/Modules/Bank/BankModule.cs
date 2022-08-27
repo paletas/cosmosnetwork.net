@@ -16,8 +16,8 @@ namespace CosmosNetwork.Modules.Bank
 
         public void ConfigureModule(CosmosMessageRegistry messageRegistry)
         {
-            messageRegistry.RegisterMessage<MessageSend>();
-            messageRegistry.RegisterMessage<MessageMultiSend>();
+            messageRegistry.RegisterMessage<MessageSend, Serialization.MessageSend>();
+            messageRegistry.RegisterMessage<MessageMultiSend, Serialization.MessageMultiSend>();
 
             this._authzModule.AuthorizationsRegistry.Register<Serialization.Authz.SendAuthorization>(SendAuthorization.AuthorizationType);
         }

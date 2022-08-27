@@ -20,9 +20,9 @@ namespace CosmosNetwork
 
         public string Address => Converter.EncodeBech32("terra", RawAddress);
 
-        internal Serialization.PublicKey ToProto()
+        internal Serialization.Json.PublicKey ToProto()
         {
-            return new Serialization.Secp256k1(Convert.ToBase64String(RawKey));
+            return new Serialization.Json.Secp256k1(Convert.ToBase64String(RawKey));
         }
 
         internal SignatureKey ToSignatureKey()

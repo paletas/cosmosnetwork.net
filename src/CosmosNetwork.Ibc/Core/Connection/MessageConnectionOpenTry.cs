@@ -4,6 +4,7 @@ using CosmosNetwork.Serialization;
 
 namespace CosmosNetwork.Ibc.Core.Connection
 {
+    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageConnectionOpenTry(
         string ClientId,
         string PreviousConnectionId,
@@ -18,6 +19,8 @@ namespace CosmosNetwork.Ibc.Core.Connection
         Height ConsensusHeight,
         string Signer) : Message
     {
+        public const string COSMOS_DESCRIPTOR = "/ibc.core.connection.v1.MsgConnectionOpenTry";
+
         protected override SerializerMessage ToSerialization()
         {
             return new Serialization.Core.Connection.MessageConnectionOpenTry(

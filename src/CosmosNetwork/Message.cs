@@ -1,4 +1,6 @@
-﻿namespace CosmosNetwork
+﻿using CosmosNetwork.Serialization;
+
+namespace CosmosNetwork
 {
     public abstract record Message()
     {

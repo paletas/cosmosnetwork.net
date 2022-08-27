@@ -19,8 +19,8 @@ namespace CosmosNetwork.Modules.FeeGrant
 
         public void ConfigureModule(CosmosMessageRegistry messageRegistry)
         {
-            messageRegistry.RegisterMessage<MessageGrantAllowance>();
-            messageRegistry.RegisterMessage<MessageRevokeAllowance>();
+            messageRegistry.RegisterMessage<MessageGrantAllowance, Serialization.MessageGrantAllowance>();
+            messageRegistry.RegisterMessage<MessageRevokeAllowance, Serialization.MessageRevokeAllowance>();
 
             _services.AddSingleton(this.AllowancesRegistry);
 

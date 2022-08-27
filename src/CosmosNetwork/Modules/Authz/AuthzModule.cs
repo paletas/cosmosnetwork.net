@@ -18,9 +18,9 @@ namespace CosmosNetwork.Modules.Authz
 
         public void ConfigureModule(CosmosMessageRegistry messageRegistry)
         {
-            messageRegistry.RegisterMessage<MessageExecute>();
-            messageRegistry.RegisterMessage<MessageGrant>();
-            messageRegistry.RegisterMessage<MessageRevoke>();
+            messageRegistry.RegisterMessage<MessageExecute, Serialization.MessageExecute>();
+            messageRegistry.RegisterMessage<MessageGrant, Serialization.MessageGrant>();
+            messageRegistry.RegisterMessage<MessageRevoke, Serialization.MessageRevoke>();
 
             _services.AddSingleton(this.AuthorizationsRegistry);
         }

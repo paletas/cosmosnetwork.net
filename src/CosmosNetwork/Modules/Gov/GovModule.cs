@@ -18,10 +18,10 @@ namespace CosmosNetwork.Modules.Gov
 
         public void ConfigureModule(CosmosMessageRegistry messageRegistry)
         {
-            messageRegistry.RegisterMessage<MessageDeposit>();
-            messageRegistry.RegisterMessage<MessageSubmitProposal>();
-            messageRegistry.RegisterMessage<MessageVote>();
-            messageRegistry.RegisterMessage<MessageVoteWeighted>();
+            messageRegistry.RegisterMessage<MessageDeposit, Serialization.MessageDeposit>();
+            messageRegistry.RegisterMessage<MessageSubmitProposal, Serialization.MessageSubmitProposal>();
+            messageRegistry.RegisterMessage<MessageVote, Serialization.MessageVote>();
+            messageRegistry.RegisterMessage<MessageVoteWeighted, Serialization.MessageVoteWeighted>();
 
             _services.AddSingleton(this.ProposalsRegistry);
 

@@ -1,7 +1,7 @@
 ﻿using CosmosNetwork.Serialization.Json.Converters;
 using System.Text.Json.Serialization;
 
-namespace CosmosNetwork.Serialization
+namespace CosmosNetwork.Serialization.Json
 {
     public abstract record PublicKey(KeyTypeEnum Type)
     {
@@ -22,7 +22,7 @@ namespace CosmosNetwork.Serialization
 
         public override SignatureKey ToModel()
         {
-            return new CosmosNetwork.Secp256k1Key(Value);
+            return new Secp256k1Key(Value);
         }
     }
 
@@ -38,7 +38,7 @@ namespace CosmosNetwork.Serialization
 
         public override SignatureKey ToModel()
         {
-            return new CosmosNetwork.Ed25519Key(Value);
+            return new Ed25519Key(Value);
         }
     }
 
