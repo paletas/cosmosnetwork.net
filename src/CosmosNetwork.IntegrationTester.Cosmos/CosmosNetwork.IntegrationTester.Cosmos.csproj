@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\CosmosNetwork.Ibc\CosmosNetwork.Ibc.csproj" />
-    <ProjectReference Include="..\src\CosmosNetwork\CosmosNetwork.csproj" />
+    <ProjectReference Include="..\CosmosNetwork.Ibc\CosmosNetwork.Ibc.csproj" />
+    <ProjectReference Include="..\CosmosNetwork\CosmosNetwork.csproj" />
   </ItemGroup>
 
 </Project>

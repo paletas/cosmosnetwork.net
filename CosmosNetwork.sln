@@ -17,9 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosNetwork.Confio.Types"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{512FAED7-B21A-4296-8A8B-A0A4B999BF71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosNetwork.IntegrationTester.Cosmos", "CosmosNetwork.IntegrationTester.Cosmos\CosmosNetwork.IntegrationTester.Cosmos.csproj", "{637ABD9B-08CF-4340-8367-4791544ABCCB}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{5B8F36DA-327B-4CA6-BA2D-2B87D3CC9101}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosNetwork.IntegrationTester.Cosmos", "src\CosmosNetwork.IntegrationTester.Cosmos\CosmosNetwork.IntegrationTester.Cosmos.csproj", "{CE0450E3-265C-49BD-829F-30FFA02F82D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,17 +51,17 @@ Global
 		{3917103F-697F-4C11-A15A-C8237F0B301A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3917103F-697F-4C11-A15A-C8237F0B301A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3917103F-697F-4C11-A15A-C8237F0B301A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{637ABD9B-08CF-4340-8367-4791544ABCCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{637ABD9B-08CF-4340-8367-4791544ABCCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{637ABD9B-08CF-4340-8367-4791544ABCCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{637ABD9B-08CF-4340-8367-4791544ABCCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE0450E3-265C-49BD-829F-30FFA02F82D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE0450E3-265C-49BD-829F-30FFA02F82D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE0450E3-265C-49BD-829F-30FFA02F82D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE0450E3-265C-49BD-829F-30FFA02F82D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{637ABD9B-08CF-4340-8367-4791544ABCCB} = {5B8F36DA-327B-4CA6-BA2D-2B87D3CC9101}
 		{5B8F36DA-327B-4CA6-BA2D-2B87D3CC9101} = {512FAED7-B21A-4296-8A8B-A0A4B999BF71}
+		{CE0450E3-265C-49BD-829F-30FFA02F82D2} = {5B8F36DA-327B-4CA6-BA2D-2B87D3CC9101}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B35290A5-367B-47EA-928E-4E61272C6E36}

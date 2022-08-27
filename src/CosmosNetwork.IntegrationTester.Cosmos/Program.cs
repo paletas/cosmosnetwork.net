@@ -1,5 +1,4 @@
 ﻿using CosmosNetwork;
-using CosmosNetwork.CosmWasm;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -44,7 +43,7 @@ do
     {
         logger.LogError("[ERROR] TimeOut!");
     }
-    catch (HttpRequestException ex)
+    catch (Exception ex)
     {
         logger.LogError($"[ERROR] {ex}");
     }
