@@ -1,4 +1,5 @@
 ﻿using CosmosNetwork.Modules.Gov.Serialization.Proposals;
+using CosmosNetwork.Modules.Gov.Serialization.Proposals.Json;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CosmosNetwork.Modules.Gov
@@ -16,7 +17,7 @@ namespace CosmosNetwork.Modules.Gov
 
         public ProposalsRegistry ProposalsRegistry { get; init; }
 
-        public void ConfigureModule(CosmosMessageRegistry messageRegistry)
+        public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
         {
             messageRegistry.RegisterMessage<MessageDeposit, Serialization.MessageDeposit>();
             messageRegistry.RegisterMessage<MessageSubmitProposal, Serialization.MessageSubmitProposal>();
@@ -24,8 +25,9 @@ namespace CosmosNetwork.Modules.Gov
             messageRegistry.RegisterMessage<MessageVoteWeighted, Serialization.MessageVoteWeighted>();
 
             _services.AddSingleton(this.ProposalsRegistry);
+            cosmosOptions.JsonSerializerOptions.Converters.Add(new ProposalConverter(this.ProposalsRegistry));
 
-            this.ProposalsRegistry.Register<Serialization.Proposals.TextProposal>(Gov.Proposals.TextProposal.ProposalType);
+            this.ProposalsRegistry.Register<TextProposal>(TextProposal.ProposalType);
         }
     }
 }

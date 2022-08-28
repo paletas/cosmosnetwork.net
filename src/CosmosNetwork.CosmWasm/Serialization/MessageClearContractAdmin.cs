@@ -1,11 +1,13 @@
 ﻿using CosmosNetwork.Serialization;
+using ProtoBuf;
 using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.CosmWasm.Serialization
 {
+    [ProtoContract]
     internal record MessageClearContractAdmin(
-        [property: JsonPropertyName("admin")] string AdminAddress,
-        [property: JsonPropertyName("contract")] string ContractAddress) : SerializerMessage
+        [property: ProtoMember(1, Name = "sender"), JsonPropertyName("admin")] string AdminAddress,
+        [property: ProtoMember(3, Name = "contract"), JsonPropertyName("contract")] string ContractAddress) : SerializerMessage
     {
         protected override Message ToModel()
         {

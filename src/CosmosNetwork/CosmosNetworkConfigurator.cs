@@ -15,36 +15,46 @@ namespace CosmosNetwork
     public class CosmosNetworkConfigurator
     {
         private readonly IServiceCollection _services;
-        private readonly CosmosApiOptions _options;
 
         internal CosmosNetworkConfigurator(IServiceCollection services, string chainId, CosmosMessageRegistry registry, CosmosApiOptions options)
         {
-            _options = options;
             _services = services;
+            Options = options;
             Registry = registry;
         }
+
+        public CosmosApiOptions Options { get; }
 
         public CosmosMessageRegistry Registry { get; }
 
         public CosmosNetworkConfigurator SetGasOptions(decimal gasAdjustment)
         {
-            _options.GasAdjustment = gasAdjustment;
-            _options.GasPrices = null;
+            Options.GasAdjustment = gasAdjustment;
+            Options.GasPrices = null;
 
             return this;
         }
 
         public CosmosNetworkConfigurator SetGasOptions(decimal gasAdjustment, params CoinDecimal[] gasPrices)
         {
-            _options.GasAdjustment = gasAdjustment;
-            _options.GasPrices = gasPrices;
+            Options.GasAdjustment = gasAdjustment;
+            Options.GasPrices = gasPrices;
 
             return this;
         }
 
         public CosmosNetworkConfigurator SetDefaultDenom(params string[] denom)
         {
-            _options.DefaultDenoms = denom;
+            Options.DefaultDenoms = denom;
+
+            return this;
+        }
+
+        public CosmosNetworkConfigurator AddModule<T>()
+            where T : class, ICosmosModule
+        {
+            _services.AddSingleton<T>();
+            _services.AddSingleton<ICosmosModule>(sp => sp.GetRequiredService<T>());
 
             return this;
         }
@@ -92,16 +102,18 @@ namespace CosmosNetwork
             options.MessageRegistry = cosmosMessageRegistry;
 
             AuthzModule authzModule;
+            GovModule govModule;
 
             cosmosNetworkConfigurator.AddModule(authzModule = new AuthzModule(services));
+            cosmosNetworkConfigurator.AddModule(govModule = new GovModule(services));
             cosmosNetworkConfigurator.AddModule(new BankModule(authzModule));
-            cosmosNetworkConfigurator.AddModule(new DistributionModule());
+            cosmosNetworkConfigurator.AddModule(new DistributionModule(govModule));
             cosmosNetworkConfigurator.AddModule(new FeeGrantModule(services));
-            cosmosNetworkConfigurator.AddModule(new GovModule(services));
             cosmosNetworkConfigurator.AddModule(new SlashingModule());
             cosmosNetworkConfigurator.AddModule(new StakingModule());
 
             services.AddSingleton(sp => cosmosMessageRegistry);
+            services.AddSingleton(options);
             services.AddSingleton(sp => new CosmosApi(new HttpClient() { BaseAddress = new Uri(endpoint) }, sp.GetRequiredService<ILoggerFactory>(), options));
 
             return cosmosNetworkConfigurator;
@@ -112,7 +124,7 @@ namespace CosmosNetwork
             var modules = provider.GetServices<ICosmosModule>();
             foreach (var module in modules)
             {
-                module.ConfigureModule(provider.GetRequiredService<CosmosMessageRegistry>());
+                module.ConfigureModule(provider.GetRequiredService<CosmosApiOptions>(), provider.GetRequiredService<CosmosMessageRegistry>());
             }
         }
     }

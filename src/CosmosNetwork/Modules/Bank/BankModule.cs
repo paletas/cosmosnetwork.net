@@ -14,7 +14,7 @@ namespace CosmosNetwork.Modules.Bank
             this._authzModule = authzModule;
         }
 
-        public void ConfigureModule(CosmosMessageRegistry messageRegistry)
+        public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
         {
             messageRegistry.RegisterMessage<MessageSend, Serialization.MessageSend>();
             messageRegistry.RegisterMessage<MessageMultiSend, Serialization.MessageMultiSend>();

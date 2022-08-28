@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>CosmosNetwork</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CosmosNetwork.CosmWasm\CosmosNetwork.CosmWasm.csproj" />
+    <ProjectReference Include="..\CosmosNetwork.Ibc\CosmosNetwork.Ibc.csproj" />
+    <ProjectReference Include="..\CosmosNetwork\CosmosNetwork.csproj" />
+  </ItemGroup>
+
+</Project>

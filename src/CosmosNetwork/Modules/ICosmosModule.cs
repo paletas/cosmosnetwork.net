@@ -1,9 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace CosmosNetwork.Modules
+﻿namespace CosmosNetwork.Modules
 {
     public interface ICosmosModule
     {
-        void ConfigureModule(CosmosMessageRegistry messageRegistry);
+        void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry);
     }
 }

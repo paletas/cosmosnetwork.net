@@ -1,12 +1,12 @@
 ﻿namespace CosmosNetwork
 {
-    public record Block(BlockIdentification BlockId, BlockDetails Details);
+    public record Block(BlockIdentification? BlockId, BlockDetails Details);
 
     public record BlockIdentification(string Hash, BlockIdentificationParts Parts);
 
     public record BlockIdentificationParts(long Total, string Hash);
 
-    public record BlockDetails(BlockHeader Header, BlockData Data, BlockCommit LastCommit);
+    public record BlockDetails(BlockHeader Header, BlockData Data, BlockCommit? LastCommit);
 
     public record BlockHeader
     (

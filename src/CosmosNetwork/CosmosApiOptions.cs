@@ -41,7 +41,7 @@ namespace CosmosNetwork
         private JsonSerializerOptions? _jsonSerializerOptions;
         public JsonSerializerOptions JsonSerializerOptions
         {
-            get { return _jsonSerializerOptions ?? CreateSerializerOptions(); }
+            get { return _jsonSerializerOptions ?? (_jsonSerializerOptions = CreateSerializerOptions()); }
         }
 
         private JsonSerializerOptions CreateSerializerOptions()

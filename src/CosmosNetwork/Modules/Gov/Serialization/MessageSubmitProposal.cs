@@ -14,9 +14,10 @@ namespace CosmosNetwork.Modules.Gov.Serialization
     {
         public const string TERRA_DESCRIPTOR = "gov/MsMsgSubmitProposalSwap";
 
-        [ProtoIgnore, JsonConverter(typeof(ProposalConverter))]
-        public IProposal Content { get; set; }
+        [ProtoIgnore]
+        public IProposal Content { get; set; } = null!;
 
+        [JsonIgnore]
         public Any ContentPack
         {
             get => Any.Pack((IProposalImplementation)Content);

@@ -1,12 +1,10 @@
-﻿using CosmosNetwork.CosmWasm;
-
-namespace CosmosNetwork
+﻿namespace CosmosNetwork.CosmWasm
 {
     public static class CosmWasmConfiguration
     {
         public static CosmosNetworkConfigurator AddCosmWasm(this CosmosNetworkConfigurator configurator)
         {
-            configurator.AddModule(new WasmModule());
+            configurator.AddModule<WasmModule>();
 
             return configurator;
         }

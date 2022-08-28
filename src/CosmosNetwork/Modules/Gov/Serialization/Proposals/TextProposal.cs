@@ -2,7 +2,7 @@
 {
     internal record TextProposal(string Title, string Description) : IProposalImplementation
     {
-        private const string ProposalType = "cosmos.gov.v1beta1.TextProposal";
+        public const string ProposalType = "/cosmos.gov.v1beta1.TextProposal";
 
         public string TypeUrl => ProposalType;
 

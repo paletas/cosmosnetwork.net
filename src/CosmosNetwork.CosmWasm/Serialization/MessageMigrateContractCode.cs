@@ -1,16 +1,26 @@
 ﻿using CosmosNetwork.Serialization;
+using ProtoBuf;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.CosmWasm.Serialization
 {
+    [ProtoContract]
     internal record MessageMigrateContractCode(
-        [property: JsonPropertyName("sender")] string SenderAddress,
-        ulong CodeId,
-        string WasmByteCode) : SerializerMessage
+        [property: ProtoMember(1, Name = "sender"), JsonPropertyName("sender")] string SenderAddress,
+        [property: ProtoMember(2, Name = "contract"), JsonPropertyName("contract")] string ContractAddress,
+        [property: ProtoMember(3, Name = "code_id")] ulong CodeId,
+        [property: ProtoMember(4, Name = "msg")] JsonDocument MigrateMsg) : SerializerMessage
     {
         protected override Message ToModel()
         {
-            return new CosmWasm.MessageMigrateContractCode(SenderAddress, CodeId, WasmByteCode);
+            string migrateMessageJson = JsonSerializer.Serialize(MigrateMsg);
+
+            return new CosmWasm.MessageMigrateContractCode(
+                SenderAddress,
+                ContractAddress,
+                CodeId,
+                migrateMessageJson);
         }
     }
 }

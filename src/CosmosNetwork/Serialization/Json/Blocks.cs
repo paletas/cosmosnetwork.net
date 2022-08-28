@@ -3,11 +3,11 @@ using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Serialization.Json
 {
-    internal record Block(BlockIdentification BlockId, [property: JsonPropertyName("block")] BlockDetails Details)
+    internal record Block(BlockIdentification? BlockId, [property: JsonPropertyName("block")] BlockDetails Details)
     {
         internal CosmosNetwork.Block ToModel()
         {
-            return new CosmosNetwork.Block(BlockId.ToModel(), Details.ToModel());
+            return new CosmosNetwork.Block(BlockId?.ToModel(), Details.ToModel());
         }
     }
 
@@ -27,11 +27,11 @@ namespace CosmosNetwork.Serialization.Json
         }
     }
 
-    internal record BlockDetails(BlockHeader Header, BlockData Data, BlockCommit LastCommit)
+    internal record BlockDetails(BlockHeader Header, BlockData Data, BlockCommit? LastCommit)
     {
         internal CosmosNetwork.BlockDetails ToModel()
         {
-            return new CosmosNetwork.BlockDetails(Header.ToModel(), Data.ToModel(), LastCommit.ToModel());
+            return new CosmosNetwork.BlockDetails(Header.ToModel(), Data.ToModel(), LastCommit?.ToModel());
         }
     }
 

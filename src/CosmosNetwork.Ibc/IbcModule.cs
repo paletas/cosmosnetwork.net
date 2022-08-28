@@ -9,7 +9,7 @@ namespace CosmosNetwork.Ibc
 {
     internal class IbcModule : ICosmosModule
     {
-        public void ConfigureModule(CosmosMessageRegistry messageRegistry)
+        public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
         {
             messageRegistry.RegisterMessage<MessagePayPacketFee, Serialization.Applications.Fees.MessagePayPacketFee>();
             messageRegistry.RegisterMessage<MessagePayPacketFeeAsync, Serialization.Applications.Fees.MessagePayPacketFeeAsync>();

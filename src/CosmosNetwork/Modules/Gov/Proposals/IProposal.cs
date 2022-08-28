@@ -2,6 +2,6 @@
 {
     public interface IProposal
     {
-        internal abstract Serialization.Proposals.IProposal ToSerialization();
+        Serialization.Proposals.IProposal ToSerialization();
     }
 }
