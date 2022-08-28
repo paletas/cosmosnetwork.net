@@ -11,9 +11,9 @@ namespace CosmosNetwork.Ibc.Serialization.LightClients.Tendermint
     internal record ClientState(
         [property: ProtoMember(1, Name = "chain_id")] string ChainId,
         [property: ProtoMember(2, Name = "trust_level")] Fraction TrustLevel,
-        [property: ProtoMember(3, Name = "trusting_period"), JsonConverter(typeof(DurationConverter))] Duration TrustingPeriod,
-        [property: ProtoMember(4, Name = "unbonding_period"), JsonConverter(typeof(DurationConverter))] Duration UnbondingPeriod,
-        [property: ProtoMember(5, Name = "max_clock_drift"), JsonConverter(typeof(DurationConverter))] Duration MaxClockDrift,
+        [property: ProtoMember(3, Name = "trusting_period")] Duration TrustingPeriod,
+        [property: ProtoMember(4, Name = "unbonding_period")] Duration UnbondingPeriod,
+        [property: ProtoMember(5, Name = "max_clock_drift")] Duration MaxClockDrift,
         [property: ProtoMember(6, Name = "frozen_height")] Height FrozenHeight,
         [property: ProtoMember(7, Name = "latest_height")] Height LatestHeight,
         [property: ProtoMember(8, Name = "proof_specs")] ProofSpec[] ProofSpecs,

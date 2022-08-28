@@ -58,6 +58,8 @@ namespace CosmosNetwork
             options.Converters.Add(new SignerModeConverter());
             options.Converters.Add(new BlockFlagConverter());
             options.Converters.Add(new SignerModeConverter());
+            options.Converters.Add(new DurationConverter());
+            options.Converters.Add(new TimestampConverter());
             options.Converters.Add(new MessagesConverter(this.MessageRegistry ?? throw new InvalidOperationException()));
 
             return options;

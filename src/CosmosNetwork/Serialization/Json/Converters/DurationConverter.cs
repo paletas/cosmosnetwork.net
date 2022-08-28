@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace CosmosNetwork.Ibc.Serialization.Json
+namespace CosmosNetwork.Serialization.Json.Converters
 {
     internal class DurationConverter : JsonConverter<Duration>
     {
@@ -13,7 +13,7 @@ namespace CosmosNetwork.Ibc.Serialization.Json
             var value = reader.GetString();
             if (value is null) throw new JsonException();
 
-            Char unit = value[value.Length - 1];
+            char unit = value[value.Length - 1];
 
             switch (unit)
             {

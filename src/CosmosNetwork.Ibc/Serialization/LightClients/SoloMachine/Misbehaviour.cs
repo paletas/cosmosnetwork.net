@@ -1,4 +1,6 @@
 ﻿using ProtoBuf;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Ibc.Serialization.LightClients.SoloMachine
 {
@@ -41,36 +43,47 @@ namespace CosmosNetwork.Ibc.Serialization.LightClients.SoloMachine
     }
 
     [ProtoContract]
+    [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     internal enum DataTypeEnum
     {
         [ProtoEnum(Name = "DATA_TYPE_UNINITIALIZED_UNSPECIFIED")]
+        [EnumMember(Value = "DATA_TYPE_UNINITIALIZED_UNSPECIFIED")]
         Unspecified = 0,
 
         [ProtoEnum(Name = "DATA_TYPE_CLIENT_STATE")]
+        [EnumMember(Value = "DATA_TYPE_CLIENT_STATE")]
         ClientState = 1,
 
         [ProtoEnum(Name = "DATA_TYPE_CONSENSUS_STATE")]
+        [EnumMember(Value = "DATA_TYPE_CONSENSUS_STATE")]
         ConsensustState = 2,
 
         [ProtoEnum(Name = "DATA_TYPE_CONNECTION_STATE")]
+        [EnumMember(Value = "DATA_TYPE_CONNECTION_STATE")]
         ConnectionState = 3,
 
         [ProtoEnum(Name = "DATA_TYPE_CHANNEL_STATE")]
+        [EnumMember(Value = "DATA_TYPE_CHANNEL_STATE")]
         ChannelState = 4,
 
         [ProtoEnum(Name = "DATA_TYPE_PACKET_COMMITMENT")]
+        [EnumMember(Value = "DATA_TYPE_PACKET_COMMITMENT")]
         PacketCommitment = 5,
 
         [ProtoEnum(Name = "DATA_TYPE_PACKET_ACKNOWLEDGEMENT")]
+        [EnumMember(Value = "DATA_TYPE_PACKET_ACKNOWLEDGEMENT")]
         PacketAcknowledgement = 6,
 
         [ProtoEnum(Name = "DATA_TYPE_PACKET_RECEIPT_ABSENCE")]
+        [EnumMember(Value = "DATA_TYPE_PACKET_RECEIPT_ABSENCE")]
         PacketReceiptAbsence = 7,
 
         [ProtoEnum(Name = "DATA_TYPE_NEXT_SEQUENCE_RECV")]
+        [EnumMember(Value = "DATA_TYPE_NEXT_SEQUENCE_RECV")]
         NextSequenceRecv = 8,
 
         [ProtoEnum(Name = "DATA_TYPE_HEADER")]
+        [EnumMember(Value = "DATA_TYPE_HEADER")]
         Header = 9
     }
 }

@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace CosmosNetwork.Ibc.Serialization.Json
+namespace CosmosNetwork.Serialization.Json.Converters
 {
     internal class TimestampConverter : JsonConverter<Timestamp>
     {
