@@ -12,7 +12,9 @@ namespace CosmosNetwork.Serialization.Json.Converters
             if (extraLong is null)
                 throw new JsonException();
 
-            if (Int128.TryParseCStyleNormalizedI128(extraLong, out Int128 int128))
+            if (extraLong.Equals("0", StringComparison.InvariantCulture))
+                return Int128.FromBits(0, 0);
+            else if (Int128.TryParseCStyleNormalizedI128(extraLong, out Int128 int128))
                 return int128;
             else
                 throw new JsonException();
