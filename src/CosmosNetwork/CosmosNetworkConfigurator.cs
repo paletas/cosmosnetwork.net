@@ -94,12 +94,11 @@ namespace CosmosNetwork
         public static CosmosNetworkConfigurator AddCosmosNetwork(this IServiceCollection services, string chainId, string endpoint, CosmosApiOptions? options = null)
         {
             CosmosMessageRegistry cosmosMessageRegistry = new();
-
-            CosmosNetworkConfigurator cosmosNetworkConfigurator = new(services, chainId, cosmosMessageRegistry, options);
-
             options ??= new CosmosApiOptions();
             options.ChainId = chainId;
             options.MessageRegistry = cosmosMessageRegistry;
+
+            CosmosNetworkConfigurator cosmosNetworkConfigurator = new(services, chainId, cosmosMessageRegistry, options ??= new CosmosApiOptions());
 
             AuthzModule authzModule;
             GovModule govModule;

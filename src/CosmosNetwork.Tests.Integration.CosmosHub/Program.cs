@@ -80,5 +80,3 @@ do
     Console.Clear();
 }
 while (true);
-
-await host.RunAsync();

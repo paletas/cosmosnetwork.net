@@ -24,7 +24,7 @@ namespace CosmosNetwork
             }
         }
 
-        internal CosmosMessageRegistry MessageRegistry { get; set; }
+        internal CosmosMessageRegistry? MessageRegistry { get; set; }
 
         public string? ChainId { get; set; }
 
