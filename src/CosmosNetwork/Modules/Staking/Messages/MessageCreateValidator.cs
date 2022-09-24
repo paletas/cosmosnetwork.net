@@ -1,4 +1,4 @@
-﻿namespace CosmosNetwork.Modules.Staking
+﻿namespace CosmosNetwork.Modules.Staking.Messages
 {
     [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageCreateValidator(
@@ -6,7 +6,7 @@
         CosmosAddress Validator,
         ulong MinimumSelfDelegation,
         ValidatorDescription Description,
-        ValidatorComission Comission,
+        ValidatorCommissionRates Comission,
         Coin SelfDelegation,
         SignatureKey PublicKey) : Message
     {
@@ -16,15 +16,11 @@
         {
             return new Serialization.MessageCreateValidator(
                 Delegator.Address, Validator.Address, MinimumSelfDelegation,
-                new Serialization.ValidatorDescription(Description.Moniker, Description.Identity, Description.Details, Description.Website, Description.SecurityContact),
-                new Serialization.ValidatorComission(Comission.Rate, Comission.MaxRate, Comission.MaxRateChange),
+                new Staking.Serialization.ValidatorDescription(Description.Moniker, Description.Identity, Description.Details, Description.Website.ToString(), Description.SecurityContact),
+                new Staking.Serialization.ValidatorCommissionRates(Comission.Rate, Comission.MaxRate, Comission.MaxRateChange),
                 new CosmosNetwork.Serialization.DenomAmount(SelfDelegation.Denom, SelfDelegation.Amount),
                 PublicKey.ToSerialization()
             );
         }
     }
-
-    public record ValidatorDescription(string Moniker, string Identity, string Details, string Website, string SecurityContact);
-
-    public record ValidatorComission(decimal Rate, decimal MaxRate, decimal MaxRateChange);
 }

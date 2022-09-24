@@ -23,9 +23,19 @@ namespace CosmosNetwork.API
 
         protected CosmosApiOptions Options { get; init; }
 
-        protected async Task<T?> Get<T>(string endpoint, CancellationToken cancellationToken = default)
+        protected Task<T?> Get<T>(string endpoint, CancellationToken cancellationToken = default)
         {
-            HttpResponseMessage httpResponse = await _httpClient.GetAsync(PrepareEndpoint(endpoint), cancellationToken);
+            if (this._httpClient.BaseAddress is null)
+                throw new InvalidOperationException();
+
+            return this.Get<T>(new Uri(this._httpClient.BaseAddress, PrepareEndpoint(endpoint)), cancellationToken);
+        }
+
+        protected async Task<T?> Get<T>(Uri endpoint, CancellationToken cancellationToken = default)
+        {
+            _logger.LogTrace("GET {endpoint}", endpoint);
+
+            HttpResponseMessage httpResponse = await _httpClient.GetAsync(endpoint, cancellationToken);
 
             if (httpResponse.IsSuccessStatusCode == false)
             {

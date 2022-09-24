@@ -1,5 +1,4 @@
-﻿using CosmosNetwork.Serialization.Json.Converters;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Serialization.Json
@@ -14,7 +13,13 @@ namespace CosmosNetwork.Serialization.Json
                     Transaction.Body.Memo,
                     Transaction.Body.TimeoutHeight,
                     Transaction.AuthInfo.Fee.ToModel(),
-                    Transaction.AuthInfo.Signers.Select((sig, ix) => new CosmosNetwork.TransactionSignature(sig.PublicKey.ToModel(), Transaction.Signatures[ix])).ToArray()
+                    Transaction.AuthInfo.Signers.Select((sig, ix) => 
+                        new CosmosNetwork.TransactionSigner(
+                            sig.PublicKey.ToModel(), 
+                            new CosmosNetwork.SignatureDescriptor(SignerModeEnum.Direct, Transaction.Signatures[ix]), 
+                            sig.Sequence
+                        )
+                    ).ToArray()
                 ),
                 Response.Height,
                 Response.TransactionHash,
@@ -72,9 +77,9 @@ namespace CosmosNetwork.Serialization.Json
 
     public record TransactionResponse(ulong Height, [property: JsonPropertyName("txhash")] string TransactionHash, string Codespace, ulong Code, string Data, string RawLog, TransactionLog[] Logs, string Info, ulong GasWanted, ulong GasUsed, TransactionEvent[] Events, [property: JsonPropertyName("tx/timestamp")] DateTime Timestamp)
     {
-        internal TransactionResult ToModel()
+        internal ExecutionResult ToModel()
         {
-            return new TransactionResult(Data, Info, Logs.Select(log => log.ToModel()).ToArray(), Events.Select(evt => evt.ToModel()).ToArray());
+            return new ExecutionResult(Data, Info, Logs.Select(log => log.ToModel()).ToArray(), Events.Select(evt => evt.ToModel()).ToArray());
         }
 
         internal TransactionExecutionStatus GetExecutionStatus()

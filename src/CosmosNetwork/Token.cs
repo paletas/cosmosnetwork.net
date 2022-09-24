@@ -1,4 +1,5 @@
 ﻿using CosmosNetwork.Serialization;
+using UltimateOrb;
 
 namespace CosmosNetwork
 {
@@ -6,7 +7,7 @@ namespace CosmosNetwork
 
     public record DenomUnit(string Denom, ushort Decimals, string[] Aliases);
 
-    public abstract record Coin(string Denom, ulong Amount, bool IsNative)
+    public abstract record Coin(string Denom, UInt128 Amount, bool IsNative)
     {
         public DenomAmount ToSerialization()
         {
@@ -16,9 +17,9 @@ namespace CosmosNetwork
 
     public record CoinDecimal(string Denom, decimal Amount, bool IsNative);
 
-    public record CustomCoin(string ContractAddress, ulong Amount) : Coin(ContractAddress, Amount, false);
+    public record CustomCoin(string ContractAddress, UInt128 Amount) : Coin(ContractAddress, Amount, false);
 
-    public record NativeCoin(string Denom, ulong Amount) : Coin(Denom, Amount, true);
+    public record NativeCoin(string Denom, UInt128 Amount) : Coin(Denom, Amount, true);
 
     public record DenomSwapRate(string Denom, decimal SwapRate);
 }

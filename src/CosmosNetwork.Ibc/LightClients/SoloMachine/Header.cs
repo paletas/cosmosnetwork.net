@@ -13,7 +13,7 @@
                 this.Sequence,
                 this.Timestamp,
                 this.Signature,
-                this.NewPublicKey.ToSerialization().AsTendermint(),
+                this.NewPublicKey.ToSerialization().ToProto(),
                 this.NewDiversifier);
         }
     }

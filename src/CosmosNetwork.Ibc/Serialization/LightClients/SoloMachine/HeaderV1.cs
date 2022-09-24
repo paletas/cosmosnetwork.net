@@ -7,7 +7,7 @@ namespace CosmosNetwork.Ibc.Serialization.LightClients.SoloMachine
         [property: ProtoMember(1, Name = "sequence")] ulong Sequence,
         [property: ProtoMember(1, Name = "timestamp")] ulong Timestamp,
         [property: ProtoMember(1, Name = "signature")] byte[] Signature,
-        [property: ProtoMember(1, Name = "new_public_key")] CosmosNetwork.Serialization.Tendermint.PublicKey NewPublicKey,
+        [property: ProtoMember(1, Name = "new_public_key")] CosmosNetwork.Serialization.Proto.PublicKey NewPublicKey,
         [property: ProtoMember(1, Name = "new_diversifier")] string NewDiversifier) : IHeader
     {
         public const string AnyType = "/ibc.lightclients.solomachine.v1.Header";

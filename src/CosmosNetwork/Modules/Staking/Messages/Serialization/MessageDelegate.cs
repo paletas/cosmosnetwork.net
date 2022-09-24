@@ -1,6 +1,6 @@
 ﻿using CosmosNetwork.Serialization;
 
-namespace CosmosNetwork.Modules.Staking.Serialization
+namespace CosmosNetwork.Modules.Staking.Messages.Serialization
 {
     internal record MessageDelegate(string DelegatorAddress, string ValidatorAddress, DenomAmount Amount) : SerializerMessage
     {
@@ -8,7 +8,7 @@ namespace CosmosNetwork.Modules.Staking.Serialization
 
         protected internal override Message ToModel()
         {
-            return new Staking.MessageDelegate(DelegatorAddress, ValidatorAddress, Amount.ToModel());
+            return new Staking.Messages.MessageDelegate(DelegatorAddress, ValidatorAddress, Amount.ToModel());
         }
     }
 }

@@ -1,12 +1,11 @@
-using CosmosNetwork.Serialization.Proto;
 using ProtoBuf;
 
-namespace CosmosNetwork.Serialization.Tendermint
+namespace CosmosNetwork.Serialization.Proto
 {
     [ProtoContract]
     public class PublicKey : IHasAny
     {
-        private ProtoBuf.DiscriminatedUnionObject _discriminatedObject = new();
+        private DiscriminatedUnionObject _discriminatedObject = new();
 
         public string TypeUrl => "/tendermint.crypto.PublicKey";
 
@@ -28,12 +27,12 @@ namespace CosmosNetwork.Serialization.Tendermint
             set => _discriminatedObject = new DiscriminatedUnionObject((int)ModeInfoDiscriminatorEnum.Multi, value);
         }
 
-        public CosmosNetwork.SignatureKey ToModel()
+        public SignatureKey ToModel()
         {
             return Discriminator switch
             {
-                PublicKeyDiscriminator.Ed25519 => new CosmosNetwork.Ed25519Key(Convert.ToBase64String(Ed25519!)),
-                PublicKeyDiscriminator.Secp256k1 => new CosmosNetwork.Ed25519Key(Convert.ToBase64String(Secp256k1!)),
+                PublicKeyDiscriminator.Ed25519 => new Ed25519Key(Convert.ToBase64String(Ed25519!)),
+                PublicKeyDiscriminator.Secp256k1 => new Ed25519Key(Convert.ToBase64String(Secp256k1!)),
                 _ => throw new NotImplementedException(),
             };
         }

@@ -1,6 +1,8 @@
-﻿namespace CosmosNetwork.Serialization
+﻿using UltimateOrb;
+
+namespace CosmosNetwork.Serialization
 {
-    public record DenomAmount(string Denom, ulong Amount)
+    public record DenomAmount(string Denom, UInt128 Amount)
     {
         public virtual Coin ToModel()
         {
@@ -8,7 +10,7 @@
         }
     };
 
-    public record CustomTokenAmount(string ContractAddress, ulong Amount) : DenomAmount(ContractAddress, Amount)
+    public record CustomTokenAmount(string ContractAddress, UInt128 Amount) : DenomAmount(ContractAddress, Amount)
     {
         public override Coin ToModel()
         {
@@ -16,7 +18,7 @@
         }
     }
 
-    public record NativeTokenAmount(string Denom, ulong Amount) : DenomAmount(Denom, Amount)
+    public record NativeTokenAmount(string Denom, UInt128 Amount) : DenomAmount(Denom, Amount)
     {
         public override Coin ToModel()
         {

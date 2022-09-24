@@ -54,11 +54,11 @@ namespace CosmosNetwork
                 PropertyNamingPolicy = new SnakeCaseNamingPolicy()
             };
 
-            options.Converters.Add(new BigIntegerConverter());
-            options.Converters.Add(new SignerModeConverter());
+            options.Converters.Add(new Uint128Converter());
+            options.Converters.Add(new Int128Converter());
             options.Converters.Add(new BlockFlagConverter());
-            options.Converters.Add(new SignerModeConverter());
             options.Converters.Add(new DurationConverter());
+            options.Converters.Add(new TimeSpanConverter());
             options.Converters.Add(new TimestampConverter());
             options.Converters.Add(new MessagesConverter(this.MessageRegistry ?? throw new InvalidOperationException()));
 

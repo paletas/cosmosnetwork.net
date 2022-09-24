@@ -13,13 +13,13 @@ namespace CosmosNetwork.Ibc.Serialization.LightClients.SoloMachine
         public string TypeUrl => AnyType;
 
         [ProtoIgnore]
-        public CosmosNetwork.Serialization.Tendermint.PublicKey PublicKey { get; set; } = null!;
+        public CosmosNetwork.Serialization.Proto.PublicKey PublicKey { get; set; } = null!;
 
         [ProtoMember(1, Name = "public_key")]
         public Any PublicKeyPacked
         {
             get => Any.Pack(this.PublicKey);
-            set => value.Unpack<CosmosNetwork.Serialization.Tendermint.PublicKey>();
+            set => value.Unpack<CosmosNetwork.Serialization.Proto.PublicKey>();
         }
 
         public Ibc.LightClients.IConsensusState ToModel()

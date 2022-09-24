@@ -1,38 +1,48 @@
-﻿namespace CosmosNetwork.Keys
+﻿using CosmosNetwork.Serialization;
+
+namespace CosmosNetwork.Keys
 {
     internal class MnemonicKey : Key
     {
-        public MnemonicKey(string mnemonic, MnemonicKeyOptions? options = null)
+        public MnemonicKey(string mnemonic, MnemonicKeyOptions options)
         {
-            options ??= new MnemonicKeyOptions();
-
-            Nethereum.HdWallet.Wallet wallet = new(mnemonic, string.Empty, GetLunaHdPath(options.CoinType, options.Account, options.Index));
+            Nethereum.HdWallet.Wallet wallet = new(mnemonic, string.Empty, GetHdPath(options.CoinType, options.Account, options.Index));
             byte[] privateKey = wallet.GetPrivateKey((int)options.Index);
             byte[] publicKey = Cryptography.ECDSA.Secp256K1Manager.GetPublicKey(privateKey, true);
 
-            SetKeys(privateKey, publicKey);
+            base.SetKeys(privateKey, publicKey);
         }
 
-        public override byte[] SignPayload(byte[] payload)
+        public override Task<byte[]> SignPayload(byte[] payload, CancellationToken cancellationToken = default)
         {
             byte[] hash = HashExtensions.SHA256(payload);
-            return Cryptography.ECDSA.Secp256K1Manager.SignCompact(hash, PrivateKey, out _);
+            return Task.FromResult(Cryptography.ECDSA.Secp256K1Manager.SignCompact(hash, PrivateKey, out _));
         }
 
-        private static string GetLunaHdPath(string coinType, uint account, uint index)
+        public override Task<byte[]> SignTransaction(string chainId, ulong accountNumber, Transaction transaction, CancellationToken cancellationToken = default)
+        {
+            return SignPayload(transaction.ToSignatureDocument(chainId, accountNumber).ToByteArray(), cancellationToken);
+        }
+
+        private static string GetHdPath(string coinType, uint account, uint index)
         {
             return $"m/44'/{coinType}'/{account}'/0/x";
         }
     }
 
-    internal class MnemonicKeyOptions
+    public class MnemonicKeyOptions
     {
-        public const string LUNA_COINTYPE = "330";
+        public MnemonicKeyOptions(string coinType, uint? account = null, uint? index = null)
+        {
+            CoinType = coinType;
+            Account = account ?? 0;
+            Index = index ?? 0;
+        }
 
-        public string CoinType { get; set; } = LUNA_COINTYPE;
+        public string CoinType { get; set; }
 
-        public uint Account { get; set; } = 0;
+        public uint Account { get; set; }
 
-        public uint Index { get; set; } = 0;
+        public uint Index { get; set; }
     }
 }

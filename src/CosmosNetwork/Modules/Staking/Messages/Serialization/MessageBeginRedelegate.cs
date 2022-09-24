@@ -1,7 +1,7 @@
 ﻿using CosmosNetwork.Serialization;
 using System.Text.Json.Serialization;
 
-namespace CosmosNetwork.Modules.Staking.Serialization
+namespace CosmosNetwork.Modules.Staking.Messages.Serialization
 {
     internal record MessageBeginRedelegate(
         string DelegatorAddress,
@@ -11,7 +11,7 @@ namespace CosmosNetwork.Modules.Staking.Serialization
     {
         protected internal override Message ToModel()
         {
-            return new Staking.MessageBeginRedelegate(
+            return new Staking.Messages.MessageBeginRedelegate(
                 DelegatorAddress,
                 SourceValidatorAddress,
                 DestinationValidatorAddress,

@@ -1,4 +1,4 @@
-﻿namespace CosmosNetwork.Modules.Staking
+﻿namespace CosmosNetwork.Modules.Staking.Messages
 {
     [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageDelegate(CosmosAddress Delegator, CosmosAddress Validator, Coin Amount) : Message

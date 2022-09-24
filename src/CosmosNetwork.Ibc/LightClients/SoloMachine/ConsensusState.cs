@@ -11,7 +11,7 @@
                 this.Diversifier,
                 this.Timestamp)
             {
-                PublicKey = this.PublicKey.ToSerialization().AsTendermint()
+                PublicKey = this.PublicKey.ToSerialization().ToProto()
             };
         }
     }

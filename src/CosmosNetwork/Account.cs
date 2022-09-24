@@ -1,8 +1,9 @@
 ﻿using System.Collections;
+using UltimateOrb;
 
 namespace CosmosNetwork
 {
-    public record AccountInformation(string AccountNumber, ulong? AccountSequence);
+    public record AccountInformation(string AccountNumber, ulong AccountSequence);
 
     public class AccountBalances : IEnumerable<Coin>
     {
@@ -13,7 +14,7 @@ namespace CosmosNetwork
             _balances = balances;
         }
 
-        public ulong? this[string denom] => this.SingleOrDefault(b => b.Denom == denom)?.Amount;
+        public UInt128? this[string denom] => this.SingleOrDefault(b => b.Denom == denom)?.Amount;
 
         public IEnumerator<Coin> GetEnumerator()
         {

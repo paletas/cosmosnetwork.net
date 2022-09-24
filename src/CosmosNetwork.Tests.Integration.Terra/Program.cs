@@ -1,63 +1,79 @@
 ﻿using CosmosNetwork;
+using CosmosNetwork.Tests.Integration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 ServiceCollection services = new ServiceCollection();
-services.AddCosmosNetwork("phoenix-1", "https://phoenix-lcd.terra.dev/", new CosmosApiOptions())
+services.AddCosmosNetwork("pisco-1", "https://pisco-lcd.terra.dev", new CosmosApiOptions())
     .SetupTerra();
 
 services.AddLogging(builder => builder.SetMinimumLevel(LogLevel.Information).AddConsole());
+
+services.AddSingleton<IntegrationTestLibrary>();
 
 var serviceProvider = services.BuildServiceProvider();
 serviceProvider.UseCosmosNetwork();
 
 var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
-var cosmosApi = serviceProvider.GetRequiredService<CosmosApi>();
+var integrationTestLibrary = serviceProvider.GetRequiredService<IntegrationTestLibrary>();
 
-var latestBlock = await cosmosApi.Blocks.GetLatestBlock();
+var integrationTests = integrationTestLibrary.GetTests();
+var integrationTestsQuantity = integrationTests.Count();
 
 do
 {
-    ulong latestHeight = latestBlock.Details.Header.Height;
-    ulong currentHeight = await GetCurrentHeight() ?? 1;
+    CosmosApi cosmosApi = serviceProvider.GetRequiredService<CosmosApi>();
+    Console.WriteLine("Setup wallet, mnemonic key:");
+    string? mnemonicKey = Console.ReadLine();
 
-    try
+    while (mnemonicKey is null)
     {
-        while (currentHeight < latestHeight)
+        Console.Clear();
+        Console.WriteLine("Setup wallet, mnemonic key:");
+        mnemonicKey = Console.ReadLine();
+    }
+
+    IWallet wallet = await cosmosApi.Wallet.GetWallet(mnemonicKey, new CosmosNetwork.Keys.MnemonicKeyOptions(TerraOptions.CoinType));
+
+    Console.WriteLine("Integration Tests Available");
+    int ix = 1;
+    foreach (var test in integrationTests)
+    {
+        Console.WriteLine($"[{ix++}] {test.Name}");
+    }
+
+    IIntegrationTest? testChoosen = null;
+    bool testChoiceStatus = false;
+    do
+    {
+        Console.Write("Choose a test: ");
+        var choosenTestNumberString = Console.ReadLine();
+        int choosenTestNumber;
+
+        if (int.TryParse(choosenTestNumberString, out choosenTestNumber))
         {
-            logger.LogInformation($"Searching block {currentHeight}..");
-            await foreach (var tx in cosmosApi.Transactions.GetTransactions(currentHeight))
+            if (choosenTestNumber <= 0 || choosenTestNumber > integrationTestsQuantity)
             {
-                logger.LogInformation($"  Block {currentHeight} found tx: {tx.Hash}");
-
-                foreach (var msg in tx.Details.Messages)
-                {
-                    logger.LogInformation($"     Message {msg.GetType().Name}");
-                }
+                Console.WriteLine($"There's no such test, pick a number between 1 and {integrationTestsQuantity}");
             }
-
-            currentHeight++;
-            await SaveCurrentHeight(currentHeight);
+            else
+            {
+                testChoosen = integrationTests.ElementAt(choosenTestNumber - 1);
+                testChoiceStatus = true;
+            }
+        }
+        else
+        {
+            Console.WriteLine($"Invalid input! Numbers only.");
         }
     }
-    catch (TimeoutException)
-    {
-        logger.LogError("[ERROR] TimeOut!");
-    }
-    catch (Exception ex)
-    {
-        logger.LogError($"[ERROR] {ex}");
-    }
+    while (testChoiceStatus == false);
+
+    if (testChoosen is null) throw new InvalidOperationException();
+    await testChoosen.Execute(wallet);
+
+    Console.ReadKey();
+
+    Console.Clear();
 }
 while (true);
-
-async Task<ulong?> GetCurrentHeight()
-{
-    if (File.Exists("local.state") == false) return null;
-    return ulong.Parse(await File.ReadAllTextAsync("local.state"));
-}
-
-async Task SaveCurrentHeight(ulong height)
-{
-    await File.WriteAllTextAsync("local.state", height.ToString());
-}

@@ -3,18 +3,19 @@ using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Serialization.Json
 {
+    [JsonConverter(typeof(PublicKeyConverter))]
     public abstract record PublicKey(KeyTypeEnum Type)
     {
         public abstract SignatureKey ToModel();
 
-        public abstract Tendermint.PublicKey AsTendermint();
+        public abstract Proto.PublicKey ToProto();
     }
 
     internal record Secp256k1([property: JsonPropertyName("key")] string Value) : PublicKey(KeyTypeEnum.Secp256k1)
     {
-        public override Tendermint.PublicKey AsTendermint()
+        public override Proto.PublicKey ToProto()
         {
-            return new Tendermint.PublicKey
+            return new Proto.PublicKey
             {
                 Secp256k1 = Convert.FromBase64String(Value)
             };
@@ -28,9 +29,9 @@ namespace CosmosNetwork.Serialization.Json
 
     internal record Ed25519([property: JsonPropertyName("key")] string Value) : PublicKey(KeyTypeEnum.Ed25519)
     {
-        public override Tendermint.PublicKey AsTendermint()
+        public override Proto.PublicKey ToProto()
         {
-            return new Tendermint.PublicKey
+            return new Proto.PublicKey
             {
                 Ed25519 = Convert.FromBase64String(Value)
             };
@@ -44,7 +45,7 @@ namespace CosmosNetwork.Serialization.Json
 
     internal record MultisigKey(uint Threshold, [property: JsonConverter(typeof(PublicKeysConverter))] PublicKey[] PublicKeys) : PublicKey(KeyTypeEnum.Multisig)
     {
-        public override Tendermint.PublicKey AsTendermint()
+        public override Proto.PublicKey ToProto()
         {
             throw new NotImplementedException();
         }

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CosmosNetwork.Modules.Staking.Messages;
 
 namespace CosmosNetwork.Modules.Staking
 {
@@ -6,11 +6,11 @@ namespace CosmosNetwork.Modules.Staking
     {
         public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
         {
-            messageRegistry.RegisterMessage<MessageBeginRedelegate, Serialization.MessageBeginRedelegate>();
-            messageRegistry.RegisterMessage<MessageCreateValidator, Serialization.MessageCreateValidator>();
-            messageRegistry.RegisterMessage<MessageDelegate, Serialization.MessageDelegate>();
-            messageRegistry.RegisterMessage<MessageEditValidator, Serialization.MessageEditValidator>();
-            messageRegistry.RegisterMessage<MessageUndelegate, Serialization.MessageUndelegate>();
+            messageRegistry.RegisterMessage<MessageBeginRedelegate, Messages.Serialization.MessageBeginRedelegate>();
+            messageRegistry.RegisterMessage<MessageCreateValidator, Messages.Serialization.MessageCreateValidator>();
+            messageRegistry.RegisterMessage<MessageDelegate, Messages.Serialization.MessageDelegate>();
+            messageRegistry.RegisterMessage<MessageEditValidator, Messages.Serialization.MessageEditValidator>();
+            messageRegistry.RegisterMessage<MessageUndelegate, Messages.Serialization.MessageUndelegate>();
         }
     }
 }

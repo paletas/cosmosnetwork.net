@@ -9,7 +9,7 @@ namespace CosmosNetwork.Serialization
     internal class SignatureDescriptor
     {
         [ProtoIgnore]
-        public Tendermint.PublicKey PublicKey { get; set; } = null!;
+        public Proto.PublicKey PublicKey { get; set; } = null!;
 
         [JsonPropertyName("mode_info")]
         [ProtoMember(2, Name = "data")]
@@ -23,7 +23,7 @@ namespace CosmosNetwork.Serialization
         public Any PublicKeyPacked
         {
             get => Any.Pack(PublicKey);
-            set => PublicKey = value.Unpack<Tendermint.PublicKey>() ?? throw new InvalidOperationException();
+            set => PublicKey = value.Unpack<Proto.PublicKey>() ?? throw new InvalidOperationException();
         }
     }
 

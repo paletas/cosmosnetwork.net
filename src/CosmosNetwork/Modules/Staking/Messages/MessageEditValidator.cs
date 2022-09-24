@@ -1,4 +1,4 @@
-﻿namespace CosmosNetwork.Modules.Staking
+﻿namespace CosmosNetwork.Modules.Staking.Messages
 {
     [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageEditValidator(
@@ -13,11 +13,11 @@
         {
             return new Serialization.MessageEditValidator(
                 Validator.Address, MinimumSelfDelegation,
-                new Serialization.ValidatorDescription(
+                new Staking.Serialization.ValidatorDescription(
                     Description.Moniker,
                     Description.Identity,
                     Description.Details,
-                    Description.Website,
+                    Description.Website.ToString(),
                     Description.SecurityContact),
                 ComissionRate
             );

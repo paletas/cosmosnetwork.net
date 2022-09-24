@@ -1,12 +1,12 @@
 ﻿using CosmosNetwork.Serialization;
 using System.Text.Json.Serialization;
 
-namespace CosmosNetwork.Modules.Staking.Serialization
+namespace CosmosNetwork.Modules.Staking.Messages.Serialization
 {
     internal record MessageEditValidator(
         string ValidatorAddress,
         [property: JsonPropertyName("min_self_delegation")] ulong? MinimumSelfDelegation,
-        ValidatorDescription Description,
+        Staking.Serialization.ValidatorDescription Description,
         decimal? ComissionRate) : SerializerMessage
     {
         public const string TERRA_DESCRIPTOR = "staking/MsgEditValidator";
@@ -14,7 +14,7 @@ namespace CosmosNetwork.Modules.Staking.Serialization
 
         protected internal override Message ToModel()
         {
-            return new Staking.MessageEditValidator(
+            return new Staking.Messages.MessageEditValidator(
                 ValidatorAddress, MinimumSelfDelegation,
                 new Staking.ValidatorDescription(
                     Description.Moniker,

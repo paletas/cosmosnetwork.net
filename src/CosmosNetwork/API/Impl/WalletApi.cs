@@ -1,4 +1,6 @@
-﻿using CosmosNetwork.Serialization.Json.Responses;
+﻿using CosmosNetwork.Keys;
+using CosmosNetwork.Serialization.Json.Responses;
+using CosmosNetwork.Wallets;
 using Microsoft.Extensions.Logging;
 
 namespace CosmosNetwork.API.Impl
@@ -12,12 +14,9 @@ namespace CosmosNetwork.API.Impl
             _transactionsApi = transactionsApi;
         }
 
-        public async Task<IWallet> GetWallet(string mnemonicKey, CancellationToken cancellationToken = default)
+        public ValueTask<IWallet> GetWallet(string mnemonicKey, MnemonicKeyOptions keyOptions, CancellationToken cancellationToken = default)
         {
-            Wallet wallet = new(Options, this, _transactionsApi);
-            await wallet.SetKey(mnemonicKey, cancellationToken).ConfigureAwait(false);
-
-            return wallet;
+            return ValueTask.FromResult<IWallet>(new DirectWallet(Options, new MnemonicKey(mnemonicKey, keyOptions), this, _transactionsApi));
         }
 
         public async Task<AccountInformation?> GetAccountInformation(string accountAddress, CancellationToken cancellationToken = default)

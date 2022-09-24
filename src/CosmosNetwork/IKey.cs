@@ -1,9 +1,11 @@
 ﻿namespace CosmosNetwork
 {
-    internal interface IKey
+    public interface IKey
     {
         PublicKey PublicKey { get; }
 
-        Serialization.Transaction SignTransaction(Transaction transaction, SignerOptions[] signers, SignOptions signOptions);
+        Task<byte[]> SignPayload(byte[] payload, CancellationToken cancellationToken = default);
+
+        Task<byte[]> SignTransaction(string chainId, ulong accountNumber, Transaction transaction, CancellationToken cancellationToken = default);
     }
 }

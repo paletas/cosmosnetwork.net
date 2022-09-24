@@ -1,6 +1,4 @@
-﻿using CosmosNetwork.Serialization;
-
-namespace CosmosNetwork.Keys
+﻿namespace CosmosNetwork.Keys
 {
     internal abstract class Key : IKey
     {
@@ -14,22 +12,8 @@ namespace CosmosNetwork.Keys
             PublicKey = new PublicKey(publicKey);
         }
 
-        private TransactionSigner CreateSignature(string chain, SignerOptions signer, Serialization.SignatureDescriptor signerInfo, SignerModeEnum signerMode, AuthInfo authInfo, TransactionBody txBody)
-        {
-            AuthInfo authInfoCopy = new(new List<Serialization.SignatureDescriptor> { signerInfo }, authInfo.Fee);
-            SignDoc signDoc = new(txBody, authInfoCopy, chain, ulong.Parse(signer.AccountNumber));
+        public abstract Task<byte[]> SignPayload(byte[] payload, CancellationToken cancellationToken = default);
 
-            byte[] signBytes = SignPayload(signDoc.ToByteArray());
-            string signBase64 = Convert.ToBase64String(signBytes);
-
-            return new TransactionSigner(PublicKey.ToSignatureKey(), new SignatureDescriptor(signerMode, signBase64), signer.Sequence);
-        }
-
-        public abstract byte[] SignPayload(byte[] payload);
-
-        public Serialization.Transaction SignTransaction(Transaction transaction, SignerOptions[] signers, SignOptions signOptions)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract Task<byte[]> SignTransaction(string chainId, ulong accountNumber, Transaction transaction, CancellationToken cancellationToken = default);
     }
 }

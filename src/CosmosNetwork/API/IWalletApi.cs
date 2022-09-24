@@ -1,8 +1,10 @@
-﻿namespace CosmosNetwork.API
+﻿using CosmosNetwork.Keys;
+
+namespace CosmosNetwork.API
 {
     public interface IWalletApi
     {
-        Task<IWallet> GetWallet(string mnemonicKey, CancellationToken cancellationToken = default);
+        ValueTask<IWallet> GetWallet(string mnemonicKey, MnemonicKeyOptions keyOptions, CancellationToken cancellationToken = default);
 
         Task<AccountInformation?> GetAccountInformation(string accountAddress, CancellationToken cancellationToken = default);
 
