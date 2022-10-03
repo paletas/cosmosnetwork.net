@@ -23,21 +23,21 @@ var integrationTestLibrary = serviceProvider.GetRequiredService<IntegrationTestL
 var integrationTests = integrationTestLibrary.GetTests();
 var integrationTestsQuantity = integrationTests.Count();
 
+CosmosApi cosmosApi = serviceProvider.GetRequiredService<CosmosApi>();
+Console.WriteLine("Setup wallet, mnemonic key:");
+string? mnemonicKey = Console.ReadLine();
+
+while (mnemonicKey is null)
+{
+    Console.Clear();
+    Console.WriteLine("Setup wallet, mnemonic key:");
+    mnemonicKey = Console.ReadLine();
+}
+
+IWallet wallet = await cosmosApi.Wallet.GetWallet(mnemonicKey, new CosmosNetwork.Keys.MnemonicKeyOptions());
+
 do
 {
-    CosmosApi cosmosApi = serviceProvider.GetRequiredService<CosmosApi>();
-    Console.WriteLine("Setup wallet, mnemonic key:");
-    string? mnemonicKey = Console.ReadLine();
-    
-    while (mnemonicKey is null)
-    {
-        Console.Clear();
-        Console.WriteLine("Setup wallet, mnemonic key:");
-        mnemonicKey = Console.ReadLine();
-    }
-
-    IWallet wallet = await cosmosApi.Wallet.GetWallet(mnemonicKey, new CosmosNetwork.Keys.MnemonicKeyOptions());
-
     Console.WriteLine("Integration Tests Available");
     int ix = 1;
     foreach (var test in integrationTests)
