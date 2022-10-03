@@ -1,7 +1,7 @@
 ﻿using CosmosNetwork.Exceptions;
 using Microsoft.Extensions.Logging;
 
-namespace CosmosNetwork.API
+namespace CosmosNetwork.API.Impl
 {
     internal class BlocksApi : CosmosApiModule, IBlocksApi
     {
