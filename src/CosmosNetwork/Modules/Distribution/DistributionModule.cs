@@ -3,7 +3,7 @@ using CosmosNetwork.Modules.Gov;
 
 namespace CosmosNetwork.Modules.Distribution
 {
-    public class DistributionModule : ICosmosModule
+    public class DistributionModule : ICosmosMessageModule
     {
         private readonly GovModule _governanceModule;
 

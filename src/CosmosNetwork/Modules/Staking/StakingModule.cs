@@ -2,7 +2,7 @@
 
 namespace CosmosNetwork.Modules.Staking
 {
-    public class StakingModule : ICosmosModule
+    public class StakingModule : ICosmosMessageModule
     {
         public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
         {

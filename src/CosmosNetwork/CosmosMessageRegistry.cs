@@ -1,4 +1,5 @@
 ﻿using CosmosNetwork.Serialization;
+using ProtoBuf.Meta;
 
 namespace CosmosNetwork
 {

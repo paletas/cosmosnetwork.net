@@ -5,19 +5,19 @@ namespace CosmosNetwork.Serialization.Proto
 {
     [ProtoContract]
     public record Any(
-       [property: ProtoMember(1, Name = "type_url")] string? TypeUrl,
+       [property: ProtoMember(1, Name = "type_url")] string TypeUrl,
        [property: ProtoMember(2, Name = "value")] byte[] Value)
     {
         public static Any Pack<T>(T @object)
             where T : IHasAny
         {
             using MemoryStream memoryStream = new();
-            JsonSerializer.Serialize(memoryStream, @object);
+            Serializer.Serialize(memoryStream, @object);
 
             return new Any(@object.TypeUrl, memoryStream.ToArray());
         }
 
-        public static Any Pack(string? typeUrl, byte[] @object)
+        public static Any Pack(string typeUrl, byte[] @object)
         {
             using MemoryStream memoryStream = new(@object);
 
@@ -33,7 +33,7 @@ namespace CosmosNetwork.Serialization.Proto
         public object? Unpack(Type type)
         {
             using MemoryStream memoryStream = new(Value);
-            return JsonSerializer.Deserialize(memoryStream, type);
+            return Serializer.Deserialize(memoryStream, type);
         }
 
         public byte[] ToArray()

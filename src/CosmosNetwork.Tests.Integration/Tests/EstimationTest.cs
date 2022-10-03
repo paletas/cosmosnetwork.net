@@ -32,15 +32,25 @@ namespace CosmosNetwork.Tests.Integration.Tests
 
             this._logger.LogInformation("Picked validator {validatorAddress}", randomValidator.Operator);
 
-            this._logger.LogInformation("Estimate Tx 1");
+            this._logger.LogInformation("Simulate Tx 1");
 
             IEnumerable<Message> messages = new Message[]
             {
-                new MessageDelegate(wallet.AccountAddress, randomValidator.Operator, new NativeCoin(stakingSettings.BondDenom, 10000000))
+                new MessageDelegate(wallet.AccountAddress, randomValidator.Operator, new NativeCoin(stakingSettings.BondDenom, 5000000))
             };
 
-            var signedTx = await wallet.CreateSignedTransaction(messages, new CreateTransactionOptions(), cancellationToken);
-            var simulationResults = await this._cosmosApi.Transactions.SimulateTransaction(signedTx, cancellationToken);
+            (uint? errorCode, TransactionSimulationResults? result) = await wallet.SimulateTransaction(messages, new TransactionSimulationOptions(), cancellationToken);
+
+            if (errorCode is null && result is null)
+                throw new NotSupportedException();
+            else if (result is not null)
+            {
+                this._logger.LogInformation($"Simulation successful, gas used {result.GasUsage!.GasUsed}");
+            }
+            else
+            {
+                this._logger.LogError($"Simulation failed with {errorCode}");
+            }
         }
     }
 }

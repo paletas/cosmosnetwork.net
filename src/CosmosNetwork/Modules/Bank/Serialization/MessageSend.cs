@@ -8,7 +8,7 @@ namespace CosmosNetwork.Modules.Bank.Serialization
     internal record MessageSend(
         [property: ProtoMember(1, Name = "from_address")] string FromAddress,
         [property: ProtoMember(2, Name = "to_address")] string ToAddress,
-        [property: ProtoMember(3, Name = "amount"), JsonPropertyName("amount")] DenomAmount[] Coins) : SerializerMessage
+        [property: ProtoMember(3, Name = "amount"), JsonPropertyName("amount")] DenomAmount[] Coins) : SerializerMessage(Bank.MessageSend.COSMOS_DESCRIPTOR)
     {
         protected internal override Message ToModel()
         {

@@ -4,7 +4,7 @@ using CosmosNetwork.Modules.Gov;
 
 namespace CosmosNetwork.CosmWasm
 {
-    public class WasmModule : ICosmosModule
+    public class WasmModule : ICosmosMessageModule
     {
         private readonly GovModule _governanceModule;
 

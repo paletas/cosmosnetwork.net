@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace CosmosNetwork.API.Impl
 {
-    internal class TransactionsApi : BaseApiSection, ITransactionsApi
+    internal class TransactionsApi : CosmosApiModule, ITransactionsApi
     {
         private readonly IBlocksApi _blocksApi;
 

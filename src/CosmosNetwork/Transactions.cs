@@ -1,26 +1,28 @@
-﻿namespace CosmosNetwork
+﻿using CosmosNetwork.Serialization.Proto;
+
+namespace CosmosNetwork
 {
     public record BlockTransaction(Transaction Details, ulong Height, string Hash, ulong GasUsed, ulong GasWanted, DateTime Timestamp, string RawLog, TransactionLog[] Logs, TransactionExecutionStatus Status);
 
     public record Transaction(IEnumerable<Message> Messages, string? Memo, ulong? TimeoutHeight, Fee? Fees = null, TransactionSigner[]? Signees = null)
     {
-        internal Serialization.Transaction ToSerialization()
+        internal Serialization.Proto.Transaction ToSerialization()
         {
-            return new Serialization.Transaction(
-                new Serialization.TransactionBody(this.Messages.Select(msg => msg.ToSerialization()).ToArray(), this.TimeoutHeight, this.Memo),
-                new Serialization.AuthInfo(
+            return new Serialization.Proto.Transaction(
+                new Serialization.Proto.TransactionBody(this.Messages.Select(msg => Any.Pack(msg.ToSerialization())).ToArray(), this.TimeoutHeight, this.Memo),
+                new Serialization.Proto.AuthInfo(
                     this.Signees?.Select(sig => new Serialization.SignatureDescriptor
                     {
-                        PublicKey = sig.PublicKey.ToSerialization().ToProto(),
-                        Data = new Serialization.SignatureData
+                        PublicKey = sig.PublicKey.ToProto(),
+                        Data = new Serialization.SignatureMode
                         {
                             Single = new Serialization.SingleMode(Serialization.SignModeEnum.Direct)
                         },
                         Sequence = sig.Sequence
                     }).ToList() ?? new List<Serialization.SignatureDescriptor>(),
-                    this.Fees is null ? null : new Serialization.Fee(
-                        this.Fees.Amount?.Select(amt => amt.ToSerialization()).ToArray() ?? Array.Empty<Serialization.DenomAmount>(),
-                        this.Fees.GasLimit,
+                    new Serialization.Fee(
+                        this.Fees?.Amount?.Select(amt => amt.ToSerialization()).ToArray() ?? Array.Empty<Serialization.DenomAmount>(),
+                        this.Fees?.GasLimit,
                         null,
                         null
                     )
@@ -29,16 +31,16 @@
             );
         }
 
-        internal Serialization.SignDoc ToSignatureDocument(string chainId, ulong accountNumber)
+        internal SignDoc ToSignatureDocument(string chainId, ulong accountNumber)
         {
-            return new Serialization.SignDoc(
-                new Serialization.TransactionBody(this.Messages.Select(msg => msg.ToSerialization()).ToArray(), this.TimeoutHeight, this.Memo),
-                new Serialization.AuthInfo(new List<Serialization.SignatureDescriptor>(), Fees?.ToSerialization()),
+            return new Serialization.Proto.SignDoc(
+                new Serialization.Proto.TransactionBody(this.Messages.Select(msg => Any.Pack(msg.ToSerialization())).ToArray(), this.TimeoutHeight, this.Memo),
+                new Serialization.Proto.AuthInfo(new List<Serialization.SignatureDescriptor>(), Fees?.ToSerialization() ?? new Serialization.Fee()),
                 chainId, accountNumber);
         }
     }
 
-    public record SerializedTransaction(byte[] Payload, Fee Fees) : ITransactionPayload
+    public record SerializedTransaction(byte[] Payload, Fee? Fees) : ITransactionPayload
     {
         public string GetBase64()
         {
@@ -52,21 +54,21 @@
 
         internal Serialization.SerializedTransaction ToSerialization()
         {
-            return new Serialization.SerializedTransaction(this.Payload, this.Fees.ToSerialization());
+            return new Serialization.SerializedTransaction(this.Payload, this.Fees?.ToSerialization());
         }
     }
 
-    public record Fee(ulong GasLimit, Coin[] Amount, CosmosAddress? Payer = null, CosmosAddress? Granter = null)
+    public record Fee(ulong? GasLimit, Coin[]? Amount, CosmosAddress? Payer = null, CosmosAddress? Granter = null)
     {
         internal Serialization.Fee ToSerialization()
         {
-            return new Serialization.Fee(this.Amount.Select(c => c.ToSerialization()).ToArray(), this.GasLimit, this.Payer?.Address, this.Granter?.Address);
+            return new Serialization.Fee(this.Amount?.Select(c => c.ToSerialization()).ToArray(), this.GasLimit, this.Payer?.Address, this.Granter?.Address);
         }
     }
 
-    public record TransactionSimulationResults(GasUsage? GasUsage, SimulationResult? Result);
+    public record TransactionSimulationResults(GasUsage GasUsage, SimulationResult Result);
 
-    public record TransactionBroadcastResults(GasUsage? GasUsage, ExecutionResult? Result);
+    public record TransactionBroadcastResults(GasUsage GasUsage, ExecutionResult Result);
 
     public record GasUsage(ulong GasWanted, ulong GasUsed);
 
@@ -80,13 +82,15 @@
 
     public record TransactionLog(ulong MessageIndex, string Log, TransactionEvent[] Events);
 
-    public record CreateTransactionOptions(string? Memo = null, ulong? TimeoutHeight = null, Fee? Fees = null, ulong? Gas = null, CoinDecimal[]? GasPrices = null, string[]? FeesDenoms = null);
+    public record CreateTransactionOptions(Fee Fees, string? Memo = null, ulong? TimeoutHeight = null, ulong? Gas = null, CoinDecimal[]? GasPrices = null, string[]? FeesDenoms = null);
 
-    public record TransactionSimulationOptions(string? Memo = null, ulong? TimeoutHeight = null, Fee? Fees = null, ulong? Gas = null, CoinDecimal[]? GasPrices = null, string[]? FeesDenoms = null) : CreateTransactionOptions(Memo, TimeoutHeight, Fees, Gas, GasPrices, FeesDenoms);
+    public record BroadcastTransactionOptions(Fee Fees, string? Memo = null, ulong? TimeoutHeight = null, ulong? Gas = null, CoinDecimal[]? GasPrices = null, string[]? FeesDenoms = null) 
+        : CreateTransactionOptions(Fees, Memo, TimeoutHeight, Gas, GasPrices, FeesDenoms);
 
-    public record BroadcastTransactionOptions(string? Memo = null, ulong? TimeoutHeight = null, Fee? Fees = null, ulong? Gas = null, CoinDecimal[]? GasPrices = null, string[]? FeesDenoms = null) : CreateTransactionOptions(Memo, TimeoutHeight, Fees, Gas, GasPrices, FeesDenoms);
+    public record TransactionSimulationOptions(Fee? Fees = null, string? Memo = null, ulong? TimeoutHeight = null, ulong? Gas = null, CoinDecimal[]? GasPrices = null, string[]? FeesDenoms = null);
 
-    public record EstimateFeesOptions(string? Memo = null, ulong? TimeoutHeight = null, Fee? Fees = null, ulong? Gas = null, decimal? GasAdjustment = null, CoinDecimal[]? GasPrices = null, string[]? FeesDenoms = null) : TransactionSimulationOptions(Memo, TimeoutHeight, Fees, Gas, GasPrices, FeesDenoms);
+    public record EstimateFeesOptions(string? Memo = null, ulong? TimeoutHeight = null, ulong? Gas = null, decimal? GasAdjustment = null, CoinDecimal[]? GasPrices = null, string[]? FeesDenoms = null) 
+        : TransactionSimulationOptions(null, Memo, TimeoutHeight, Gas, GasPrices, FeesDenoms);
 
     public enum TransactionExecutionStatus
     {

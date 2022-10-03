@@ -1,4 +1,4 @@
-using ProtoBuf;
+﻿using ProtoBuf;
 
 namespace CosmosNetwork.Serialization.Proto
 {
@@ -7,6 +7,7 @@ namespace CosmosNetwork.Serialization.Proto
     {
         private DiscriminatedUnionObject _discriminatedObject = new();
 
+        [ProtoIgnore]
         public string TypeUrl => "/tendermint.crypto.PublicKey";
 
         public PublicKeyDiscriminator Discriminator => (PublicKeyDiscriminator)_discriminatedObject.Discriminator;
@@ -16,7 +17,7 @@ namespace CosmosNetwork.Serialization.Proto
         {
             get => Discriminator == PublicKeyDiscriminator.Ed25519 ? _discriminatedObject.Object as byte[] : null;
 
-            set => _discriminatedObject = new DiscriminatedUnionObject((int)ModeInfoDiscriminatorEnum.Single, value);
+            set => _discriminatedObject = new DiscriminatedUnionObject((int)PublicKeyDiscriminator.Ed25519, value);
         }
 
         [ProtoMember(3, Name = "secp256k1")]
@@ -24,7 +25,7 @@ namespace CosmosNetwork.Serialization.Proto
         {
             get => Discriminator == PublicKeyDiscriminator.Secp256k1 ? _discriminatedObject.Object as byte[] : null;
 
-            set => _discriminatedObject = new DiscriminatedUnionObject((int)ModeInfoDiscriminatorEnum.Multi, value);
+            set => _discriminatedObject = new DiscriminatedUnionObject((int)PublicKeyDiscriminator.Secp256k1, value);
         }
 
         public SignatureKey ToModel()

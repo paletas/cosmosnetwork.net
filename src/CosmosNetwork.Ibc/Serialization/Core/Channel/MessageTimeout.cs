@@ -11,7 +11,7 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Channel
         [property: ProtoMember(2, Name = "proof_unreceived")] byte[] ProofUnreceived,
         [property: ProtoMember(3, Name = "proof_height")] Height ProofHeight,
         [property: ProtoMember(4, Name = "next_sequence_recv"), JsonPropertyName("next_sequence_recv")] ulong NextSequenceReceiver,
-        [property: ProtoMember(5, Name = "signer")] string Signer) : SerializerMessage
+        [property: ProtoMember(5, Name = "signer")] string Signer) : SerializerMessage(Ibc.Core.Channel.MessageTimeout.COSMOS_DESCRIPTOR)
     {
         protected override Message ToModel()
         {

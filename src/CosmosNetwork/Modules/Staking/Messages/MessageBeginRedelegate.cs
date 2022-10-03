@@ -15,7 +15,7 @@
                 Delegator.Address,
                 SourceValidator.Address,
                 DestinationValidator.Address,
-                new CosmosNetwork.Serialization.DenomAmount(Amount.Denom, Amount.Amount));
+                Amount.ToSerialization());
         }
     }
 }

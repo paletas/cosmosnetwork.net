@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CosmosNetwork.Modules.Slashing
 {
-    public class SlashingModule : ICosmosModule
+    public class SlashingModule : ICosmosMessageModule
     {
         public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
         {

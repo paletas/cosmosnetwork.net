@@ -1,4 +1,4 @@
-﻿namespace CosmosNetwork.Confio.Serialization
+﻿namespace CosmosNetwork.Confio.Types.Serialization
 {
     public record ProofSpec(
         LeafOp LeafSpec,
@@ -6,13 +6,13 @@
         int MaxDepth,
         int MinDepth)
     {
-        public Confio.ProofSpec ToModel()
+        public Types.ProofSpec ToModel()
         {
-            return new Confio.ProofSpec(
-                this.LeafSpec.ToModel(),
-                this.InnerSpec.ToModel(),
-                this.MaxDepth,
-                this.MinDepth);
+            return new Types.ProofSpec(
+                LeafSpec.ToModel(),
+                InnerSpec.ToModel(),
+                MaxDepth,
+                MinDepth);
         }
     }
 }

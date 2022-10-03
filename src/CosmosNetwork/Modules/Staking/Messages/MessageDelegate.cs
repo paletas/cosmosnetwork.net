@@ -10,7 +10,7 @@
             return new Serialization.MessageDelegate(
                 Delegator.Address,
                 Validator.Address,
-                new CosmosNetwork.Serialization.DenomAmount(Amount.Denom, Amount.Amount));
+                Amount.ToSerialization());
         }
     }
 }

@@ -8,7 +8,7 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Client
     [ProtoContract]
     internal record MessageSubmitMisbehaviour(
         [property: ProtoMember(1, Name = "client_id")] string ClientId,
-        [property: ProtoMember(3, Name = "signer")] string Signer) : SerializerMessage
+        [property: ProtoMember(3, Name = "signer")] string Signer) : SerializerMessage(Ibc.Core.Client.MessageSubmitMisbehaviour.COSMOS_DESCRIPTOR)
     {
         [ProtoIgnore]
         public IMisbehaviour Misbehaviour { get; set; } = null!;

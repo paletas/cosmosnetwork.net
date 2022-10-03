@@ -1,14 +1,8 @@
-﻿using CosmosNetwork.Keys;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CosmosNetwork
+﻿namespace CosmosNetwork
 {
-    public static class CosmosHubOptions
+    public record CosmosHubOptions(string ChainId) : NetworkOptions(ChainId, CosmosHubOptions._CoinType, CosmosHubOptions._AddressPrefix)
     {
-        public const string CoinType = "118";
+        private const string _CoinType = "118";
+        private const string _AddressPrefix = "cosmos";
     }
 }

@@ -12,7 +12,7 @@ namespace CosmosNetwork.CosmWasm.Serialization
         [property: ProtoMember(3, Name = "code_id")] ulong CodeId,
         [property: ProtoMember(4, Name = "label")] string Label,
         [property: ProtoMember(5, Name = "msg")] JsonDocument Msg,
-        [property: ProtoMember(6, Name = "funds")] DenomAmount[] Funds) : SerializerMessage
+        [property: ProtoMember(6, Name = "funds")] DenomAmount[] Funds) : SerializerMessage(CosmWasm.MessageInstantiateContract.COSMOS_DESCRIPTOR)
     {
         protected override Message ToModel()
         {

@@ -7,7 +7,7 @@ using CosmosNetwork.Modules;
 
 namespace CosmosNetwork.Ibc
 {
-    internal class IbcModule : ICosmosModule
+    internal class IbcModule : ICosmosMessageModule
     {
         public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
         {

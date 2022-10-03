@@ -6,10 +6,10 @@
 
         public PublicKey PublicKey { get; private set; } = null!;
 
-        protected void SetKeys(byte[] privateKey, byte[] publicKey)
+        protected void SetKeys(byte[] privateKey, PublicKey publicKey)
         {
             PrivateKey = privateKey;
-            PublicKey = new PublicKey(publicKey);
+            PublicKey = publicKey;
         }
 
         public abstract Task<byte[]> SignPayload(byte[] payload, CancellationToken cancellationToken = default);

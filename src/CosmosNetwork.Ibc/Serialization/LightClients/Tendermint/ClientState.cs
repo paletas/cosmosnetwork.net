@@ -1,4 +1,4 @@
-﻿using CosmosNetwork.Confio.Serialization;
+﻿using CosmosNetwork.Confio.Types.Serialization;
 using CosmosNetwork.Ibc.Serialization.Core.Client;
 using CosmosNetwork.Ibc.Serialization.Json;
 using ProtoBuf;

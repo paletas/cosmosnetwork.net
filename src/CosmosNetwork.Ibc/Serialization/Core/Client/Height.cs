@@ -1,6 +1,11 @@
-﻿namespace CosmosNetwork.Ibc.Serialization.Core.Client
+﻿using ProtoBuf;
+
+namespace CosmosNetwork.Ibc.Serialization.Core.Client
 {
-    internal record Height(ulong RevisionNumber, ulong RevisionHeight)
+    [ProtoContract]
+    internal record Height(
+        [property: ProtoMember(1, Name = "revision_number")] ulong RevisionNumber,
+        [property: ProtoMember(2, Name = "revision_height")] ulong RevisionHeight)
     {
         public Ibc.Core.Client.Height ToModel()
         {

@@ -16,7 +16,7 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Connection
         [property: ProtoMember(7, Name = "proof_client")] byte[] ProofClient,
         [property: ProtoMember(8, Name = "proof_consensus")] byte[] ProofConsensus,
         [property: ProtoMember(9, Name = "consensus_height")] Height ConsensusHeight,
-        [property: ProtoMember(10, Name = "signer")] string Signer) : SerializerMessage
+        [property: ProtoMember(10, Name = "signer")] string Signer) : SerializerMessage(Ibc.Core.Connection.MessageConnectionOpenAck.COSMOS_DESCRIPTOR)
     {
         [ProtoIgnore]
         public IClientState ClientState { get; set; } = null!;

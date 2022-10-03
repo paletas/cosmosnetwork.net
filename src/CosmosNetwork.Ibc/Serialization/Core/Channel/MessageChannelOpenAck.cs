@@ -12,7 +12,7 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Channel
         [property: ProtoMember(4, Name = "counterparty_version")] string CounterpartyVersion,
         [property: ProtoMember(5, Name = "proof_try")] byte[] ProofTry,
         [property: ProtoMember(6, Name = "proof_height")] Height ProofHeight,
-        [property: ProtoMember(7, Name = "signer")] string Signer) : SerializerMessage
+        [property: ProtoMember(7, Name = "signer")] string Signer) : SerializerMessage(Ibc.Core.Channel.MessageChannelOpenAck.COSMOS_DESCRIPTOR)
     {
         protected override Message ToModel()
         {

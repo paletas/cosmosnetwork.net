@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CosmosNetwork.Modules.Bank
 {
-    public class BankModule : ICosmosModule
+    public class BankModule : ICosmosMessageModule
     {
         private readonly AuthzModule _authzModule;
 

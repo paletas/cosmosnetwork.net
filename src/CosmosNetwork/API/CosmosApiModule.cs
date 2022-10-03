@@ -5,12 +5,12 @@ using System.Text.Json;
 
 namespace CosmosNetwork.API
 {
-    internal class BaseApiSection
+    public class CosmosApiModule
     {
         private readonly HttpClient _httpClient;
-        private readonly ILogger<BaseApiSection> _logger;
+        private readonly ILogger<CosmosApiModule> _logger;
 
-        public BaseApiSection(CosmosApiOptions options, HttpClient httpClient, ILogger<BaseApiSection> logger)
+        protected internal CosmosApiModule(CosmosApiOptions options, HttpClient httpClient, ILogger<CosmosApiModule> logger)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _logger = logger;

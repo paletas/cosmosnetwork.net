@@ -12,11 +12,11 @@
             return new Serialization.MessageMultiSend(
                 Inputs.Select(i => new Serialization.MessageMultiSendInputOutput(
                     i.Address.Address,
-                    i.Coins.Select(coin => new CosmosNetwork.Serialization.DenomAmount(coin.Denom, coin.Amount)).ToArray())
+                    i.Coins.Select(coin => coin.ToSerialization()).ToArray())
                 ).ToArray(),
                 Outputs.Select(i => new Serialization.MessageMultiSendInputOutput(
                     i.Address.Address,
-                    i.Coins.Select(coin => new CosmosNetwork.Serialization.DenomAmount(coin.Denom, coin.Amount)).ToArray())
+                    i.Coins.Select(coin => coin.ToSerialization()).ToArray())
                 ).ToArray()
             );
         }

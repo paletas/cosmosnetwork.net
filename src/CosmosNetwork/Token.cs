@@ -11,7 +11,7 @@ namespace CosmosNetwork
     {
         public DenomAmount ToSerialization()
         {
-            return new DenomAmount(Denom, Amount);
+            return new DenomAmount(Denom, Amount.ToStringCStyleU128());
         }
     }
 

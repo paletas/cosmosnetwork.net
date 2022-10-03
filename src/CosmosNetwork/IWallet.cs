@@ -20,15 +20,15 @@ namespace CosmosNetwork
 
         Task<SerializedTransaction> CreateSignedTransaction(IEnumerable<Message> messages, CreateTransactionOptions transactionOptions, CancellationToken cancellationToken = default);
 
-        Task<(uint? ErrorCode, TransactionSimulationResults? Result)> SimulateTransaction(IEnumerable<Message> messages, TransactionSimulationOptions? simulationOptions = null, CancellationToken cancellationToken = default);
+        Task<(uint? ErrorCode, TransactionSimulationResults? Result)> SimulateTransaction(IEnumerable<Message> messages, TransactionSimulationOptions simulationOptions, CancellationToken cancellationToken = default);
 
         Task<(uint? ErrorCode, TransactionSimulationResults? Result)> SimulateTransaction(SerializedTransaction transaction, CancellationToken cancellationToken = default);
 
-        Task<(uint? ErrorCode, TransactionBroadcastResults? Result)> BroadcastTransactionBlock(IEnumerable<Message> messages, BroadcastTransactionOptions? broadcastOptions = null, CancellationToken cancellationToken = default);
+        Task<(uint? ErrorCode, TransactionBroadcastResults? Result)> BroadcastTransactionBlock(IEnumerable<Message> messages, BroadcastTransactionOptions broadcastOptions, CancellationToken cancellationToken = default);
 
         Task<(uint? ErrorCode, TransactionBroadcastResults? Result)> BroadcastTransactionBlock(SerializedTransaction transaction, CancellationToken cancellationToken = default);
 
-        Task<(uint? ErrorCode, TransactionBroadcastResults? Result)> BroadcastTransactionAsyncAndWait(IEnumerable<Message> messages, BroadcastTransactionOptions? broadcastOptions = null, CancellationToken cancellationToken = default);
+        Task<(uint? ErrorCode, TransactionBroadcastResults? Result)> BroadcastTransactionAsyncAndWait(IEnumerable<Message> messages, BroadcastTransactionOptions broadcastOptions, CancellationToken cancellationToken = default);
 
         Task<(uint? ErrorCode, TransactionBroadcastResults? Result)> BroadcastTransactionAsyncAndWait(SerializedTransaction transaction, CancellationToken cancellationToken = default);
 

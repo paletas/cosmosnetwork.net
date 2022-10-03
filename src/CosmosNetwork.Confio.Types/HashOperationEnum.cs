@@ -1,4 +1,4 @@
-﻿namespace CosmosNetwork.Confio
+﻿namespace CosmosNetwork.Confio.Types
 {
     public enum HashOperationEnum
     {

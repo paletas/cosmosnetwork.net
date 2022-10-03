@@ -1,17 +1,16 @@
 ﻿using CosmosNetwork.Serialization;
+using ProtoBuf;
 using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Modules.Staking.Messages.Serialization
 {
+    [ProtoContract]
     internal record MessageEditValidator(
-        string ValidatorAddress,
-        [property: JsonPropertyName("min_self_delegation")] ulong? MinimumSelfDelegation,
-        Staking.Serialization.ValidatorDescription Description,
-        decimal? ComissionRate) : SerializerMessage
+        [property: ProtoMember(2, Name = "validator_address")] string ValidatorAddress,
+        [property: ProtoMember(4, Name = "min_self_delegation"), JsonPropertyName("min_self_delegation")] ulong? MinimumSelfDelegation,
+        [property: ProtoMember(1, Name = "description")] Staking.Serialization.ValidatorDescription Description,
+        [property: ProtoMember(3, Name = "commission_rate")] decimal? ComissionRate) : SerializerMessage(Staking.Messages.MessageEditValidator.COSMOS_DESCRIPTOR)
     {
-        public const string TERRA_DESCRIPTOR = "staking/MsgEditValidator";
-        public const string COSMOS_DESCRIPTOR = "/cosmos.staking.v1beta1.MsgEditValidator";
-
         protected internal override Message ToModel()
         {
             return new Staking.Messages.MessageEditValidator(

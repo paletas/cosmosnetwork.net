@@ -1,7 +1,8 @@
 ﻿namespace CosmosNetwork
 {
-    public static class TerraOptions
+    public record TerraOptions(string ChainId) : NetworkOptions(ChainId, TerraOptions._CoinType, TerraOptions._AddressPrefix)
     {
-        public const string CoinType = "330";
+        private const string _CoinType = "330";
+        private const string _AddressPrefix = "terra";
     }
 }

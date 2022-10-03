@@ -1,12 +1,14 @@
 ﻿using CosmosNetwork.Serialization;
+using ProtoBuf;
 using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Modules.Gov.Serialization
 {
+    [ProtoContract]
     internal record MessageVote(
-        ulong ProposalId,
-        [property: JsonPropertyName("voter")] string VoterAddress,
-        [property: JsonConverter(typeof(JsonStringEnumConverter))] VoteOptionEnum Option) : SerializerMessage
+        [property: ProtoMember(1, Name = "proposal_id")] ulong ProposalId,
+        [property: ProtoMember(2, Name = "voter"), JsonPropertyName("voter")] string VoterAddress,
+        [property: ProtoMember(3, Name = "option"), JsonConverter(typeof(JsonStringEnumConverter))] VoteOptionEnum Option) : SerializerMessage(Gov.MessageVote.COSMOS_DESCRIPTOR)
     {
         public const string TERRA_DESCRIPTOR = "gov/MsgVote";
 

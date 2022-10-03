@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
-namespace CosmosNetwork.Confio.Serialization
+namespace CosmosNetwork.Confio.Types.Serialization
 {
     [ProtoContract]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]

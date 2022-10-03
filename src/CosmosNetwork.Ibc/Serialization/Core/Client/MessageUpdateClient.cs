@@ -8,7 +8,7 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Client
     [ProtoContract]
     internal record MessageUpdateClient(
         [property: ProtoMember(1, Name = "client_id")] string ClientId,
-        [property: ProtoMember(3, Name = "signer")] string Signer) : SerializerMessage
+        [property: ProtoMember(3, Name = "signer")] string Signer) : SerializerMessage(Ibc.Core.Client.MessageUpdateClient.COSMOS_DESCRIPTOR)
     {
         [ProtoIgnore]
         public IHeader Header { get; set; } = null!;

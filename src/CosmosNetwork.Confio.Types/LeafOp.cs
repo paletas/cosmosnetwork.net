@@ -1,4 +1,4 @@
-﻿namespace CosmosNetwork.Confio
+﻿namespace CosmosNetwork.Confio.Types
 {
     public record LeafOp(
         HashOperationEnum Hash,
@@ -10,11 +10,11 @@
         internal Serialization.LeafOp ToSerialization()
         {
             return new Serialization.LeafOp(
-                (Serialization.HashOperationEnum)this.Hash,
-                (Serialization.HashOperationEnum)this.PreHashKey,
-                (Serialization.HashOperationEnum)this.PreHashValue,
-                (Serialization.LengthOperationEnum)this.Length,
-                this.Prefix);
+                (Serialization.HashOperationEnum)Hash,
+                (Serialization.HashOperationEnum)PreHashKey,
+                (Serialization.HashOperationEnum)PreHashValue,
+                (Serialization.LengthOperationEnum)Length,
+                Prefix);
         }
     }
 }

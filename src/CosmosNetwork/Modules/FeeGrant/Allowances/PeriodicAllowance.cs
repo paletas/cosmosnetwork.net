@@ -16,8 +16,8 @@ namespace CosmosNetwork.Modules.FeeGrant.Allowances
             return new Serialization.Allowances.PeriodicAllowance(
                 (Serialization.Allowances.BasicAllowance)Allowance.ToSerialization(),
                 Period,
-                SpendLimit.Select(coin => new DenomAmount(coin.Denom, coin.Amount)).ToArray(),
-                CanSpend.Select(coin => new DenomAmount(coin.Denom, coin.Amount)).ToArray(),
+                SpendLimit.Select(coin => coin.ToSerialization()).ToArray(),
+                CanSpend.Select(coin => coin.ToSerialization()).ToArray(),
                 PeriodReset);
         }
     }

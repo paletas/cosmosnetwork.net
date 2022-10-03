@@ -1,6 +1,6 @@
 ﻿using ProtoBuf;
 
-namespace CosmosNetwork.Confio.Serialization
+namespace CosmosNetwork.Confio.Types.Serialization
 {
     [ProtoContract]
     public record InnerSpec(
@@ -11,15 +11,15 @@ namespace CosmosNetwork.Confio.Serialization
         [property: ProtoMember(5, Name = "empty_child")] byte[] EmptyChild,
         [property: ProtoMember(6, Name = "hash")] HashOperationEnum Hash)
     {
-        public Confio.InnerSpec ToModel()
+        public Types.InnerSpec ToModel()
         {
-            return new Confio.InnerSpec(
-                this.ChildOrder,
-                this.ChildSize,
-                this.MinPrefixLength,
-                this.MaxPrefixLength,
-                this.EmptyChild,
-                (Confio.HashOperationEnum)this.Hash);
+            return new Types.InnerSpec(
+                ChildOrder,
+                ChildSize,
+                MinPrefixLength,
+                MaxPrefixLength,
+                EmptyChild,
+                (Types.HashOperationEnum)Hash);
         }
     }
 }

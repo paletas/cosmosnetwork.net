@@ -6,35 +6,37 @@ using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Serialization
 {
+    [ProtoContract]
     internal class SignatureDescriptor
     {
         [ProtoIgnore]
-        public Proto.PublicKey PublicKey { get; set; } = null!;
+        public Proto.SimplePublicKey? PublicKey { get; set; }
 
         [JsonPropertyName("mode_info")]
-        [ProtoMember(2, Name = "data")]
-        public SignatureData Data { get; set; } = null!;
+        [ProtoMember(2, Name = "mode_info")]
+        public SignatureMode Data { get; set; } = null!;
 
         [ProtoMember(3, Name = "sequence")]
         public ulong Sequence { get; set; }
 
         [JsonIgnore]
         [ProtoMember(1, Name = "public_key")]
-        public Any PublicKeyPacked
+        public Any? PublicKeyPacked
         {
-            get => Any.Pack(PublicKey);
-            set => PublicKey = value.Unpack<Proto.PublicKey>() ?? throw new InvalidOperationException();
+            get => this.PublicKey is null ? null : Any.Pack(PublicKey);
+            set => PublicKey = value?.Unpack<Proto.SimplePublicKey>();
         }
     }
 
     [ProtoContract]
-    internal class SignatureData
+    internal class SignatureMode
     {
         private ProtoBuf.DiscriminatedUnionObject _discriminatedObject = new();
 
+        [ProtoIgnore]
         public ModeInfoDiscriminatorEnum Discriminator => (ModeInfoDiscriminatorEnum)_discriminatedObject.Discriminator;
 
-        [ProtoMember(2, Name = "single")]
+        [ProtoMember(1, Name = "single")]
         public SingleMode? Single
         {
             get => Discriminator == ModeInfoDiscriminatorEnum.Single ? _discriminatedObject.Object as SingleMode : null;
@@ -42,7 +44,7 @@ namespace CosmosNetwork.Serialization
             set => _discriminatedObject = new DiscriminatedUnionObject((int)ModeInfoDiscriminatorEnum.Single, value);
         }
 
-        [ProtoMember(3, Name = "multi")]
+        [ProtoMember(2, Name = "multi")]
         public MultiMode? Multi
         {
             get => Discriminator == ModeInfoDiscriminatorEnum.Multi ? _discriminatedObject.Object as MultiMode : null;
@@ -94,7 +96,7 @@ namespace CosmosNetwork.Serialization
     [ProtoContract]
     internal record MultiMode(
         [property: ProtoMember(1, Name = "bitarray")] CompactBitArray BitArray,
-        [property: ProtoMember(2, Name = "mode_infos")] SignatureData[] ModeInfos)
+        [property: ProtoMember(2, Name = "mode_infos")] SignatureMode[] ModeInfos)
     {
 
     }

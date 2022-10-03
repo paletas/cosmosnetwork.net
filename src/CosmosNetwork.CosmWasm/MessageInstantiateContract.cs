@@ -22,7 +22,7 @@ namespace CosmosNetwork.CosmWasm
                 CodeId,
                 Label,
                 JsonDocument.Parse(InitMessage),
-                InitCoins.Select(coin => new DenomAmount(coin.Denom, coin.Amount)).ToArray());
+                InitCoins.Select(coin => coin.ToSerialization()).ToArray());
         }
     }
 }

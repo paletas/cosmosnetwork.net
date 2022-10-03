@@ -4,9 +4,9 @@ using System.Web;
 
 namespace CosmosNetwork.Modules.Staking
 {
-    internal class StakingApi : BaseApiSection, IStakingApi
+    internal class StakingApi : CosmosApiModule, IStakingApi
     {
-        public StakingApi(CosmosApiOptions options, HttpClient httpClient, ILogger<BaseApiSection> logger) : base(options, httpClient, logger)
+        public StakingApi(CosmosApiOptions options, HttpClient httpClient, ILogger<CosmosApiModule> logger) : base(options, httpClient, logger)
         {
         }
 

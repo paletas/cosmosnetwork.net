@@ -4,8 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 ServiceCollection services = new ServiceCollection();
-services.AddCosmosNetwork("pisco-1", "https://pisco-lcd.terra.dev", new CosmosApiOptions())
-    .SetupTerra();
+services.AddCosmosNetwork("https://pisco-lcd.terra.dev", new CosmosApiOptions())
+    .SetupTerra("pisco-1");
 
 services.AddLogging(builder => builder.SetMinimumLevel(LogLevel.Information).AddConsole());
 
@@ -33,7 +33,7 @@ do
         mnemonicKey = Console.ReadLine();
     }
 
-    IWallet wallet = await cosmosApi.Wallet.GetWallet(mnemonicKey, new CosmosNetwork.Keys.MnemonicKeyOptions(TerraOptions.CoinType));
+    IWallet wallet = await cosmosApi.Wallet.GetWallet(mnemonicKey, new CosmosNetwork.Keys.MnemonicKeyOptions());
 
     Console.WriteLine("Integration Tests Available");
     int ix = 1;

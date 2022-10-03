@@ -7,10 +7,6 @@ namespace CosmosNetwork
 {
     public class CosmosApiOptions
     {
-        public CosmosApiOptions()
-        {
-        }
-
         public CosmosApiOptions(int? throttlingEnumeratorsInSeconds = default, ulong? startingBlockHeightForTransactionSearch = default)
         {
             if (throttlingEnumeratorsInSeconds != default)
@@ -25,8 +21,6 @@ namespace CosmosNetwork
         }
 
         internal CosmosMessageRegistry? MessageRegistry { get; set; }
-
-        public string? ChainId { get; set; }
 
         public int? ThrottlingEnumeratorsInMilliseconds { get; set; } = 1000;
 

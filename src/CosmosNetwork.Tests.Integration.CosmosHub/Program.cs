@@ -7,8 +7,8 @@ using Microsoft.Extensions.Logging;
 using IHost host = Host.CreateDefaultBuilder(args).Build();
 
 ServiceCollection services = new ServiceCollection();
-services.AddCosmosNetwork("theta-testnet-001", "https://rest.sentry-01.theta-testnet.polypore.xyz/", new CosmosApiOptions())
-    .SetupCosmosHub();
+services.AddCosmosNetwork("https://rest.sentry-01.theta-testnet.polypore.xyz/", new CosmosApiOptions())
+    .SetupCosmosHub("theta-testnet-001");
 
 services.AddLogging(builder => builder.SetMinimumLevel(LogLevel.Information).AddConsole());
 
@@ -36,7 +36,7 @@ do
         mnemonicKey = Console.ReadLine();
     }
 
-    IWallet wallet = await cosmosApi.Wallet.GetWallet(mnemonicKey, new CosmosNetwork.Keys.MnemonicKeyOptions(CosmosHubOptions.CoinType));
+    IWallet wallet = await cosmosApi.Wallet.GetWallet(mnemonicKey, new CosmosNetwork.Keys.MnemonicKeyOptions());
 
     Console.WriteLine("Integration Tests Available");
     int ix = 1;

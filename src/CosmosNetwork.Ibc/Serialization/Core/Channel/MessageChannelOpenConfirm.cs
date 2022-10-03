@@ -10,7 +10,7 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Channel
         [property: ProtoMember(2, Name = "channel_id")] string ChannelId,
         [property: ProtoMember(3, Name = "proof_ack")] byte[] ProofAck,
         [property: ProtoMember(4, Name = "proof_height")] Height ProofHeight,
-        [property: ProtoMember(5, Name = "signer")] string Signer) : SerializerMessage
+        [property: ProtoMember(5, Name = "signer")] string Signer) : SerializerMessage(Ibc.Core.Channel.MessageChannelOpenConfirm.COSMOS_DESCRIPTOR)
     {
         protected override Message ToModel()
         {

@@ -1,5 +1,6 @@
 ﻿using CosmosNetwork.API;
 using CosmosNetwork.Keys;
+using CosmosNetwork.Serialization.Proto;
 using System.Runtime.CompilerServices;
 
 namespace CosmosNetwork.Wallets
@@ -75,28 +76,40 @@ namespace CosmosNetwork.Wallets
                 await UpdateAccountInformation(cancellationToken).ConfigureAwait(false);
             }
 
-            if (transactionOptions?.Fees is null) throw new InvalidOperationException();
-
             var fees = transactionOptions?.Fees?.ToSerialization();
 
-            Serialization.Transaction transaction = new(
-                new Serialization.TransactionBody(messages.Select(msg => msg.ToSerialization()).ToArray(), transactionOptions?.TimeoutHeight, transactionOptions?.Memo),
-                new Serialization.AuthInfo(new List<Serialization.SignatureDescriptor>(), fees),
+            Serialization.Proto.Transaction transaction = new(
+                new Serialization.Proto.TransactionBody(messages.Select(msg => Any.Pack(msg.ToSerialization())).ToArray(), transactionOptions?.TimeoutHeight, transactionOptions?.Memo),
+                new Serialization.Proto.AuthInfo(new List<Serialization.SignatureDescriptor>(), fees ?? new Serialization.Fee()),
                 new List<byte[]>());
 
             byte[] serializedTx = transaction.GetBytes();
-            return new SerializedTransaction(serializedTx, transactionOptions.Fees);
+            return new SerializedTransaction(serializedTx, transactionOptions?.Fees);
         }
 
         public async Task<(uint? ErrorCode, TransactionSimulationResults? Result)> SimulateTransaction(IEnumerable<Message> messages, TransactionSimulationOptions? simulationOptions = null, CancellationToken cancellationToken = default)
         {
-            var fees = simulationOptions?.Fees?.ToSerialization();
-            if (fees is null) throw new InvalidOperationException();
+            if (this.RequiresAccountUpdate)
+            {
+                await UpdateAccountInformation(cancellationToken).ConfigureAwait(false);
+            }
 
-            Serialization.Transaction transaction = new(
-                new Serialization.TransactionBody(messages.Select(msg => msg.ToSerialization()).ToArray(), simulationOptions?.TimeoutHeight, simulationOptions?.Memo),
-                new Serialization.AuthInfo(new List<Serialization.SignatureDescriptor>(), fees),
-                new List<byte[]>());
+            var fees = simulationOptions?.Fees?.ToSerialization();
+
+            Serialization.SignatureDescriptor signatureDescriptor = new Serialization.SignatureDescriptor
+            {
+                PublicKey = this.PublicKey.ToSimpleProto(),
+                Data = new Serialization.SignatureMode
+                {
+                    Single = new Serialization.SingleMode(Serialization.SignModeEnum.Direct)
+                },
+                Sequence = this.Sequence!.Value
+            };
+
+            Serialization.Proto.Transaction transaction = new(
+                new Serialization.Proto.TransactionBody(messages.Select(msg => Any.Pack(msg.ToSerialization())).ToArray(), simulationOptions?.TimeoutHeight, simulationOptions?.Memo),
+                new Serialization.Proto.AuthInfo(new List<Serialization.SignatureDescriptor>() { signatureDescriptor }, fees ?? new Serialization.Fee()),
+                new List<byte[]>() { Array.Empty<byte>() });
 
             return await _transactionsApi.SimulateTransaction(transaction, cancellationToken).ConfigureAwait(false);
         }
@@ -106,9 +119,9 @@ namespace CosmosNetwork.Wallets
             var fees = estimateOptions?.Fees?.ToSerialization();
             if (fees is null) throw new InvalidOperationException();
 
-            Serialization.Transaction transaction = new(
-                new Serialization.TransactionBody(messages.Select(msg => msg.ToSerialization()).ToArray(), estimateOptions?.TimeoutHeight, estimateOptions?.Memo),
-                new Serialization.AuthInfo(new List<Serialization.SignatureDescriptor>(), fees),
+            Serialization.Proto.Transaction transaction = new(
+                new Serialization.Proto.TransactionBody(messages.Select(msg => Any.Pack(msg.ToSerialization())).ToArray(), estimateOptions?.TimeoutHeight, estimateOptions?.Memo),
+                new Serialization.Proto.AuthInfo(new List<Serialization.SignatureDescriptor>(), fees),
                 new List<byte[]>());
 
             return await _transactionsApi.EstimateFee(transaction, estimateOptions, cancellationToken).ConfigureAwait(false);
@@ -119,9 +132,9 @@ namespace CosmosNetwork.Wallets
             return _transactionsApi.SimulateTransaction(transaction.ToSerialization(), cancellationToken);
         }
 
-        public async Task<(uint? ErrorCode, TransactionBroadcastResults? Result)> BroadcastTransactionBlock(IEnumerable<Message> messages, BroadcastTransactionOptions? broadcastOptions = null, CancellationToken cancellationToken = default)
+        public async Task<(uint? ErrorCode, TransactionBroadcastResults? Result)> BroadcastTransactionBlock(IEnumerable<Message> messages, BroadcastTransactionOptions broadcastOptions, CancellationToken cancellationToken = default)
         {
-            SerializedTransaction signedTransaction = await CreateSignedTransaction(messages, new CreateTransactionOptions(broadcastOptions?.Memo, broadcastOptions?.TimeoutHeight, broadcastOptions?.Fees, Gas: broadcastOptions?.Gas, GasPrices: null, broadcastOptions?.FeesDenoms), cancellationToken).ConfigureAwait(false);
+            SerializedTransaction signedTransaction = await CreateSignedTransaction(messages, new CreateTransactionOptions(broadcastOptions.Fees, broadcastOptions.Memo, broadcastOptions.TimeoutHeight, Gas: broadcastOptions.Gas, GasPrices: null, broadcastOptions?.FeesDenoms), cancellationToken).ConfigureAwait(false);
 
             try
             {
@@ -145,9 +158,9 @@ namespace CosmosNetwork.Wallets
             }
         }
 
-        public async Task<(uint? ErrorCode, TransactionBroadcastResults? Result)> BroadcastTransactionAsyncAndWait(IEnumerable<Message> messages, BroadcastTransactionOptions? broadcastOptions = null, CancellationToken cancellationToken = default)
+        public async Task<(uint? ErrorCode, TransactionBroadcastResults? Result)> BroadcastTransactionAsyncAndWait(IEnumerable<Message> messages, BroadcastTransactionOptions broadcastOptions, CancellationToken cancellationToken = default)
         {
-            SerializedTransaction signedTransaction = await CreateSignedTransaction(messages, new CreateTransactionOptions(broadcastOptions?.Memo, broadcastOptions?.TimeoutHeight, broadcastOptions?.Fees, Gas: broadcastOptions?.Gas, GasPrices: null, broadcastOptions?.FeesDenoms), cancellationToken).ConfigureAwait(false);
+            SerializedTransaction signedTransaction = await CreateSignedTransaction(messages, broadcastOptions, cancellationToken).ConfigureAwait(false);
 
             try
             {

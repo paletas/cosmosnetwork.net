@@ -1,6 +1,6 @@
 ﻿namespace CosmosNetwork.Modules
 {
-    public interface ICosmosModule
+    public interface ICosmosMessageModule
     {
         void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry);
     }

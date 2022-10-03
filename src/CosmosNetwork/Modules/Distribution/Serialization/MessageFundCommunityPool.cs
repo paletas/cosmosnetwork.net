@@ -7,7 +7,7 @@ namespace CosmosNetwork.Modules.Distribution.Serialization
     [ProtoContract]
     internal record MessageFundCommunityPool(
         [property: ProtoMember(2, Name = "depositor"), JsonPropertyName("depositor")] string DepositorAddress,
-        [property: ProtoMember(1, Name = "amount")] DenomAmount[] Amount) : SerializerMessage
+        [property: ProtoMember(1, Name = "amount")] DenomAmount[] Amount) : SerializerMessage(Distribution.MessageFundCommunityPool.COSMOS_DESCRIPTOR)
     {
         protected internal override Message ToModel()
         {

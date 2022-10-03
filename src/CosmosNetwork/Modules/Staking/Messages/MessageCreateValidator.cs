@@ -18,8 +18,9 @@
                 Delegator.Address, Validator.Address, MinimumSelfDelegation,
                 new Staking.Serialization.ValidatorDescription(Description.Moniker, Description.Identity, Description.Details, Description.Website.ToString(), Description.SecurityContact),
                 new Staking.Serialization.ValidatorCommissionRates(Comission.Rate, Comission.MaxRate, Comission.MaxRateChange),
-                new CosmosNetwork.Serialization.DenomAmount(SelfDelegation.Denom, SelfDelegation.Amount),
-                PublicKey.ToSerialization()
+                SelfDelegation.ToSerialization(),
+                PublicKey.ToJson(),
+                PublicKey.ToProto()
             );
         }
     }

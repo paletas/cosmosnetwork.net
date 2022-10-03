@@ -1,6 +1,7 @@
-﻿using ProtoBuf;
+﻿using CosmosNetwork.Confio.Types;
+using ProtoBuf;
 
-namespace CosmosNetwork.Confio.Serialization
+namespace CosmosNetwork.Confio.Types.Serialization
 {
     [ProtoContract]
     public record LeafOp(
@@ -10,14 +11,14 @@ namespace CosmosNetwork.Confio.Serialization
         [property: ProtoMember(4, Name = "length")] LengthOperationEnum Length,
         [property: ProtoMember(5, Name = "prefix")] byte[] Prefix)
     {
-        public Confio.LeafOp ToModel()
+        public Types.LeafOp ToModel()
         {
-            return new Confio.LeafOp(
-                (Confio.HashOperationEnum)this.Hash,
-                (Confio.HashOperationEnum)this.PreHashKey,
-                (Confio.HashOperationEnum)this.PreHashValue,
-                (Confio.LengthOperationEnum)this.Length,
-                this.Prefix);
+            return new Types.LeafOp(
+                (Types.HashOperationEnum)Hash,
+                (Types.HashOperationEnum)PreHashKey,
+                (Types.HashOperationEnum)PreHashValue,
+                (Types.LengthOperationEnum)Length,
+                Prefix);
         }
     }
 }

@@ -4,13 +4,13 @@ namespace CosmosNetwork.Keys
 {
     internal class MnemonicKey : Key
     {
-        public MnemonicKey(string mnemonic, MnemonicKeyOptions options)
+        public MnemonicKey(string mnemonic, MnemonicKeyOptions options, NetworkOptions network)
         {
-            Nethereum.HdWallet.Wallet wallet = new(mnemonic, string.Empty, GetHdPath(options.CoinType, options.Account, options.Index));
+            Nethereum.HdWallet.Wallet wallet = new(mnemonic, string.Empty, GetHdPath(network.CoinType, options.Account, options.Index));
             byte[] privateKey = wallet.GetPrivateKey((int)options.Index);
             byte[] publicKey = Cryptography.ECDSA.Secp256K1Manager.GetPublicKey(privateKey, true);
 
-            base.SetKeys(privateKey, publicKey);
+            base.SetKeys(privateKey, new PublicKey(network, publicKey));
         }
 
         public override Task<byte[]> SignPayload(byte[] payload, CancellationToken cancellationToken = default)
@@ -32,14 +32,11 @@ namespace CosmosNetwork.Keys
 
     public class MnemonicKeyOptions
     {
-        public MnemonicKeyOptions(string coinType, uint? account = null, uint? index = null)
+        public MnemonicKeyOptions(uint? account = null, uint? index = null)
         {
-            CoinType = coinType;
             Account = account ?? 0;
             Index = index ?? 0;
         }
-
-        public string CoinType { get; set; }
 
         public uint Account { get; set; }
 

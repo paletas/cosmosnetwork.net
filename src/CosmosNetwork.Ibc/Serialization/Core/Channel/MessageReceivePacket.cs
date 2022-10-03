@@ -7,9 +7,9 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Channel
     [ProtoContract]
     internal record MessageReceivePacket(
         [property: ProtoMember(1, Name = "packet")] Packet Packet,
-        [property: ProtoMember(1, Name = "proof_commitment")] byte[] ProofCommitment,
-        [property: ProtoMember(1, Name = "proof_height")] Height ProofHeight,
-        [property: ProtoMember(1, Name = "signer")] string Signer) : SerializerMessage
+        [property: ProtoMember(2, Name = "proof_commitment")] byte[] ProofCommitment,
+        [property: ProtoMember(3, Name = "proof_height")] Height ProofHeight,
+        [property: ProtoMember(4, Name = "signer")] string Signer) : SerializerMessage(Ibc.Core.Channel.MessageReceivePacket.COSMOS_DESCRIPTOR)
     {
         protected override Message ToModel()
         {

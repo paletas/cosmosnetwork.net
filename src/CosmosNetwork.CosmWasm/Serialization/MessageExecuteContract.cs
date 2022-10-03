@@ -11,7 +11,7 @@ namespace CosmosNetwork.CosmWasm.Serialization
         [property: ProtoMember(5, Name = "funds"), JsonPropertyName("funds")] DenomAmount[] Coins,
         [property: ProtoMember(1, Name = "sender"), JsonPropertyName("sender")] string SenderAddress,
         [property: ProtoMember(2, Name = "contract"), JsonPropertyName("contract")] string ContractAddress,
-        [property: ProtoMember(3, Name = "msg"), JsonPropertyName("msg")] JsonDocument ExecuteMessage) : SerializerMessage
+        [property: ProtoMember(3, Name = "msg"), JsonPropertyName("msg")] JsonDocument ExecuteMessage) : SerializerMessage(CosmWasm.MessageExecuteContract.COSMOS_DESCRIPTOR)
     {
         protected override Message ToModel()
         {

@@ -11,7 +11,7 @@
         {
             return new Serialization.MessageFundCommunityPool(
                 Depositor.Address,
-                Coins.Select(coin => new CosmosNetwork.Serialization.DenomAmount(coin.Denom, coin.Amount)).ToArray());
+                Coins.Select(coin => coin.ToSerialization()).ToArray());
         }
     }
 }

@@ -10,7 +10,7 @@ namespace CosmosNetwork.Modules.FeeGrant.Serialization
     [ProtoContract]
     internal record MessageGrantAllowance(
         [property: ProtoMember(1, Name = "granter"), JsonPropertyName("granter")] string GranterAddress,
-        [property: ProtoMember(2, Name = "grantee"), JsonPropertyName("grantee")] string GranteeAddress) : SerializerMessage
+        [property: ProtoMember(2, Name = "grantee"), JsonPropertyName("grantee")] string GranteeAddress) : SerializerMessage(FeeGrant.MessageGrantAllowance.COSMOS_DESCRIPTOR)
     {
         private Any? _allowancePack;
         public const string TERRA_DESCRIPTOR = "feegrant/MsgGrantAllowance";

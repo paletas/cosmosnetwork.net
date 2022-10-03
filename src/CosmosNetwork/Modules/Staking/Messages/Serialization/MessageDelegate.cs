@@ -1,11 +1,14 @@
 ﻿using CosmosNetwork.Serialization;
+using ProtoBuf;
 
 namespace CosmosNetwork.Modules.Staking.Messages.Serialization
 {
-    internal record MessageDelegate(string DelegatorAddress, string ValidatorAddress, DenomAmount Amount) : SerializerMessage
+    [ProtoContract]
+    internal record MessageDelegate(
+        [property: ProtoMember(1, Name = "delegator_address")] string DelegatorAddress,
+        [property: ProtoMember(2, Name = "validator_address")] string ValidatorAddress,
+        [property: ProtoMember(3, Name = "amount")] DenomAmount Amount) : SerializerMessage(Staking.Messages.MessageDelegate.COSMOS_DESCRIPTOR)
     {
-        public const string TERRA_DESCRIPTOR = "staking/MsgDelegate";
-
         protected internal override Message ToModel()
         {
             return new Staking.Messages.MessageDelegate(DelegatorAddress, ValidatorAddress, Amount.ToModel());

@@ -9,7 +9,7 @@ namespace CosmosNetwork.Modules.FeeGrant.Allowances
         public Serialization.Allowances.IAllowance ToSerialization()
         {
             return new Serialization.Allowances.BasicAllowance(
-                SpendLimit.Select(coin => new DenomAmount(coin.Denom, coin.Amount)).ToArray(),
+                SpendLimit.Select(coin => coin.ToSerialization()).ToArray(),
                 Expiration);
         }
     }

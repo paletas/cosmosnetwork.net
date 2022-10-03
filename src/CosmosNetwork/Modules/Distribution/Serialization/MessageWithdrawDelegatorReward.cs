@@ -6,7 +6,7 @@ namespace CosmosNetwork.Modules.Distribution.Serialization
     [ProtoContract]
     internal record MessageWithdrawDelegatorReward(
         [property: ProtoMember(1, Name = "delegator_address")] string DelegatorAddress,
-        [property: ProtoMember(2, Name = "validator_address")] string ValidatorAddress) : SerializerMessage
+        [property: ProtoMember(2, Name = "validator_address")] string ValidatorAddress) : SerializerMessage(Distribution.MessageWithdrawDelegatorReward.COSMOS_DESCRIPTOR)
     {
         public const string TERRA_DESCRIPTOR = "distribution/MsgWithdrawDelegationReward";
 

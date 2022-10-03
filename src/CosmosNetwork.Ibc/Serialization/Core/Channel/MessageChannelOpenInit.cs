@@ -7,7 +7,7 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Channel
     internal record MessageChannelOpenInit(
         [property: ProtoMember(1, Name = "port_id")] string PortId,
         [property: ProtoMember(2, Name = "channel")] Channel Channel,
-        [property: ProtoMember(3, Name = "signer")] string Signer) : SerializerMessage
+        [property: ProtoMember(3, Name = "signer")] string Signer) : SerializerMessage(Ibc.Core.Channel.MessageChannelOpenInit.COSMOS_DESCRIPTOR)
     {
         protected override Message ToModel()
         {

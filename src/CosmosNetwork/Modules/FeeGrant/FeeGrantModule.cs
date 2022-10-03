@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CosmosNetwork.Modules.FeeGrant
 {
-    public class FeeGrantModule : ICosmosModule
+    public class FeeGrantModule : ICosmosMessageModule
     {
         private readonly IServiceCollection _services;
 

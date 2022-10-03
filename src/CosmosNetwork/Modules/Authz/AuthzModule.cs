@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CosmosNetwork.Modules.Authz
 {
-    public class AuthzModule : ICosmosModule
+    public class AuthzModule : ICosmosMessageModule
     {
         private readonly IServiceCollection _services;
 

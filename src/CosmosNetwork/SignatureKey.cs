@@ -2,9 +2,9 @@
 {
     public abstract record SignatureKey(SignatureTypeEnum Type)
     {
-        public abstract Serialization.Json.PublicKey ToSerialization();
+        public abstract Serialization.Proto.SimplePublicKey ToProto();
 
-        public abstract PublicKey[] GetPublicKeys();
+        public abstract Serialization.Json.PublicKey ToJson();
     }
 
     public enum SignatureTypeEnum
@@ -16,40 +16,40 @@
 
     public record Secp256k1Key(string Key) : SignatureKey(SignatureTypeEnum.Secp256k1)
     {
-        public override PublicKey[] GetPublicKeys()
-        {
-            return new[] { new PublicKey(Key) };
-        }
-
-        public override Serialization.Json.PublicKey ToSerialization()
+        public override Serialization.Json.PublicKey ToJson()
         {
             return new Serialization.Json.Secp256k1(Key);
+        }
+
+        public override Serialization.Proto.SimplePublicKey ToProto()
+        {
+            return new Serialization.Proto.Secp256k1(Key);
         }
     }
 
     public record Ed25519Key(string Key) : SignatureKey(SignatureTypeEnum.Ed25519)
     {
-        public override PublicKey[] GetPublicKeys()
-        {
-            return new[] { new PublicKey(Key) };
-        }
-
-        public override Serialization.Json.PublicKey ToSerialization()
+        public override Serialization.Json.PublicKey ToJson()
         {
             return new Serialization.Json.Ed25519(Key);
+        }
+
+        public override Serialization.Proto.SimplePublicKey ToProto()
+        {
+            return new Serialization.Proto.Ed25519(Key);
         }
     }
 
     public record MultisigKey(uint Threshold, SignatureKey[] Keys) : SignatureKey(SignatureTypeEnum.Multisig)
     {
-        public override PublicKey[] GetPublicKeys()
+        public override Serialization.Json.PublicKey ToJson()
         {
-            return Keys.SelectMany(k => k.GetPublicKeys()).ToArray();
+            return new Serialization.Json.MultisigKey(Threshold, Keys.Select(k => k.ToJson()).ToArray());
         }
 
-        public override Serialization.Json.PublicKey ToSerialization()
+        public override Serialization.Proto.SimplePublicKey ToProto()
         {
-            return new Serialization.Json.MultisigKey(Threshold, Keys.Select(k => k.ToSerialization()).ToArray());
+            return new Serialization.Proto.MultisigKey(Threshold, Keys.Select(k => k.ToProto()).ToArray());
         }
     }
 }

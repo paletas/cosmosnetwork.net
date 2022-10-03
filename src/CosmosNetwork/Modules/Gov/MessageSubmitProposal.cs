@@ -11,7 +11,7 @@ namespace CosmosNetwork.Modules.Gov
         {
             return new Serialization.MessageSubmitProposal(
                 Proposer.Address,
-                InitialDeposit.Select(coin => new CosmosNetwork.Serialization.DenomAmount(coin.Denom, coin.Amount)).ToArray())
+                InitialDeposit.Select(coin => coin.ToSerialization()).ToArray())
             {
                 Content = Proposal.ToSerialization()
             };

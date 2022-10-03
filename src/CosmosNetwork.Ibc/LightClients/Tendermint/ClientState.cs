@@ -1,4 +1,4 @@
-﻿using CosmosNetwork.Confio;
+﻿using CosmosNetwork.Confio.Types;
 using CosmosNetwork.Ibc.Core.Client;
 using ProtoBuf.WellKnownTypes;
 

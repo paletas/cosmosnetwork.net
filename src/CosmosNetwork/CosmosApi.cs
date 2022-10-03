@@ -1,7 +1,7 @@
 ﻿using CosmosNetwork.API;
 using CosmosNetwork.API.Impl;
 using CosmosNetwork.Modules.Staking;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Terra.NET.Tests")]
@@ -10,17 +10,13 @@ namespace CosmosNetwork
 {
     public class CosmosApi
     {
-        internal CosmosApi(HttpClient httpClient, ILoggerFactory loggerFactory, CosmosApiOptions options)
+        public CosmosApi(IServiceProvider serviceProvider)
         {
-            Options = options;
-
-            Blocks = new BlocksApi(options, httpClient, loggerFactory.CreateLogger<BlocksApi>());
-            Transactions = new TransactionsApi(options, httpClient, loggerFactory.CreateLogger<TransactionsApi>(), Blocks);
-            Wallet = new WalletApi(options, httpClient, loggerFactory.CreateLogger<WalletApi>(), Transactions);
-            Staking = new StakingApi(options, httpClient, loggerFactory.CreateLogger<StakingApi>());
+            Blocks = serviceProvider.GetRequiredService<IBlocksApi>();
+            Transactions = serviceProvider.GetRequiredService<ITransactionsApi>();
+            Wallet = serviceProvider.GetRequiredService<IWalletApi>();
+            Staking = serviceProvider.GetRequiredService<IStakingApi>();
         }
-
-        public CosmosApiOptions Options { get; init; }
 
         public IBlocksApi Blocks { get; init; }
 

@@ -2,21 +2,24 @@
 using CosmosNetwork.Serialization.Json.Responses;
 using CosmosNetwork.Wallets;
 using Microsoft.Extensions.Logging;
+using UltimateOrb;
 
 namespace CosmosNetwork.API.Impl
 {
-    internal class WalletApi : BaseApiSection, IWalletApi
+    internal class WalletApi : CosmosApiModule, IWalletApi
     {
+        private readonly NetworkOptions _networkOptions;
         private readonly ITransactionsApi _transactionsApi;
 
-        public WalletApi(CosmosApiOptions options, HttpClient httpClient, ILogger<WalletApi> logger, ITransactionsApi transactionsApi) : base(options, httpClient, logger)
+        public WalletApi(CosmosApiOptions apiOptions, NetworkOptions networkOptions, HttpClient httpClient, ILogger<WalletApi> logger, ITransactionsApi transactionsApi) : base(apiOptions, httpClient, logger)
         {
+            _networkOptions = networkOptions;
             _transactionsApi = transactionsApi;
         }
 
         public ValueTask<IWallet> GetWallet(string mnemonicKey, MnemonicKeyOptions keyOptions, CancellationToken cancellationToken = default)
         {
-            return ValueTask.FromResult<IWallet>(new DirectWallet(Options, new MnemonicKey(mnemonicKey, keyOptions), this, _transactionsApi));
+            return ValueTask.FromResult<IWallet>(new DirectWallet(Options, new MnemonicKey(mnemonicKey, keyOptions, _networkOptions), this, _transactionsApi));
         }
 
         public async Task<AccountInformation?> GetAccountInformation(string accountAddress, CancellationToken cancellationToken = default)
@@ -32,7 +35,12 @@ namespace CosmosNetwork.API.Impl
             Serialization.Json.AccountBalances? accountBalances = await Get<Serialization.Json.AccountBalances>($"/cosmos/bank/v1beta1/balances/{accountAddress}", cancellationToken).ConfigureAwait(false);
             return accountBalances == null
                 ? throw new InvalidOperationException()
-                : new AccountBalances(accountBalances.Balances.Select(bal => new NativeCoin(bal.Denom, bal.Amount)));
+                : new AccountBalances(accountBalances.Balances.Select(bal =>
+                {
+                    if (UInt128.TryParseCStyleNormalizedU128(bal.Amount, out UInt128 amount) == false)
+                        throw new InvalidOperationException($"amount format is invalid: {bal.Amount}");
+                    return new NativeCoin(bal.Denom, amount); 
+                }));
         }
     }
 }

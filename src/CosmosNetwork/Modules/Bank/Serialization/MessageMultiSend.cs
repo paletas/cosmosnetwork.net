@@ -6,7 +6,7 @@ namespace CosmosNetwork.Modules.Bank.Serialization
     [ProtoContract]
     internal record MessageMultiSend(
         [property: ProtoMember(1, Name = "inputs")] MessageMultiSendInputOutput[] Inputs,
-        [property: ProtoMember(2, Name = "outputs")] MessageMultiSendInputOutput[] Outputs) : SerializerMessage
+        [property: ProtoMember(2, Name = "outputs")] MessageMultiSendInputOutput[] Outputs) : SerializerMessage(Bank.MessageMultiSend.COSMOS_DESCRIPTOR)
     {
         protected internal override Message ToModel()
         {

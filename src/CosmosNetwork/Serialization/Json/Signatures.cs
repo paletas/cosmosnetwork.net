@@ -9,7 +9,7 @@ namespace CosmosNetwork.Serialization.Json
         public PublicKey PublicKey { get; set; } = null!;
 
         [JsonPropertyName("mode_info")]
-        public SignatureData Data { get; set; } = null!;
+        public SignatureMode Data { get; set; } = null!;
 
         public ulong Sequence { get; set; }
     }

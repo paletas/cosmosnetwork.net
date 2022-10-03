@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CosmosNetwork.Modules.Gov
 {
-    public class GovModule : ICosmosModule
+    public class GovModule : ICosmosMessageModule
     {
         private readonly IServiceCollection _services;
 
