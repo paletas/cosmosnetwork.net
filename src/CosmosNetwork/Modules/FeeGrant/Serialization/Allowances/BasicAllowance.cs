@@ -1,0 +1,18 @@
+﻿using CosmosNetwork.Serialization;
+
+namespace CosmosNetwork.Modules.FeeGrant.Serialization.Allowances
+{
+    internal record BasicAllowance(DenomAmount[] SpendLimit, DateTime? Expiration) : IAllowance
+    {
+        internal const string AllowanceType = "cosmos.feegrant.v1beta1.BasicAllowance";
+
+        public string TypeUrl => AllowanceType;
+
+        public FeeGrant.Allowances.IAllowance ToModel()
+        {
+            return new FeeGrant.Allowances.BasicAllowance(
+                SpendLimit.Select(coin => coin.ToModel()).ToArray(),
+                Expiration);
+        }
+    }
+}
