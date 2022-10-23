@@ -5,12 +5,8 @@ namespace CosmosNetwork.Modules.Authz
 {
     public class AuthzModule : ICosmosMessageModule
     {
-        private readonly IServiceCollection _services;
-
-        public AuthzModule(IServiceCollection services)
+        public AuthzModule()
         {
-            this._services = services;
-
             this.AuthorizationsRegistry = new AuthorizationRegistry();
         }
 
@@ -22,7 +18,6 @@ namespace CosmosNetwork.Modules.Authz
             messageRegistry.RegisterMessage<MessageGrant, Serialization.MessageGrant>();
             messageRegistry.RegisterMessage<MessageRevoke, Serialization.MessageRevoke>();
 
-            _ = this._services.AddSingleton(this.AuthorizationsRegistry);
         }
     }
 }

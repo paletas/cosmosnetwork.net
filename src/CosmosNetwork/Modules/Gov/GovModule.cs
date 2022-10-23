@@ -6,12 +6,8 @@ namespace CosmosNetwork.Modules.Gov
 {
     public class GovModule : ICosmosMessageModule
     {
-        private readonly IServiceCollection _services;
-
-        public GovModule(IServiceCollection services)
+        public GovModule()
         {
-            this._services = services;
-
             this.ProposalsRegistry = new ProposalsRegistry();
         }
 
@@ -24,7 +20,6 @@ namespace CosmosNetwork.Modules.Gov
             messageRegistry.RegisterMessage<MessageVote, Serialization.MessageVote>();
             messageRegistry.RegisterMessage<MessageVoteWeighted, Serialization.MessageVoteWeighted>();
 
-            _ = this._services.AddSingleton(this.ProposalsRegistry);
             cosmosOptions.JsonSerializerOptions.Converters.Add(new ProposalConverter(this.ProposalsRegistry));
 
             this.ProposalsRegistry.Register<TextProposal>(TextProposal.ProposalType);

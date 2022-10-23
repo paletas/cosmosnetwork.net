@@ -94,30 +94,29 @@ namespace CosmosNetwork
         public CosmosNetworkConfigurator AddApiModule<T>()
             where T : CosmosApiModule
         {
-            _ = this.Services.AddHttpClient<T>();
+            _ = this.Services.AddScoped<T>();
 
             return this;
         }
 
-        public CosmosNetworkConfigurator AddApiModule<TI, TP>(string basePath)
+        public CosmosNetworkConfigurator AddApiModule<TI, TP>()
             where TI : class
             where TP : CosmosApiModule, TI
         {
-            _ = this.Services.AddHttpClient<TI, TP>(client => client.BaseAddress = new Uri(basePath, UriKind.Absolute));
-
+            this.Services.AddScoped<TI, TP>();
             return this;
         }
 
-        public CosmosNetworkConfigurator ReplaceApiModule<TI, TP>(string basePath)
+        public CosmosNetworkConfigurator ReplaceApiModule<TI, TP>()
             where TI : class
             where TP : CosmosApiModule, TI
         {
             _ = this.Services.RemoveAll<TI>();
-            _ = this.Services.AddHttpClient<TI, TP>(client => client.BaseAddress = new Uri(basePath, UriKind.Absolute));
+            _ = this.Services.AddScoped<TI, TP>();
 
             return this;
         }
-    }
+    } 
 
     public static class CosmosNetworkConfiguration
     {
@@ -136,21 +135,18 @@ namespace CosmosNetwork
 
             CosmosNetworkConfigurator cosmosNetworkConfigurator = new(services, endpoint, cosmosMessageRegistry, options);
 
-            AuthzModule authzModule;
-            GovModule govModule;
+            cosmosNetworkConfigurator.AddMessageModule<AuthzModule>();
+            cosmosNetworkConfigurator.AddMessageModule<GovModule>();
+            cosmosNetworkConfigurator.AddMessageModule<BankModule>();
+            cosmosNetworkConfigurator.AddMessageModule<DistributionModule>();
+            cosmosNetworkConfigurator.AddMessageModule<FeeGrantModule>();
+            cosmosNetworkConfigurator.AddMessageModule<SlashingModule>();
+            cosmosNetworkConfigurator.AddMessageModule<StakingModule>();
 
-            cosmosNetworkConfigurator.AddMessageModule(authzModule = new AuthzModule(services));
-            cosmosNetworkConfigurator.AddMessageModule(govModule = new GovModule(services));
-            cosmosNetworkConfigurator.AddMessageModule(new BankModule(authzModule));
-            cosmosNetworkConfigurator.AddMessageModule(new DistributionModule(govModule));
-            cosmosNetworkConfigurator.AddMessageModule(new FeeGrantModule(services));
-            cosmosNetworkConfigurator.AddMessageModule(new SlashingModule());
-            cosmosNetworkConfigurator.AddMessageModule(new StakingModule());
-
-            cosmosNetworkConfigurator.AddApiModule<IBlocksApi, BlocksApi>(endpoint);
-            cosmosNetworkConfigurator.AddApiModule<ITransactionsApi, TransactionsApi>(endpoint);
-            cosmosNetworkConfigurator.AddApiModule<IWalletApi, WalletApi>(endpoint);
-            cosmosNetworkConfigurator.AddApiModule<IStakingApi, StakingApi>(endpoint);
+            cosmosNetworkConfigurator.AddApiModule<IBlocksApi, BlocksApi>();
+            cosmosNetworkConfigurator.AddApiModule<ITransactionsApi, TransactionsApi>();
+            cosmosNetworkConfigurator.AddApiModule<IWalletApi, WalletApi>();
+            cosmosNetworkConfigurator.AddApiModule<IStakingApi, StakingApi>();
 
             services.AddSingleton(cosmosNetworkConfigurator);
             services.AddSingleton(options);
@@ -172,7 +168,7 @@ namespace CosmosNetwork
             where T : CosmosApi
         {
             configurator.Network = networkOptions;
-            configurator.Services.AddTransient<T>();
+            configurator.Services.AddScoped<T>();
             configurator.Services.AddSingleton(networkOptions);
         }
 

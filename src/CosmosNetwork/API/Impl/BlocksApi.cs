@@ -8,7 +8,7 @@ namespace CosmosNetwork.API.Impl
         public BlocksApi(
             CosmosApiOptions options, 
             IHttpClientFactory httpClientFactory, 
-            ILogger<CosmosApiModule> logger) : base(options, httpClientFactory, logger)
+            ILogger<BlocksApi> logger) : base(options, httpClientFactory, logger)
         { }
 
         public async Task<Block?> GetBlock(ulong height, CancellationToken cancellationToken = default)

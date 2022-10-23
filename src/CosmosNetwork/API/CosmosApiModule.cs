@@ -52,7 +52,12 @@ namespace CosmosNetwork.API
             return await JsonSerializer.DeserializeAsync<T>(streamResponse, options: this.JsonSerializerOptions, cancellationToken: cancellationToken);
         }
 
-        protected async Task<TR?> Post<TP, TR>(string endpoint, TP request, CancellationToken cancellationToken = default)
+        protected Task<TR?> Post<TP, TR>(string endpoint, TP request, CancellationToken cancellationToken = default)
+        {
+            return Post<TP, TR>(PrepareEndpoint(endpoint), request, cancellationToken);
+        }
+            
+        protected async Task<TR?> Post<TP, TR>(Uri endpoint, TP request, CancellationToken cancellationToken = default)
         {
             string serializedRequest = JsonSerializer.Serialize(request, options: this.JsonSerializerOptions);
             using StringContent httpContent = new(serializedRequest, Encoding.UTF8, "application/json");
@@ -62,7 +67,7 @@ namespace CosmosNetwork.API
 #endif
 
             HttpClient httpClient = GetHttpClient();
-            using HttpResponseMessage httpResponse = await httpClient.PostAsync(PrepareEndpoint(endpoint), httpContent, cancellationToken).ConfigureAwait(false);
+            using HttpResponseMessage httpResponse = await httpClient.PostAsync(endpoint, httpContent, cancellationToken).ConfigureAwait(false);
             httpResponse.EnsureSuccessStatusCode();
 
 #if DEBUG_API
@@ -74,7 +79,12 @@ namespace CosmosNetwork.API
             return await JsonSerializer.DeserializeAsync<TR>(streamResponse, options: this.JsonSerializerOptions, cancellationToken: cancellationToken);
         }
 
-        protected async Task<(TR? ResponseOK, TErr? ResponseError)> Post<TP, TR, TErr>(string endpoint, TP request, CancellationToken cancellationToken = default)
+        protected Task<(TR? ResponseOK, TErr? ResponseError)> Post<TP, TR, TErr>(string endpoint, TP request, CancellationToken cancellationToken = default)
+        {
+            return Post<TP, TR, TErr>(PrepareEndpoint(endpoint), request, cancellationToken);
+        }
+         
+        protected async Task<(TR? ResponseOK, TErr? ResponseError)> Post<TP, TR, TErr>(Uri endpoint, TP request, CancellationToken cancellationToken = default)
         {
             string serializedRequest = JsonSerializer.Serialize(request, options: this.JsonSerializerOptions);
             using StringContent httpContent = new(serializedRequest, Encoding.UTF8, "application/json");
@@ -84,7 +94,7 @@ namespace CosmosNetwork.API
 #endif
 
             HttpClient httpClient = GetHttpClient();
-            using HttpResponseMessage httpResponse = await httpClient.PostAsync(PrepareEndpoint(endpoint), httpContent, cancellationToken).ConfigureAwait(false);
+            using HttpResponseMessage httpResponse = await httpClient.PostAsync(endpoint, httpContent, cancellationToken).ConfigureAwait(false);
 
 #if DEBUG_API
             string stringResponse = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
@@ -114,9 +124,9 @@ namespace CosmosNetwork.API
             }
         }
 
-        private static string PrepareEndpoint(string endpoint)
+        private static Uri PrepareEndpoint(string endpoint)
         {
-            return endpoint.StartsWith('/') ? endpoint[1..] : endpoint;
+            return new Uri(endpoint.StartsWith('/') ? endpoint[1..] : endpoint, UriKind.Relative);
         }
 
         private HttpClient GetHttpClient()
