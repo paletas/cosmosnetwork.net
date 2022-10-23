@@ -1,5 +1,4 @@
 using ProtoBuf;
-using System.Diagnostics;
 
 namespace CosmosNetwork.Tendermint.Types.Serialization.Crypto
 {
@@ -10,22 +9,22 @@ namespace CosmosNetwork.Tendermint.Types.Serialization.Crypto
 
         public string TypeUrl => "/tendermint.crypto.PublicKey";
 
-        public PublicKeyDiscriminator Discriminator => (PublicKeyDiscriminator)_discriminatedObject.Discriminator;
+        public PublicKeyDiscriminator Discriminator => (PublicKeyDiscriminator)this._discriminatedObject.Discriminator;
 
         [ProtoMember(2, Name = "ed25519")]
         public byte[]? Ed25519
         {
-            get => Discriminator == PublicKeyDiscriminator.Ed25519 ? _discriminatedObject.Object as byte[] : null;
+            get => this.Discriminator == PublicKeyDiscriminator.Ed25519 ? this._discriminatedObject.Object as byte[] : null;
 
-            set => _discriminatedObject = new DiscriminatedUnionObject((int)PublicKeyDiscriminator.Ed25519, value);
+            set => this._discriminatedObject = new DiscriminatedUnionObject((int)PublicKeyDiscriminator.Ed25519, value);
         }
 
         [ProtoMember(3, Name = "secp256k1")]
         public byte[]? Secp256k1
         {
-            get => Discriminator == PublicKeyDiscriminator.Secp256k1 ? _discriminatedObject.Object as byte[] : null;
+            get => this.Discriminator == PublicKeyDiscriminator.Secp256k1 ? this._discriminatedObject.Object as byte[] : null;
 
-            set => _discriminatedObject = new DiscriminatedUnionObject((int)PublicKeyDiscriminator.Secp256k1, value);
+            set => this._discriminatedObject = new DiscriminatedUnionObject((int)PublicKeyDiscriminator.Secp256k1, value);
         }
 
         public Types.Crypto.PublicKey ToModel()

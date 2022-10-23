@@ -4,17 +4,17 @@
     {
         public string GetBase64()
         {
-            return Convert.ToBase64String(Payload);
+            return Convert.ToBase64String(this.Payload);
         }
 
         public byte[] GetBytes()
         {
-            return Payload;
+            return this.Payload;
         }
 
         public CosmosNetwork.SerializedTransaction ToModel()
         {
-            return new CosmosNetwork.SerializedTransaction(Payload, Fees?.ToModel());
+            return new CosmosNetwork.SerializedTransaction(this.Payload, this.Fees?.ToModel());
         }
     }
 }

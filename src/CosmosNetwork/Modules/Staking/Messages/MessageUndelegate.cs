@@ -8,9 +8,9 @@
         protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.MessageUndelegate(
-                Delegator.Address,
-                Validator.Address,
-                Amount.ToSerialization());
+                this.Delegator.Address,
+                this.Validator.Address,
+                this.Amount.ToSerialization());
         }
     }
 }

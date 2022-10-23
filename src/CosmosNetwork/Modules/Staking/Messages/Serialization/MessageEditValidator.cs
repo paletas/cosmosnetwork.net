@@ -14,14 +14,14 @@ namespace CosmosNetwork.Modules.Staking.Messages.Serialization
         protected internal override Message ToModel()
         {
             return new Staking.Messages.MessageEditValidator(
-                ValidatorAddress, MinimumSelfDelegation,
+                this.ValidatorAddress, this.MinimumSelfDelegation,
                 new Staking.ValidatorDescription(
-                    Description.Moniker,
-                    Description.Identity,
-                    Description.Details,
-                    Description.Website,
-                    Description.SecurityContact),
-                ComissionRate
+                    this.Description.Moniker,
+                    this.Description.Identity,
+                    this.Description.Details,
+                    this.Description.Website,
+                    this.Description.SecurityContact),
+                this.ComissionRate
             );
         }
     }

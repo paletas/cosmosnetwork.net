@@ -1,7 +1,4 @@
-﻿using CosmosNetwork.Modules.Gov.Serialization.Proposals;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace CosmosNetwork.Modules.Slashing
+﻿namespace CosmosNetwork.Modules.Slashing
 {
     public class SlashingModule : ICosmosMessageModule
     {

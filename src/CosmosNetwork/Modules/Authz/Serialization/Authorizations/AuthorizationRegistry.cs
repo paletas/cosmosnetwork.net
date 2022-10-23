@@ -14,15 +14,15 @@
         public void Register<T>(string typeName)
             where T : IAuthorization
         {
-            if (_proposalRegistry.ContainsKey(typeName) == false)
+            if (this._proposalRegistry.ContainsKey(typeName) == false)
             {
-                _proposalRegistry.Add(typeName, typeof(T));
+                this._proposalRegistry.Add(typeName, typeof(T));
             }
         }
 
         public Type GetProposalByTypeName(string typeName)
         {
-            return _proposalRegistry.ContainsKey(typeName) ? _proposalRegistry[typeName] : typeof(GenericAuthorization);
+            return this._proposalRegistry.ContainsKey(typeName) ? this._proposalRegistry[typeName] : typeof(GenericAuthorization);
         }
     }
 }

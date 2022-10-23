@@ -9,7 +9,7 @@ namespace CosmosNetwork.Serialization.Json.Converters
 
         public MessagesConverter(CosmosMessageRegistry messageRegistry)
         {
-            _messageRegistry = messageRegistry;
+            this._messageRegistry = messageRegistry;
         }
 
         public override SerializerMessage[]? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -25,7 +25,7 @@ namespace CosmosNetwork.Serialization.Json.Converters
             }
 
             JsonSerializerOptions serializerOptions = new(options);
-            serializerOptions.Converters.Add(new MessageConverter(_messageRegistry));
+            serializerOptions.Converters.Add(new MessageConverter(this._messageRegistry));
 
             List<SerializerMessage> messages = new();
             do
@@ -54,7 +54,7 @@ namespace CosmosNetwork.Serialization.Json.Converters
 
             public MessageConverter(CosmosMessageRegistry messageRegistry)
             {
-                _messageRegistry = messageRegistry;
+                this._messageRegistry = messageRegistry;
             }
 
             public override SerializerMessage Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -103,7 +103,7 @@ namespace CosmosNetwork.Serialization.Json.Converters
                     }
                 }
 
-                Type messageType = _messageRegistry.GetSerializerMessageType(typeDiscriminator) ??
+                Type messageType = this._messageRegistry.GetSerializerMessageType(typeDiscriminator) ??
                     throw new JsonException($"message type {typeDiscriminator} not known");
 
                 SerializerMessage baseClass = (SerializerMessage?)JsonSerializer.Deserialize(ref reader, messageType, options) ?? throw new JsonException();
@@ -123,7 +123,7 @@ namespace CosmosNetwork.Serialization.Json.Converters
             {
                 writer.WriteStartObject();
 
-                writer.WriteString("type", _messageRegistry.GetSerializerMessageTypeName(value.GetType()));
+                writer.WriteString("type", this._messageRegistry.GetSerializerMessageTypeName(value.GetType()));
                 writer.WritePropertyName("value");
                 JsonSerializer.Serialize(writer, value, options);
 

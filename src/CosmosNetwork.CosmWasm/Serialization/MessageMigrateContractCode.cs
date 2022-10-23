@@ -14,12 +14,12 @@ namespace CosmosNetwork.CosmWasm.Serialization
     {
         protected override Message ToModel()
         {
-            string migrateMessageJson = JsonSerializer.Serialize(MigrateMsg);
+            string migrateMessageJson = JsonSerializer.Serialize(this.MigrateMsg);
 
             return new CosmWasm.MessageMigrateContractCode(
-                SenderAddress,
-                ContractAddress,
-                CodeId,
+                this.SenderAddress,
+                this.ContractAddress,
+                this.CodeId,
                 migrateMessageJson);
         }
     }

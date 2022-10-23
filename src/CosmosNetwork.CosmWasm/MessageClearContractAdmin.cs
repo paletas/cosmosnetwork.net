@@ -11,7 +11,7 @@ namespace CosmosNetwork.CosmWasm
 
         protected override SerializerMessage ToSerialization()
         {
-            return new Serialization.MessageClearContractAdmin(Admin, Contract);
+            return new Serialization.MessageClearContractAdmin(this.Admin, this.Contract);
         }
     }
 }

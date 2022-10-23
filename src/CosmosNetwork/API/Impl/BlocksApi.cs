@@ -5,7 +5,10 @@ namespace CosmosNetwork.API.Impl
 {
     internal class BlocksApi : CosmosApiModule, IBlocksApi
     {
-        public BlocksApi(CosmosApiOptions options, HttpClient httpClient, ILogger<CosmosApiModule> logger) : base(options, httpClient, logger)
+        public BlocksApi(
+            CosmosApiOptions options, 
+            IHttpClientFactory httpClientFactory, 
+            ILogger<CosmosApiModule> logger) : base(options, httpClientFactory, logger)
         { }
 
         public async Task<Block?> GetBlock(ulong height, CancellationToken cancellationToken = default)

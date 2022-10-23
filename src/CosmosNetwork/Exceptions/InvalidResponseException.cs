@@ -4,7 +4,7 @@
     {
         public InvalidResponseException(string rawResponse)
         {
-            RawResponse = rawResponse;
+            this.RawResponse = rawResponse;
         }
 
         public string RawResponse { get; }

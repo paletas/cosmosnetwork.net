@@ -13,9 +13,9 @@ namespace CosmosNetwork.Modules.Bank.Serialization
         protected internal override Message ToModel()
         {
             return new Bank.MessageSend(
-                FromAddress,
-                ToAddress,
-                Coins.Select(c => c.ToModel()).ToArray());
+                this.FromAddress,
+                this.ToAddress,
+                this.Coins.Select(c => c.ToModel()).ToArray());
         }
     }
 }

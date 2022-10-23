@@ -13,7 +13,7 @@ namespace CosmosNetwork.Modules.Bank.Serialization.Authz
         {
             return new Bank.Authz.SendAuthorization
             {
-                SpendLimit = SpendLimit.Select(amt => amt.ToModel()).ToArray()
+                SpendLimit = this.SpendLimit.Select(amt => amt.ToModel()).ToArray()
             };
         }
     }

@@ -7,40 +7,34 @@ namespace CosmosNetwork
 {
     public class CosmosApiOptions
     {
-        public CosmosApiOptions(int? throttlingEnumeratorsInSeconds = default, ulong? startingBlockHeightForTransactionSearch = default)
+        public CosmosApiOptions(string? httpClientName = null, ulong? minimumAvailableBlockHeight = default)
         {
-            if (throttlingEnumeratorsInSeconds != default)
+            if (minimumAvailableBlockHeight.HasValue)
             {
-                ThrottlingEnumeratorsInMilliseconds = throttlingEnumeratorsInSeconds;
+                this.MinimumAvailableBlockHeight = minimumAvailableBlockHeight.Value;
             }
 
-            if (startingBlockHeightForTransactionSearch.HasValue)
-            {
-                StartingBlockHeightForTransactionSearch = startingBlockHeightForTransactionSearch.Value;
-            }
+            this.HttpClientName = httpClientName;
         }
+
+        public string? HttpClientName { get; }
+
+        internal NetworkOptions? Network { get; set; }
 
         internal CosmosMessageRegistry? MessageRegistry { get; set; }
 
-        public int? ThrottlingEnumeratorsInMilliseconds { get; set; } = 1000;
-
-        public ulong StartingBlockHeightForTransactionSearch { get; set; } = 1;
+        public ulong MinimumAvailableBlockHeight { get; set; } = 1;
 
         public CoinDecimal[]? GasPrices { get; set; } = null;
 
         public decimal GasAdjustment { get; set; } = 1.75M;
 
-        public string[]? DefaultDenoms { get; set; } = new[] { "uatom" };
-
         private JsonSerializerOptions? _jsonSerializerOptions;
-        public JsonSerializerOptions JsonSerializerOptions
-        {
-            get { return _jsonSerializerOptions ?? (_jsonSerializerOptions = CreateSerializerOptions()); }
-        }
+        public JsonSerializerOptions JsonSerializerOptions => this._jsonSerializerOptions ??= CreateSerializerOptions();
 
         private JsonSerializerOptions CreateSerializerOptions()
         {
-            var options = new JsonSerializerOptions
+            JsonSerializerOptions options = new()
             {
                 PropertyNameCaseInsensitive = true,
                 NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString,

@@ -15,10 +15,10 @@ namespace CosmosNetwork.CosmWasm
         protected override SerializerMessage ToSerialization()
         {
             return new Serialization.MessageExecuteContract(
-                Coins.Select(coin => coin.ToSerialization()).ToArray(),
-                Sender.Address,
-                Contract.Address,
-                JsonDocument.Parse(ExecuteMessage));
+                this.Coins.Select(coin => coin.ToSerialization()).ToArray(),
+                this.Sender.Address,
+                this.Contract.Address,
+                JsonDocument.Parse(this.ExecuteMessage));
         }
     }
 }

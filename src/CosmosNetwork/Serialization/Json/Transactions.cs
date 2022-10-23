@@ -9,26 +9,26 @@ namespace CosmosNetwork.Serialization.Json
         {
             return new CosmosNetwork.BlockTransaction(
                 new CosmosNetwork.Transaction(
-                    Transaction.Body.Messages.Select(msg => msg.ToModel()).ToArray(),
-                    Transaction.Body.Memo,
-                    Transaction.Body.TimeoutHeight,
-                    Transaction.AuthInfo.Fee.ToModel(),
-                    Transaction.AuthInfo.Signers.Select((sig, ix) => 
+                    this.Transaction.Body.Messages.Select(msg => msg.ToModel()).ToArray(),
+                    this.Transaction.Body.Memo,
+                    this.Transaction.Body.TimeoutHeight,
+                    this.Transaction.AuthInfo.Fee.ToModel(),
+                    this.Transaction.AuthInfo.Signers.Select((sig, ix) =>
                         new CosmosNetwork.TransactionSigner(
-                            sig.PublicKey.ToModel(), 
-                            new CosmosNetwork.SignatureDescriptor(SignerModeEnum.Direct, Transaction.Signatures[ix]), 
+                            sig.PublicKey.ToModel(),
+                            new CosmosNetwork.SignatureDescriptor(SignerModeEnum.Direct, this.Transaction.Signatures[ix]),
                             sig.Sequence
                         )
                     ).ToArray()
                 ),
-                Response.Height,
-                Response.TransactionHash,
-                Response.GasUsed,
-                Response.GasWanted,
-                Response.Timestamp,
-                Response.RawLog,
-                Response.Logs.Select(log => log.ToModel()).ToArray(),
-                Response.GetExecutionStatus()
+                this.Response.Height,
+                this.Response.TransactionHash,
+                this.Response.GasUsed,
+                this.Response.GasWanted,
+                this.Response.Timestamp,
+                this.Response.RawLog,
+                this.Response.Logs.Select(log => log.ToModel()).ToArray(),
+                this.Response.GetExecutionStatus()
             );
         }
     }
@@ -41,7 +41,7 @@ namespace CosmosNetwork.Serialization.Json
     {
         internal CosmosNetwork.Fee ToModel()
         {
-            return new CosmosNetwork.Fee(Gas, Amount.Select(amnt => amnt.ToModel()).ToArray());
+            return new CosmosNetwork.Fee(this.Gas, this.Amount.Select(amnt => amnt.ToModel()).ToArray());
         }
     }
 
@@ -55,7 +55,7 @@ namespace CosmosNetwork.Serialization.Json
     {
         public CosmosNetwork.TransactionEventAttribute ToModel()
         {
-            return new CosmosNetwork.TransactionEventAttribute(Key, Value);
+            return new CosmosNetwork.TransactionEventAttribute(this.Key, this.Value);
         }
     }
 
@@ -63,7 +63,7 @@ namespace CosmosNetwork.Serialization.Json
     {
         public CosmosNetwork.TransactionEvent ToModel()
         {
-            return new CosmosNetwork.TransactionEvent(Type, Attributes.Select(attr => attr.ToModel()).ToArray());
+            return new CosmosNetwork.TransactionEvent(this.Type, this.Attributes.Select(attr => attr.ToModel()).ToArray());
         }
     }
 
@@ -71,7 +71,7 @@ namespace CosmosNetwork.Serialization.Json
     {
         public CosmosNetwork.TransactionLog ToModel()
         {
-            return new CosmosNetwork.TransactionLog(MessageIndex, Log?.ToString(), Events.Select(evt => evt.ToModel()).ToArray());
+            return new CosmosNetwork.TransactionLog(this.MessageIndex, this.Log?.ToString(), this.Events.Select(evt => evt.ToModel()).ToArray());
         }
     }
 
@@ -79,12 +79,12 @@ namespace CosmosNetwork.Serialization.Json
     {
         internal ExecutionResult ToModel()
         {
-            return new ExecutionResult(Data, Info, Logs.Select(log => log.ToModel()).ToArray(), Events.Select(evt => evt.ToModel()).ToArray());
+            return new ExecutionResult(this.Data, this.Info, this.Logs.Select(log => log.ToModel()).ToArray(), this.Events.Select(evt => evt.ToModel()).ToArray());
         }
 
         internal TransactionExecutionStatus GetExecutionStatus()
         {
-            return Code switch
+            return this.Code switch
             {
                 0 => TransactionExecutionStatus.Executed,
                 _ => TransactionExecutionStatus.Failed,

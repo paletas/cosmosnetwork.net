@@ -12,8 +12,8 @@ namespace CosmosNetwork.Ibc.Applications.Fees
         protected override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.Applications.Fees.MessagePayPacketFeeAsync(
-                PacketId.ToSerialization(),
-                PacketFee.ToSerialization());
+                this.PacketId.ToSerialization(),
+                this.PacketFee.ToSerialization());
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿namespace CosmosNetwork
 {
-    public record TerraOptions(string ChainId) : NetworkOptions(ChainId, TerraOptions._CoinType, TerraOptions._AddressPrefix)
+    public record TerraOptions(string ChainId) : NetworkOptions(ChainId, COIN_TYPE, ADDRESS_PREFIX, new[] { DENOM } )
     {
-        private const string _CoinType = "330";
-        private const string _AddressPrefix = "terra";
+        public const string COIN_TYPE = "330";
+        public const string ADDRESS_PREFIX = "terra";
+        public const string DENOM = "uluna";
     }
 }

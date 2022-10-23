@@ -12,7 +12,7 @@ namespace CosmosNetwork.Modules.Authz
 
         protected internal override SerializerMessage ToSerialization()
         {
-            return new Serialization.MessageGrant(Granter.Address, Grantee.Address, Grant.ToSerialization());
+            return new Serialization.MessageGrant(this.Granter.Address, this.Grantee.Address, this.Grant.ToSerialization());
         }
     }
 }

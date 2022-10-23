@@ -24,7 +24,7 @@ namespace CosmosNetwork.Modules.Gov
             messageRegistry.RegisterMessage<MessageVote, Serialization.MessageVote>();
             messageRegistry.RegisterMessage<MessageVoteWeighted, Serialization.MessageVoteWeighted>();
 
-            _services.AddSingleton(this.ProposalsRegistry);
+            _ = this._services.AddSingleton(this.ProposalsRegistry);
             cosmosOptions.JsonSerializerOptions.Converters.Add(new ProposalConverter(this.ProposalsRegistry));
 
             this.ProposalsRegistry.Register<TextProposal>(TextProposal.ProposalType);

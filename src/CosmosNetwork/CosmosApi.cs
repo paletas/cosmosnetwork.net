@@ -1,5 +1,4 @@
 ﻿using CosmosNetwork.API;
-using CosmosNetwork.API.Impl;
 using CosmosNetwork.Modules.Staking;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
@@ -12,10 +11,10 @@ namespace CosmosNetwork
     {
         public CosmosApi(IServiceProvider serviceProvider)
         {
-            Blocks = serviceProvider.GetRequiredService<IBlocksApi>();
-            Transactions = serviceProvider.GetRequiredService<ITransactionsApi>();
-            Wallet = serviceProvider.GetRequiredService<IWalletApi>();
-            Staking = serviceProvider.GetRequiredService<IStakingApi>();
+            this.Blocks = serviceProvider.GetRequiredService<IBlocksApi>();
+            this.Transactions = serviceProvider.GetRequiredService<ITransactionsApi>();
+            this.Wallet = serviceProvider.GetRequiredService<IWalletApi>();
+            this.Staking = serviceProvider.GetRequiredService<IStakingApi>();
         }
 
         public IBlocksApi Blocks { get; init; }

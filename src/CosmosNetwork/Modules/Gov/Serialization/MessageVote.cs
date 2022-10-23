@@ -14,7 +14,7 @@ namespace CosmosNetwork.Modules.Gov.Serialization
 
         protected internal override Message ToModel()
         {
-            return new Gov.MessageVote(ProposalId, VoterAddress, (Gov.VoteOptionEnum)Option);
+            return new Gov.MessageVote(this.ProposalId, this.VoterAddress, (Gov.VoteOptionEnum)this.Option);
         }
     }
 

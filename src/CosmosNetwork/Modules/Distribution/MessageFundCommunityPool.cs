@@ -10,8 +10,8 @@
         protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.MessageFundCommunityPool(
-                Depositor.Address,
-                Coins.Select(coin => coin.ToSerialization()).ToArray());
+                this.Depositor.Address,
+                this.Coins.Select(coin => coin.ToSerialization()).ToArray());
         }
     }
 }

@@ -11,9 +11,9 @@ namespace CosmosNetwork.CosmWasm
         protected override SerializerMessage ToSerialization()
         {
             return new Serialization.MessageUpdateContractAdmin(
-                Admin.Address,
-                NewAdmin.Address,
-                Contract.Address);
+                this.Admin.Address,
+                this.NewAdmin.Address,
+                this.Contract.Address);
         }
     }
 }

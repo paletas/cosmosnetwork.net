@@ -1,6 +1,4 @@
-﻿using CosmosNetwork.Keys;
-
-namespace CosmosNetwork
+﻿namespace CosmosNetwork
 {
     public interface IWallet
     {

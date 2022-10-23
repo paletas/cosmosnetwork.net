@@ -8,7 +8,7 @@
 
         public Gov.Proposals.IProposal ToModel()
         {
-            return new Gov.Proposals.TextProposal(Title, Description);
+            return new Gov.Proposals.TextProposal(this.Title, this.Description);
         }
     }
 }

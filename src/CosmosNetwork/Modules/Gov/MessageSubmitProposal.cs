@@ -10,10 +10,10 @@ namespace CosmosNetwork.Modules.Gov
         protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.MessageSubmitProposal(
-                Proposer.Address,
-                InitialDeposit.Select(coin => coin.ToSerialization()).ToArray())
+                this.Proposer.Address,
+                this.InitialDeposit.Select(coin => coin.ToSerialization()).ToArray())
             {
-                Content = Proposal.ToSerialization()
+                Content = this.Proposal.ToSerialization()
             };
         }
     }

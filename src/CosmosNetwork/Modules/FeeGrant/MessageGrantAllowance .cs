@@ -14,10 +14,10 @@ namespace CosmosNetwork.Modules.FeeGrant
         protected internal override SerializerMessage ToSerialization()
         {
             return new Serialization.MessageGrantAllowance(
-                Granter.Address,
-                Grantee.Address)
+                this.Granter.Address,
+                this.Grantee.Address)
             {
-                Allowance = Allowance.ToSerialization()
+                Allowance = this.Allowance.ToSerialization()
             };
         }
     }

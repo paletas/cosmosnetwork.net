@@ -4,14 +4,14 @@
     {
         public GenericAuthorization(string messageType)
         {
-            MessageType = messageType;
+            this.MessageType = messageType;
         }
 
         public string MessageType { get; set; }
 
         public Serialization.Authorizations.IAuthorization ToSerialization()
         {
-            return new Authz.Serialization.Authorizations.GenericAuthorization(MessageType);
+            return new Serialization.Authorizations.GenericAuthorization(this.MessageType);
         }
     }
 }

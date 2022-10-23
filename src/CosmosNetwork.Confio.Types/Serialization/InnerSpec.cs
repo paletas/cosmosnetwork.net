@@ -14,12 +14,12 @@ namespace CosmosNetwork.Confio.Types.Serialization
         public Types.InnerSpec ToModel()
         {
             return new Types.InnerSpec(
-                ChildOrder,
-                ChildSize,
-                MinPrefixLength,
-                MaxPrefixLength,
-                EmptyChild,
-                (Types.HashOperationEnum)Hash);
+                this.ChildOrder,
+                this.ChildSize,
+                this.MinPrefixLength,
+                this.MaxPrefixLength,
+                this.EmptyChild,
+                (Types.HashOperationEnum)this.Hash);
         }
     }
 }

@@ -8,8 +8,8 @@
 
         protected void SetKeys(byte[] privateKey, PublicKey publicKey)
         {
-            PrivateKey = privateKey;
-            PublicKey = publicKey;
+            this.PrivateKey = privateKey;
+            this.PublicKey = publicKey;
         }
 
         public abstract Task<byte[]> SignPayload(byte[] payload, CancellationToken cancellationToken = default);

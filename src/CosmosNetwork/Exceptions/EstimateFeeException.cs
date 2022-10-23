@@ -4,7 +4,7 @@
     {
         public EstimateFeeException(uint errorCode, string? message) : base(message)
         {
-            ErrorCode = errorCode;
+            this.ErrorCode = errorCode;
         }
 
         public uint ErrorCode { get; }

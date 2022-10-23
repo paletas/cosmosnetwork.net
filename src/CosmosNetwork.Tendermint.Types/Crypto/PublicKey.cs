@@ -14,15 +14,12 @@ namespace CosmosNetwork.Tendermint.Types.Crypto
 
         public Serialization.Crypto.PublicKey ToSerialization()
         {
-            switch (this.Type)
+            return this.Type switch
             {
-                case PublicKeyEnum.Ed25519:
-                    return new Serialization.Crypto.PublicKey { Ed25519 = this.Data };
-                case PublicKeyEnum.Secp256k1:
-                    return new Serialization.Crypto.PublicKey { Secp256k1 = this.Data };
-                default:
-                    throw new NotSupportedException();
-            }
+                PublicKeyEnum.Ed25519 => new Serialization.Crypto.PublicKey { Ed25519 = this.Data },
+                PublicKeyEnum.Secp256k1 => new Serialization.Crypto.PublicKey { Secp256k1 = this.Data },
+                _ => throw new NotSupportedException(),
+            };
         }
     }
 

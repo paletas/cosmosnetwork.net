@@ -8,9 +8,9 @@
         protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.MessageVote(
-                ProposalId,
-                Voter.Address,
-                (Serialization.VoteOptionEnum)Option);
+                this.ProposalId,
+                this.Voter.Address,
+                (Serialization.VoteOptionEnum)this.Option);
         }
     }
 

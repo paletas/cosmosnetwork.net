@@ -15,9 +15,9 @@ namespace CosmosNetwork.Modules.Gov.Serialization
         protected internal override Message ToModel()
         {
             return new Gov.MessageDeposit(
-                ProposalId,
-                DepositorAddress,
-                Amount.Select(c => c.ToModel()).ToArray());
+                this.ProposalId,
+                this.DepositorAddress,
+                this.Amount.Select(c => c.ToModel()).ToArray());
         }
     }
 }

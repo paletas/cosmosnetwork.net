@@ -1,5 +1,4 @@
 ﻿using CosmosNetwork.Modules.Authz.Serialization.Authorizations;
-using CosmosNetwork.Modules.FeeGrant.Serialization.Allowances;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -11,7 +10,7 @@ namespace CosmosNetwork.Modules.FeeGrant.Serialization.Allowances.Json
 
         public AllowancesConverter(AuthorizationRegistry registry)
         {
-            _registry = registry;
+            this._registry = registry;
         }
 
         public override IAllowance[]? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -27,7 +26,7 @@ namespace CosmosNetwork.Modules.FeeGrant.Serialization.Allowances.Json
             }
 
             JsonSerializerOptions serializerOptions = new(options);
-            serializerOptions.Converters.Add(new AllowanceConverter(_registry));
+            serializerOptions.Converters.Add(new AllowanceConverter(this._registry));
 
             List<IAllowance> allowances = new();
             do
@@ -57,7 +56,7 @@ namespace CosmosNetwork.Modules.FeeGrant.Serialization.Allowances.Json
 
         public AllowanceConverter(AuthorizationRegistry registry)
         {
-            _registry = registry;
+            this._registry = registry;
         }
 
         public override IAllowance? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -85,7 +84,7 @@ namespace CosmosNetwork.Modules.FeeGrant.Serialization.Allowances.Json
                 throw new JsonException();
             }
 
-            Type proposalType = _registry.GetProposalByTypeName(type);
+            Type proposalType = this._registry.GetProposalByTypeName(type);
             return (IAllowance?)JsonSerializer.Deserialize(ref reader, proposalType, options);
         }
 

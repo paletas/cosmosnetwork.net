@@ -10,11 +10,11 @@
         internal Serialization.LeafOp ToSerialization()
         {
             return new Serialization.LeafOp(
-                (Serialization.HashOperationEnum)Hash,
-                (Serialization.HashOperationEnum)PreHashKey,
-                (Serialization.HashOperationEnum)PreHashValue,
-                (Serialization.LengthOperationEnum)Length,
-                Prefix);
+                (Serialization.HashOperationEnum)this.Hash,
+                (Serialization.HashOperationEnum)this.PreHashKey,
+                (Serialization.HashOperationEnum)this.PreHashValue,
+                (Serialization.LengthOperationEnum)this.Length,
+                this.Prefix);
         }
     }
 }

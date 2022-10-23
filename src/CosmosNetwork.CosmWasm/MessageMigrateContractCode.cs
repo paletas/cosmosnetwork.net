@@ -15,10 +15,10 @@ namespace CosmosNetwork.CosmWasm
         protected override SerializerMessage ToSerialization()
         {
             return new Serialization.MessageMigrateContractCode(
-                Admin.Address,
-                Contract.Address,
-                NewCodeId,
-                JsonDocument.Parse(MigrateMessage));
+                this.Admin.Address,
+                this.Contract.Address,
+                this.NewCodeId,
+                JsonDocument.Parse(this.MigrateMessage));
         }
     }
 }

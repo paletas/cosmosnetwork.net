@@ -1,5 +1,4 @@
-﻿using CosmosNetwork.Serialization.Json.Converters;
-using CosmosNetwork.Serialization.Proto;
+﻿using CosmosNetwork.Serialization.Proto;
 using ProtoBuf;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
@@ -23,8 +22,8 @@ namespace CosmosNetwork.Serialization
         [ProtoMember(1, Name = "public_key")]
         public Any? PublicKeyPacked
         {
-            get => this.PublicKey is null ? null : Any.Pack(PublicKey);
-            set => PublicKey = value?.Unpack<Proto.SimplePublicKey>();
+            get => this.PublicKey is null ? null : Any.Pack(this.PublicKey);
+            set => this.PublicKey = value?.Unpack<Proto.SimplePublicKey>();
         }
     }
 
@@ -34,22 +33,22 @@ namespace CosmosNetwork.Serialization
         private ProtoBuf.DiscriminatedUnionObject _discriminatedObject = new();
 
         [ProtoIgnore]
-        public ModeInfoDiscriminatorEnum Discriminator => (ModeInfoDiscriminatorEnum)_discriminatedObject.Discriminator;
+        public ModeInfoDiscriminatorEnum Discriminator => (ModeInfoDiscriminatorEnum)this._discriminatedObject.Discriminator;
 
         [ProtoMember(1, Name = "single")]
         public SingleMode? Single
         {
-            get => Discriminator == ModeInfoDiscriminatorEnum.Single ? _discriminatedObject.Object as SingleMode : null;
+            get => this.Discriminator == ModeInfoDiscriminatorEnum.Single ? this._discriminatedObject.Object as SingleMode : null;
 
-            set => _discriminatedObject = new DiscriminatedUnionObject((int)ModeInfoDiscriminatorEnum.Single, value);
+            set => this._discriminatedObject = new DiscriminatedUnionObject((int)ModeInfoDiscriminatorEnum.Single, value);
         }
 
         [ProtoMember(2, Name = "multi")]
         public MultiMode? Multi
         {
-            get => Discriminator == ModeInfoDiscriminatorEnum.Multi ? _discriminatedObject.Object as MultiMode : null;
+            get => this.Discriminator == ModeInfoDiscriminatorEnum.Multi ? this._discriminatedObject.Object as MultiMode : null;
 
-            set => _discriminatedObject = new DiscriminatedUnionObject((int)ModeInfoDiscriminatorEnum.Multi, value);
+            set => this._discriminatedObject = new DiscriminatedUnionObject((int)ModeInfoDiscriminatorEnum.Multi, value);
         }
     }
 
@@ -72,7 +71,7 @@ namespace CosmosNetwork.Serialization
     [ProtoContract]
     internal enum SignModeEnum
     {
-        [EnumMember(Value = "SIGN_MODE_UNSPECIFIED")] 
+        [EnumMember(Value = "SIGN_MODE_UNSPECIFIED")]
         [ProtoEnum(Name = "SIGN_MODE_UNSPECIFIED")]
         Unspecified = 0,
 

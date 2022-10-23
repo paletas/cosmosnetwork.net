@@ -14,7 +14,7 @@ namespace CosmosNetwork.Modules.Bank.Authz
         {
             return new Serialization.Authz.SendAuthorization
             {
-                SpendLimit = SpendLimit.Select(c => c.ToSerialization()).ToArray()
+                SpendLimit = this.SpendLimit.Select(c => c.ToSerialization()).ToArray()
             };
         }
     }

@@ -13,11 +13,11 @@
         protected override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.Applications.Fees.MessagePayPacketFee(
-                Fee.ToSerialization(),
-                SourcePortId,
-                SourceChannelId,
-                Signer,
-                Relayers);
+                this.Fee.ToSerialization(),
+                this.SourcePortId,
+                this.SourceChannelId,
+                this.Signer,
+                this.Relayers);
         }
     }
 }

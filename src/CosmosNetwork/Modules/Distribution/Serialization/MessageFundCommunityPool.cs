@@ -12,8 +12,8 @@ namespace CosmosNetwork.Modules.Distribution.Serialization
         protected internal override Message ToModel()
         {
             return new Distribution.MessageFundCommunityPool(
-                DepositorAddress,
-                Amount.Select(amt => amt.ToModel()).ToArray());
+                this.DepositorAddress,
+                this.Amount.Select(amt => amt.ToModel()).ToArray());
         }
     }
 }

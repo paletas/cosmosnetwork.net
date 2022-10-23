@@ -1,6 +1,4 @@
-﻿using CosmosNetwork.Serialization;
-
-namespace CosmosNetwork.Modules.FeeGrant.Allowances
+﻿namespace CosmosNetwork.Modules.FeeGrant.Allowances
 {
     public record BasicAllowance(Coin[] SpendLimit, DateTime? Expiration) : IAllowance
     {
@@ -9,8 +7,8 @@ namespace CosmosNetwork.Modules.FeeGrant.Allowances
         public Serialization.Allowances.IAllowance ToSerialization()
         {
             return new Serialization.Allowances.BasicAllowance(
-                SpendLimit.Select(coin => coin.ToSerialization()).ToArray(),
-                Expiration);
+                this.SpendLimit.Select(coin => coin.ToSerialization()).ToArray(),
+                this.Expiration);
         }
     }
 }

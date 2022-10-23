@@ -17,15 +17,15 @@ namespace CosmosNetwork.Serialization.Json
         public CosmosNetwork.SmartContract ToModel()
         {
             return new CosmosNetwork.SmartContract(
-                ContractAddress,
-                Hash,
-                Information.Name,
-                Information.Description,
-                Information.Memo,
-                Timestamp,
-                OwnerAddress,
-                CodeId,
-                InitializeMessage
+                this.ContractAddress,
+                this.Hash,
+                this.Information.Name,
+                this.Information.Description,
+                this.Information.Memo,
+                this.Timestamp,
+                this.OwnerAddress,
+                this.CodeId,
+                this.InitializeMessage
             );
         }
     };
@@ -41,19 +41,19 @@ namespace CosmosNetwork.Serialization.Json
         public CosmosNetwork.SmartContractCode ToModel()
         {
             Uri? repositoryUrl = null;
-            if (Information.RepositoryUrl != null)
+            if (this.Information.RepositoryUrl != null)
             {
-                repositoryUrl = new Uri(Information.RepositoryUrl);
+                repositoryUrl = new Uri(this.Information.RepositoryUrl);
             }
 
             return new CosmosNetwork.SmartContractCode(
-                CodeId,
-                Hash,
-                Information.Name,
-                Information.Description,
-                Information.Memo,
-                Timestamp,
-                Sender,
+                this.CodeId,
+                this.Hash,
+                this.Information.Name,
+                this.Information.Description,
+                this.Information.Memo,
+                this.Timestamp,
+                this.Sender,
                 repositoryUrl
             );
         }

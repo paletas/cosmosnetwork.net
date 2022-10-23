@@ -4,7 +4,7 @@ namespace CosmosNetwork.CosmWasm
 {
     [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageStoreContractCode(
-        CosmosAddress Sender, 
+        CosmosAddress Sender,
         string WasmByteCode,
         AccessConfig? InstantiatePermission) : Message
     {
@@ -13,7 +13,7 @@ namespace CosmosNetwork.CosmWasm
         protected override SerializerMessage ToSerialization()
         {
             return new Serialization.MessageStoreContractCode(
-                this.Sender.Address, 
+                this.Sender.Address,
                 this.WasmByteCode,
                 this.InstantiatePermission?.ToSerialization());
         }

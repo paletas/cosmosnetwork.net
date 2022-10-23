@@ -12,7 +12,7 @@ namespace CosmosNetwork.Modules.Authz
 
         protected internal override SerializerMessage ToSerialization()
         {
-            return new Serialization.MessageRevoke(Granter.Address, Grantee.Address, MessageTypeUrl);
+            return new Serialization.MessageRevoke(this.Granter.Address, this.Grantee.Address, this.MessageTypeUrl);
         }
     }
 }

@@ -9,8 +9,8 @@
         public FeeGrant.Allowances.IAllowance ToModel()
         {
             return new FeeGrant.Allowances.AllowedMessageAllowance(
-                Allowance.ToModel(),
-                AllowedMessages);
+                this.Allowance.ToModel(),
+                this.AllowedMessages);
         }
     }
 }

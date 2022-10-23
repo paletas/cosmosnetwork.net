@@ -21,13 +21,13 @@ namespace CosmosNetwork.Serialization.Proto
         {
             return new Proto.PublicKey
             {
-                Secp256k1 = Convert.FromBase64String(Value)
+                Secp256k1 = Convert.FromBase64String(this.Value)
             };
         }
 
         public override SignatureKey ToModel()
         {
-            return new Secp256k1Key(Value);
+            return new Secp256k1Key(this.Value);
         }
     }
 
@@ -39,13 +39,13 @@ namespace CosmosNetwork.Serialization.Proto
         {
             return new Proto.PublicKey
             {
-                Ed25519 = Convert.FromBase64String(Value)
+                Ed25519 = Convert.FromBase64String(this.Value)
             };
         }
 
         public override SignatureKey ToModel()
         {
-            return new Ed25519Key(Value);
+            return new Ed25519Key(this.Value);
         }
     }
 
@@ -61,7 +61,7 @@ namespace CosmosNetwork.Serialization.Proto
 
         public override SignatureKey ToModel()
         {
-            return new CosmosNetwork.MultisigKey(Threshold, PublicKeys.Select(pk => pk.ToModel()).ToArray());
+            return new CosmosNetwork.MultisigKey(this.Threshold, this.PublicKeys.Select(pk => pk.ToModel()).ToArray());
         }
     }
 }

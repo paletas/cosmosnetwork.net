@@ -7,7 +7,7 @@
 
         protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
-            return new Serialization.MessageSetWithdrawAddress(Delegator.Address, Withdraw.Address);
+            return new Serialization.MessageSetWithdrawAddress(this.Delegator.Address, this.Withdraw.Address);
         }
     }
 }

@@ -5,8 +5,8 @@
         public Serialization.Proposals.IProposal ToSerialization()
         {
             return new Serialization.Proposals.TextProposal(
-                Title,
-                Description);
+                this.Title,
+                this.Description);
         }
     }
 }

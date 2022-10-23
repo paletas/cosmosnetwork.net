@@ -1,8 +1,6 @@
 ﻿using CosmosNetwork.Ibc.Serialization.Core.Commitment;
-using CosmosNetwork.Ibc.Serialization.Json;
 using ProtoBuf;
 using ProtoBuf.WellKnownTypes;
-using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Ibc.Serialization.LightClients.Tendermint
 {
@@ -21,7 +19,7 @@ namespace CosmosNetwork.Ibc.Serialization.LightClients.Tendermint
             return new Ibc.LightClients.Tendermint.ConsensusState(
                 this.Timestamp,
                 this.Root.ToModel(),
-                this.NextValidatorsHash); 
+                this.NextValidatorsHash);
         }
     }
 }

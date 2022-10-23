@@ -10,7 +10,7 @@ namespace CosmosNetwork.Modules.Authz.Serialization.Json
 
         public AuthorizationsConverter(AuthorizationRegistry registry)
         {
-            _registry = registry;
+            this._registry = registry;
         }
 
         public override Authorizations.IAuthorization[]? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -26,7 +26,7 @@ namespace CosmosNetwork.Modules.Authz.Serialization.Json
             }
 
             JsonSerializerOptions serializerOptions = new(options);
-            serializerOptions.Converters.Add(new AuthorizationConverter(_registry));
+            serializerOptions.Converters.Add(new AuthorizationConverter(this._registry));
 
             List<Authorizations.IAuthorization> authorizations = new();
             do
@@ -56,7 +56,7 @@ namespace CosmosNetwork.Modules.Authz.Serialization.Json
 
         public AuthorizationConverter(AuthorizationRegistry registry)
         {
-            _registry = registry;
+            this._registry = registry;
         }
 
         public override Authorizations.IAuthorization? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -84,7 +84,7 @@ namespace CosmosNetwork.Modules.Authz.Serialization.Json
                 throw new JsonException();
             }
 
-            Type proposalType = _registry.GetProposalByTypeName(type);
+            Type proposalType = this._registry.GetProposalByTypeName(type);
             return (Authorizations.IAuthorization?)JsonSerializer.Deserialize(ref reader, proposalType, options);
         }
 

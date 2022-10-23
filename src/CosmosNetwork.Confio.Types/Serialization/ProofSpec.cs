@@ -9,10 +9,10 @@
         public Types.ProofSpec ToModel()
         {
             return new Types.ProofSpec(
-                LeafSpec.ToModel(),
-                InnerSpec.ToModel(),
-                MaxDepth,
-                MinDepth);
+                this.LeafSpec.ToModel(),
+                this.InnerSpec.ToModel(),
+                this.MaxDepth,
+                this.MinDepth);
         }
     }
 }

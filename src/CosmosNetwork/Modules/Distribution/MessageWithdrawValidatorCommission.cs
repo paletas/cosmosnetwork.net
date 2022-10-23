@@ -7,7 +7,7 @@
 
         protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
-            return new Serialization.MessageWithdrawValidatorCommission(Validator.Address);
+            return new Serialization.MessageWithdrawValidatorCommission(this.Validator.Address);
         }
     }
 }

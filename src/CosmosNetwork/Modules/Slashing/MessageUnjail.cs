@@ -7,7 +7,7 @@
 
         protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
-            return new Serialization.MessageUnjail(Validator.Address);
+            return new Serialization.MessageUnjail(this.Validator.Address);
         }
     }
 }

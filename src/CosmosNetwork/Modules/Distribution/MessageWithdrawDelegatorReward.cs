@@ -9,7 +9,7 @@
 
         protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
-            return new Serialization.MessageWithdrawDelegatorReward(Delegator.Address, Validator.Address);
+            return new Serialization.MessageWithdrawDelegatorReward(this.Delegator.Address, this.Validator.Address);
         }
     }
 }

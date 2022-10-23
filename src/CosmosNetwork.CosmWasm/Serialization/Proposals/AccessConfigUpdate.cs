@@ -1,6 +1,4 @@
-﻿using CosmosNetwork.Modules.Gov.Proposals;
-
-namespace CosmosNetwork.CosmWasm.Serialization.Proposals
+﻿namespace CosmosNetwork.CosmWasm.Serialization.Proposals
 {
     internal record AccessConfigUpdate(
         ulong CodeId,

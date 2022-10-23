@@ -5,23 +5,20 @@ namespace CosmosNetwork
 {
     public class PublicKey
     {
-        private readonly NetworkOptions _networkOptions;
-
-        public PublicKey(NetworkOptions networkOptions, byte[] key)
+        public PublicKey(byte[] key)
         {
-            this._networkOptions = networkOptions;
             this.RawKey = key;
         }
 
-        public PublicKey(NetworkOptions networkOptions, string key)
-            : this(networkOptions, Convert.FromBase64String(key))
+        public PublicKey(string key)
+            : this(Convert.FromBase64String(key))
         { }
 
         public byte[] RawKey { get; }
 
-        public byte[] RawAddress => new RIPEMD160().ComputeHash(SHA256.HashData(RawKey));
+        public byte[] RawAddress => new RIPEMD160().ComputeHash(SHA256.HashData(this.RawKey));
 
-        public string Address => Converter.EncodeBech32(this._networkOptions.AddressPrefix, RawAddress);
+        public string GetAddress(string prefix) => Converter.EncodeBech32(prefix, this.RawAddress);
 
         internal SignatureKey ToSignatureKey()
         {

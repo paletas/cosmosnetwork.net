@@ -8,12 +8,18 @@ namespace CosmosNetwork.Serialization.Json.Converters
     {
         public override Timestamp Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TokenType != JsonTokenType.String) throw new JsonException();
+            if (reader.TokenType != JsonTokenType.String)
+            {
+                throw new JsonException();
+            }
 
-            var value = reader.GetString();
-            if (value is null) throw new JsonException();
+            string? value = reader.GetString();
+            if (value is null)
+            {
+                throw new JsonException();
+            }
 
-            var timestamp = DateTime.Parse(value);
+            DateTime timestamp = DateTime.Parse(value);
             return new Timestamp(timestamp);
         }
 

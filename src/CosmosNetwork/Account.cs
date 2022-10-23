@@ -11,19 +11,19 @@ namespace CosmosNetwork
 
         public AccountBalances(IEnumerable<Coin> balances)
         {
-            _balances = balances;
+            this._balances = balances;
         }
 
         public UInt128? this[string denom] => this.SingleOrDefault(b => b.Denom == denom)?.Amount;
 
         public IEnumerator<Coin> GetEnumerator()
         {
-            return _balances.GetEnumerator();
+            return this._balances.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return _balances.GetEnumerator();
+            return this._balances.GetEnumerator();
         }
     }
 }

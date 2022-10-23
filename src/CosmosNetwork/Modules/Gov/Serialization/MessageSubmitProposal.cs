@@ -1,5 +1,4 @@
 ﻿using CosmosNetwork.Modules.Gov.Serialization.Proposals;
-using CosmosNetwork.Modules.Gov.Serialization.Proposals.Json;
 using CosmosNetwork.Serialization;
 using CosmosNetwork.Serialization.Proto;
 using ProtoBuf;
@@ -20,16 +19,16 @@ namespace CosmosNetwork.Modules.Gov.Serialization
         [JsonIgnore]
         public Any ContentPack
         {
-            get => Any.Pack((IProposalImplementation)Content);
-            set => Content = value.Unpack<IProposalImplementation>() ?? throw new InvalidOperationException();
+            get => Any.Pack((IProposalImplementation)this.Content);
+            set => this.Content = value.Unpack<IProposalImplementation>() ?? throw new InvalidOperationException();
         }
 
         protected internal override Message ToModel()
         {
             return new Gov.MessageSubmitProposal(
-                Content.ToModel(),
-                ProposerAddress,
-                InitialDeposit.Select(c => c.ToModel()).ToArray());
+                this.Content.ToModel(),
+                this.ProposerAddress,
+                this.InitialDeposit.Select(c => c.ToModel()).ToArray());
         }
     }
 }

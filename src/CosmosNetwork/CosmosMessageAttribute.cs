@@ -5,7 +5,7 @@
     {
         public CosmosMessageAttribute(string cosmosType)
         {
-            CosmosType = cosmosType;
+            this.CosmosType = cosmosType;
         }
 
         public string CosmosType { get; set; }

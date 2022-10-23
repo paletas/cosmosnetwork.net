@@ -17,12 +17,12 @@ namespace CosmosNetwork.CosmWasm
         protected override SerializerMessage ToSerialization()
         {
             return new Serialization.MessageInstantiateContract(
-                Sender.Address,
-                Admin?.Address,
-                CodeId,
-                Label,
-                JsonDocument.Parse(InitMessage),
-                InitCoins.Select(coin => coin.ToSerialization()).ToArray());
+                this.Sender.Address,
+                this.Admin?.Address,
+                this.CodeId,
+                this.Label,
+                JsonDocument.Parse(this.InitMessage),
+                this.InitCoins.Select(coin => coin.ToSerialization()).ToArray());
         }
     }
 }

@@ -13,9 +13,9 @@ namespace CosmosNetwork.Modules.Gov.Serialization
         protected internal override Message ToModel()
         {
             return new Gov.MessageVoteWeighted(
-                ProposalId,
-                VoterAddress,
-                Options.Select(opt => opt.ToModel()).ToArray());
+                this.ProposalId,
+                this.VoterAddress,
+                this.Options.Select(opt => opt.ToModel()).ToArray());
         }
     }
 
@@ -27,8 +27,8 @@ namespace CosmosNetwork.Modules.Gov.Serialization
         internal Gov.WeightedVoteOption ToModel()
         {
             return new Gov.WeightedVoteOption(
-                (Gov.VoteOptionEnum)Option,
-                Weight);
+                (Gov.VoteOptionEnum)this.Option,
+                this.Weight);
         }
     }
 }

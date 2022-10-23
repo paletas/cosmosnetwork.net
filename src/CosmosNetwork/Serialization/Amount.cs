@@ -10,11 +10,9 @@ namespace CosmosNetwork.Serialization
     {
         public virtual Coin ToModel()
         {
-            UInt128 amount;
-            if (UInt128.TryParseCStyleNormalizedU128(Amount, out amount) == false)
-                throw new InvalidOperationException($"invalid amount format: {Amount}");
-
-            return new NativeCoin(Denom, amount);
+            return UInt128.TryParseCStyleNormalizedU128(this.Amount, out UInt128 amount) == false
+                ? throw new InvalidOperationException($"invalid amount format: {this.Amount}")
+                : (Coin)new NativeCoin(this.Denom, amount);
         }
     };
 }

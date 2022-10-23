@@ -11,9 +11,9 @@
         protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.MessageSend(
-                From.Address,
-                To.Address,
-                Coins.Select(coin => coin.ToSerialization()).ToArray());
+                this.From.Address,
+                this.To.Address,
+                this.Coins.Select(coin => coin.ToSerialization()).ToArray());
         }
     }
 }

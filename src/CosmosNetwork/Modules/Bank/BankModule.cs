@@ -1,7 +1,5 @@
 ﻿using CosmosNetwork.Modules.Authz;
-using CosmosNetwork.Modules.Authz.Serialization.Authorizations;
 using CosmosNetwork.Modules.Bank.Authz;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace CosmosNetwork.Modules.Bank
 {

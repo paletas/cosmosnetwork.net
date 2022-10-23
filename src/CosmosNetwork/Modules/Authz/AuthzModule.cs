@@ -22,7 +22,7 @@ namespace CosmosNetwork.Modules.Authz
             messageRegistry.RegisterMessage<MessageGrant, Serialization.MessageGrant>();
             messageRegistry.RegisterMessage<MessageRevoke, Serialization.MessageRevoke>();
 
-            _services.AddSingleton(this.AuthorizationsRegistry);
+            _ = this._services.AddSingleton(this.AuthorizationsRegistry);
         }
     }
 }

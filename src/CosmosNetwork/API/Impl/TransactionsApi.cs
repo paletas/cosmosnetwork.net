@@ -10,16 +10,23 @@ namespace CosmosNetwork.API.Impl
     {
         private readonly IBlocksApi _blocksApi;
 
-        public TransactionsApi(CosmosApiOptions options, HttpClient httpClient, ILogger<TransactionsApi> logger, IBlocksApi blocksApi) : base(options, httpClient, logger)
+        public TransactionsApi(
+            CosmosApiOptions options, 
+            IHttpClientFactory httpClientFactory, 
+            ILogger<TransactionsApi> logger, 
+            IBlocksApi blocksApi) : base(options, httpClientFactory, logger)
         {
-            _blocksApi = blocksApi;
+            this._blocksApi = blocksApi;
         }
 
         public async IAsyncEnumerable<BlockTransaction> GetTransactions(ulong height, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            Block? block = await _blocksApi.GetBlock(height, cancellationToken);
+            Block? block = await this._blocksApi.GetBlock(height, cancellationToken);
 
-            if (block is null) throw new ArgumentException("block not found at height", nameof(height));
+            if (block is null)
+            {
+                throw new ArgumentException("block not found at height", nameof(height));
+            }
 
             foreach (string tx in block.Details.Data.Transactions)
             {
@@ -40,12 +47,15 @@ namespace CosmosNetwork.API.Impl
 
         public async Task<Fee> EstimateFee(ITransactionPayload transaction, EstimateFeesOptions? estimateOptions = null, CancellationToken cancellationToken = default)
         {
-            decimal gasAdjustment = estimateOptions?.GasAdjustment ?? Options.GasAdjustment;
-            CoinDecimal[]? gasPrices = estimateOptions?.GasPrices ?? Options.GasPrices;
+            decimal gasAdjustment = estimateOptions?.GasAdjustment ?? this.Options.GasAdjustment;
+            CoinDecimal[]? gasPrices = estimateOptions?.GasPrices ?? this.Options.GasPrices;
 
-            if (gasPrices is null) throw new InvalidOperationException("Gas prices unknown");
+            if (gasPrices is null)
+            {
+                throw new InvalidOperationException("Gas prices unknown");
+            }
 
-            string[] feeDenoms = estimateOptions?.FeesDenoms ?? Options.DefaultDenoms ?? throw new InvalidOperationException("Default denoms are required");
+            string[] feeDenoms = estimateOptions?.FeesDenoms ?? this.Options.Network?.DefaultDenoms ?? throw new InvalidOperationException("Default denoms are required");
             ulong gas = estimateOptions?.Gas ?? default;
 
             if (gas == default)

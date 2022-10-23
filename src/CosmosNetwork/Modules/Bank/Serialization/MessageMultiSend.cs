@@ -11,8 +11,8 @@ namespace CosmosNetwork.Modules.Bank.Serialization
         protected internal override Message ToModel()
         {
             return new CosmosNetwork.Modules.Bank.MessageMultiSend(
-                Inputs.Select(i => i.ToModel()).ToArray(),
-                Outputs.Select(o => o.ToModel()).ToArray());
+                this.Inputs.Select(i => i.ToModel()).ToArray(),
+                this.Outputs.Select(o => o.ToModel()).ToArray());
         }
     }
 
@@ -24,8 +24,8 @@ namespace CosmosNetwork.Modules.Bank.Serialization
         internal CosmosNetwork.Modules.Bank.MessageMultiSendInputOutput ToModel()
         {
             return new CosmosNetwork.Modules.Bank.MessageMultiSendInputOutput(
-                Address,
-                Coins.Select(c => c.ToModel()).ToArray());
+                this.Address,
+                this.Coins.Select(c => c.ToModel()).ToArray());
         }
     }
 }

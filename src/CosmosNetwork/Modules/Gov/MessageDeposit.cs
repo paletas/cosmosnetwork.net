@@ -8,9 +8,9 @@
         protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.MessageDeposit(
-                ProposalId,
-                Depositor.Address,
-                Coins.Select(coin => coin.ToSerialization()).ToArray());
+                this.ProposalId,
+                this.Depositor.Address,
+                this.Coins.Select(coin => coin.ToSerialization()).ToArray());
         }
     }
 }

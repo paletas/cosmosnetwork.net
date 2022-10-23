@@ -8,8 +8,8 @@
         public Serialization.Allowances.IAllowance ToSerialization()
         {
             return new Serialization.Allowances.AllowedMessageAllowance(
-                Allowance.ToSerialization(),
-                AllowedMessages);
+                this.Allowance.ToSerialization(),
+                this.AllowedMessages);
         }
     }
 }

@@ -49,9 +49,9 @@ namespace CosmosNetwork.Serialization.Proto
         [property: ProtoMember(3, Name = "chain_id")] string ChainId,
         [property: ProtoMember(4, Name = "account_number")] ulong AccountNumber)
     {
-        public byte[] BodyBytes => AsBytes(Body);
+        public byte[] BodyBytes => AsBytes(this.Body);
 
-        public byte[] AuthInfoBytes => AsBytes(AuthInfo);
+        public byte[] AuthInfoBytes => AsBytes(this.AuthInfo);
 
         public byte[] ToByteArray()
         {

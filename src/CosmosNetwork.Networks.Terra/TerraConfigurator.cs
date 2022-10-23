@@ -8,10 +8,12 @@ namespace CosmosNetwork
         public static void SetupTerra(this CosmosNetworkConfigurator configurator, string chainId)
         {
             if (configurator.Network is not null)
+            {
                 throw new InvalidOperationException("already has network configured");
+            }
 
-            configurator.SetupChain(new TerraOptions(chainId)); 
-            configurator.AddCosmWasm()
+            configurator.SetupChain(new TerraOptions(chainId));
+            _ = configurator.AddCosmWasm()
                 .AddIbc();
         }
     }

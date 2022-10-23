@@ -1,8 +1,6 @@
-﻿using CosmosNetwork.Modules.Authz.Serialization.Authorizations;
-using CosmosNetwork.Modules.Authz.Serialization.Json;
+﻿using CosmosNetwork.Modules.Authz.Serialization.Json;
 using CosmosNetwork.Serialization;
 using CosmosNetwork.Serialization.Proto;
-using NBitcoin.Protocol;
 using ProtoBuf;
 using System.Text.Json.Serialization;
 
@@ -13,29 +11,30 @@ namespace CosmosNetwork.Modules.Authz.Serialization
         [property: ProtoMember(1, Name = "grantee"), JsonPropertyName("grantee")] string GranteeAddress) : SerializerMessage(Authz.MessageExecute.COSMOS_DESCRIPTOR)
     {
         [ProtoIgnore, JsonPropertyName("msgs"), JsonConverter(typeof(AuthorizationsConverter))]
-        public Authorizations.IAuthorization[] Authorizations { get; set; } = null!;
+        public SerializerMessage[] Messages { get; set; } = null!;
 
         [ProtoMember(2, Name = "msgs")]
         public Any[] MessagesPack
         {
-            get => Authorizations.Select(auth => Any.Pack(auth)).ToArray();
-            set => Authorizations = value
-                    .Select(auth => UnpackAuthorization(auth))
+            get => this.Messages.Select(auth => Any.Pack(auth)).ToArray();
+            set => this.Messages = value
+                    .Select(msg => UnpackMessage(msg))
                     .ToArray();
         }
 
-        private static IAuthorization UnpackAuthorization(Any authorization)
+        private static SerializerMessage UnpackMessage(Any message)
         {
-            var authorizationType = AuthorizationRegistry.Instance.GetProposalByTypeName(authorization.TypeUrl);
-
-            return (IAuthorization) (authorization.Unpack(authorizationType) ?? throw new InvalidOperationException());
+            Type? msgType = CosmosMessageRegistry.Instance.GetMessageType(message.TypeUrl);
+            return msgType is null
+                ? throw new InvalidOperationException($"unknown message type {message.TypeUrl}")
+                : (SerializerMessage)(message.Unpack(msgType) ?? throw new InvalidOperationException());
         }
 
         protected internal override Message ToModel()
         {
             return new Authz.MessageExecute(
-                GranteeAddress,
-                Authorizations.Select(msg => msg.ToModel()).ToArray());
+                this.GranteeAddress,
+                this.Messages.Select(msg => msg.ToModel()).ToArray());
         }
     }
 }

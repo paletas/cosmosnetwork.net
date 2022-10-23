@@ -13,7 +13,7 @@ namespace CosmosNetwork.Modules.FeeGrant.Serialization
 
         protected internal override Message ToModel()
         {
-            return new FeeGrant.MessageRevokeAllowance(GranterAddress, GranteeAddress);
+            return new FeeGrant.MessageRevokeAllowance(this.GranterAddress, this.GranteeAddress);
         }
     }
 }

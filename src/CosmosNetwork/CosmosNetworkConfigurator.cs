@@ -9,10 +9,9 @@ using CosmosNetwork.Modules.Gov;
 using CosmosNetwork.Modules.Slashing;
 using CosmosNetwork.Modules.Staking;
 using CosmosNetwork.Serialization.Proto;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using ProtoBuf.Meta;
 using UltimateOrb;
 
@@ -22,10 +21,10 @@ namespace CosmosNetwork
     {
         internal CosmosNetworkConfigurator(IServiceCollection services, string endpoint, CosmosMessageRegistry registry, CosmosApiOptions options)
         {
-            Services = services;
-            Options = options;
-            Registry = registry;
-            Endpoint = endpoint;
+            this.Services = services;
+            this.Options = options;
+            this.Registry = registry;
+            this.Endpoint = endpoint;
         }
 
         public CosmosApiOptions Options { get; }
@@ -40,23 +39,16 @@ namespace CosmosNetwork
 
         public CosmosNetworkConfigurator SetGasOptions(decimal gasAdjustment)
         {
-            Options.GasAdjustment = gasAdjustment;
-            Options.GasPrices = null;
+            this.Options.GasAdjustment = gasAdjustment;
+            this.Options.GasPrices = null;
 
             return this;
         }
 
         public CosmosNetworkConfigurator SetGasOptions(decimal gasAdjustment, params CoinDecimal[] gasPrices)
         {
-            Options.GasAdjustment = gasAdjustment;
-            Options.GasPrices = gasPrices;
-
-            return this;
-        }
-
-        public CosmosNetworkConfigurator SetDefaultDenom(params string[] denom)
-        {
-            Options.DefaultDenoms = denom;
+            this.Options.GasAdjustment = gasAdjustment;
+            this.Options.GasPrices = gasPrices;
 
             return this;
         }
@@ -64,8 +56,8 @@ namespace CosmosNetwork
         public CosmosNetworkConfigurator AddMessageModule<T>()
             where T : class, ICosmosMessageModule
         {
-            Services.AddSingleton<T>();
-            Services.AddSingleton<ICosmosMessageModule>(sp => sp.GetRequiredService<T>());
+            _ = this.Services.AddSingleton<T>();
+            _ = this.Services.AddSingleton<ICosmosMessageModule>(sp => sp.GetRequiredService<T>());
 
             return this;
         }
@@ -73,8 +65,8 @@ namespace CosmosNetwork
         public CosmosNetworkConfigurator AddMessageModule<T>(T module)
             where T : class, ICosmosMessageModule
         {
-            Services.AddSingleton<T>(module);
-            Services.AddSingleton<ICosmosMessageModule>(module);
+            _ = this.Services.AddSingleton<T>(module);
+            _ = this.Services.AddSingleton<ICosmosMessageModule>(module);
 
             return this;
         }
@@ -83,10 +75,10 @@ namespace CosmosNetwork
             where TE : class, ICosmosMessageModule
             where TN : class, ICosmosMessageModule
         {
-            Services.RemoveAll<TE>();
+            _ = this.Services.RemoveAll<TE>();
 
-            Services.AddSingleton<TN>(newModule);
-            Services.AddSingleton<ICosmosMessageModule>(newModule);
+            _ = this.Services.AddSingleton<TN>(newModule);
+            _ = this.Services.AddSingleton<ICosmosMessageModule>(newModule);
 
             return this;
         }
@@ -94,7 +86,7 @@ namespace CosmosNetwork
         public CosmosNetworkConfigurator RemoveMessageModule<T>()
             where T : class, ICosmosMessageModule
         {
-            Services.RemoveAll<T>();
+            _ = this.Services.RemoveAll<T>();
 
             return this;
         }
@@ -102,7 +94,7 @@ namespace CosmosNetwork
         public CosmosNetworkConfigurator AddApiModule<T>()
             where T : CosmosApiModule
         {
-            Services.AddHttpClient<T>();
+            _ = this.Services.AddHttpClient<T>();
 
             return this;
         }
@@ -111,7 +103,7 @@ namespace CosmosNetwork
             where TI : class
             where TP : CosmosApiModule, TI
         {
-            Services.AddHttpClient<TI, TP>(client => client.BaseAddress = new Uri(basePath, UriKind.Absolute));
+            _ = this.Services.AddHttpClient<TI, TP>(client => client.BaseAddress = new Uri(basePath, UriKind.Absolute));
 
             return this;
         }
@@ -120,8 +112,8 @@ namespace CosmosNetwork
             where TI : class
             where TP : CosmosApiModule, TI
         {
-            Services.RemoveAll<TI>();
-            Services.AddHttpClient<TI, TP>(client => client.BaseAddress = new Uri(basePath, UriKind.Absolute));
+            _ = this.Services.RemoveAll<TI>();
+            _ = this.Services.AddHttpClient<TI, TP>(client => client.BaseAddress = new Uri(basePath, UriKind.Absolute));
 
             return this;
         }
@@ -131,9 +123,16 @@ namespace CosmosNetwork
     {
         public static CosmosNetworkConfigurator AddCosmosNetwork(this IServiceCollection services, string endpoint, CosmosApiOptions? options = null)
         {
+            const string DEFAULT_HTTPCLIENT = "HTTP_Default";
+
             CosmosMessageRegistry cosmosMessageRegistry = new();
-            options ??= new CosmosApiOptions();
+            options ??= new CosmosApiOptions(DEFAULT_HTTPCLIENT);
             options.MessageRegistry = cosmosMessageRegistry;
+
+            if ((options.HttpClientName ?? DEFAULT_HTTPCLIENT) == DEFAULT_HTTPCLIENT)
+            {
+                services.AddHttpClient(DEFAULT_HTTPCLIENT, client => client.BaseAddress = new Uri(endpoint));
+            }     
 
             CosmosNetworkConfigurator cosmosNetworkConfigurator = new(services, endpoint, cosmosMessageRegistry, options);
 
@@ -177,11 +176,16 @@ namespace CosmosNetwork
             configurator.Services.AddSingleton(networkOptions);
         }
 
+        public static void UseCosmosNetwork(this IApplicationBuilder application)
+        {
+            application.ApplicationServices.UseCosmosNetwork();
+        }
+
         public static void UseCosmosNetwork(this IServiceProvider provider)
         {
-            var configurator = provider.GetRequiredService<CosmosNetworkConfigurator>();
-            var modules = provider.GetServices<ICosmosMessageModule>();
-            foreach (var module in modules)
+            CosmosNetworkConfigurator configurator = provider.GetRequiredService<CosmosNetworkConfigurator>();
+            IEnumerable<ICosmosMessageModule> modules = provider.GetServices<ICosmosMessageModule>();
+            foreach (ICosmosMessageModule module in modules)
             {
                 module.ConfigureModule(configurator.Options, configurator.Registry);
             }

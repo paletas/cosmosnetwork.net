@@ -4,7 +4,7 @@
     {
         public static CosmosNetworkConfigurator AddCosmWasm(this CosmosNetworkConfigurator configurator)
         {
-            configurator.AddMessageModule<WasmModule>();
+            _ = configurator.AddMessageModule<WasmModule>();
 
             return configurator;
         }

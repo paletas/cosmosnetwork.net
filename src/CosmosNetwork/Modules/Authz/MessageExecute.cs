@@ -1,20 +1,19 @@
-﻿using CosmosNetwork.Modules.Authz.Authorizations;
-using CosmosNetwork.Serialization;
+﻿using CosmosNetwork.Serialization;
 
 namespace CosmosNetwork.Modules.Authz
 {
     [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageExecute(
         CosmosAddress Grantee,
-        IAuthorization[] Authorizations) : Message
+        Message[] Messages) : Message
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.msgauth.v1beta1.MsgExecAuthorized";
 
         protected internal override SerializerMessage ToSerialization()
         {
-            return new Serialization.MessageExecute(Grantee.Address)
+            return new Serialization.MessageExecute(this.Grantee.Address)
             {
-                Authorizations = Authorizations.Select(msg => msg.ToSerialization()).ToArray()
+                Messages = this.Messages.Select(msg => msg.ToSerialization()).ToArray()
             };
         }
     }

@@ -9,15 +9,11 @@ namespace CosmosNetwork.Serialization.Json.Converters
         public override UInt128 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             string? extraLong = reader.GetString();
-            if (extraLong is null)
-                throw new JsonException();
-
-            if (extraLong.Equals("0", StringComparison.InvariantCulture))
-                return UInt128.FromBits(0, 0);
-            else if (UInt128.TryParseCStyleNormalizedU128(extraLong, out UInt128 int128))
-                return int128;
-            else
-                throw new JsonException();
+            return extraLong is null
+                ? throw new JsonException()
+                : extraLong.Equals("0", StringComparison.InvariantCulture)
+                ? UInt128.FromBits(0, 0)
+                : UInt128.TryParseCStyleNormalizedU128(extraLong, out UInt128 int128) ? int128 : throw new JsonException();
         }
 
         public override void Write(Utf8JsonWriter writer, UInt128 value, JsonSerializerOptions options)

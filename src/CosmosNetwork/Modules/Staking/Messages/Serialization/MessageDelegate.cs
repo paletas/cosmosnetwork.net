@@ -11,7 +11,7 @@ namespace CosmosNetwork.Modules.Staking.Messages.Serialization
     {
         protected internal override Message ToModel()
         {
-            return new Staking.Messages.MessageDelegate(DelegatorAddress, ValidatorAddress, Amount.ToModel());
+            return new Staking.Messages.MessageDelegate(this.DelegatorAddress, this.ValidatorAddress, this.Amount.ToModel());
         }
     }
 }

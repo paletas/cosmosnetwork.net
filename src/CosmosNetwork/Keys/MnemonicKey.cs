@@ -1,6 +1,4 @@
-﻿using CosmosNetwork.Serialization;
-
-namespace CosmosNetwork.Keys
+﻿namespace CosmosNetwork.Keys
 {
     internal class MnemonicKey : Key
     {
@@ -10,13 +8,13 @@ namespace CosmosNetwork.Keys
             byte[] privateKey = wallet.GetPrivateKey((int)options.Index);
             byte[] publicKey = Cryptography.ECDSA.Secp256K1Manager.GetPublicKey(privateKey, true);
 
-            base.SetKeys(privateKey, new PublicKey(network, publicKey));
+            base.SetKeys(privateKey, new PublicKey(publicKey));
         }
 
         public override Task<byte[]> SignPayload(byte[] payload, CancellationToken cancellationToken = default)
         {
             byte[] hash = HashExtensions.SHA256(payload);
-            return Task.FromResult(Cryptography.ECDSA.Secp256K1Manager.SignCompact(hash, PrivateKey, out _));
+            return Task.FromResult(Cryptography.ECDSA.Secp256K1Manager.SignCompact(hash, this.PrivateKey, out _));
         }
 
         public override Task<byte[]> SignTransaction(string chainId, ulong accountNumber, Transaction transaction, CancellationToken cancellationToken = default)
@@ -34,8 +32,8 @@ namespace CosmosNetwork.Keys
     {
         public MnemonicKeyOptions(uint? account = null, uint? index = null)
         {
-            Account = account ?? 0;
-            Index = index ?? 0;
+            this.Account = account ?? 0;
+            this.Index = index ?? 0;
         }
 
         public uint Account { get; set; }

@@ -12,10 +12,10 @@
         protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.MessageBeginRedelegate(
-                Delegator.Address,
-                SourceValidator.Address,
-                DestinationValidator.Address,
-                Amount.ToSerialization());
+                this.Delegator.Address,
+                this.SourceValidator.Address,
+                this.DestinationValidator.Address,
+                this.Amount.ToSerialization());
         }
     }
 }

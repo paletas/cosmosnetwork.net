@@ -1,5 +1,4 @@
-﻿using CosmosNetwork.Ibc.Core.Client;
-using CosmosNetwork.Serialization;
+﻿using CosmosNetwork.Serialization;
 
 namespace CosmosNetwork.Ibc.Core.Channel
 {
