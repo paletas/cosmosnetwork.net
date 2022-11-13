@@ -13,7 +13,7 @@ namespace CosmosNetwork
             }
 
             configurator.SetupChain(new TerraOptions(chainId));
-            _ = configurator.AddCosmWasm()
+            configurator.AddCosmWasm()
                 .AddIbc();
         }
     }

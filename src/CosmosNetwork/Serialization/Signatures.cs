@@ -9,7 +9,7 @@ namespace CosmosNetwork.Serialization
     internal class SignatureDescriptor
     {
         [ProtoIgnore]
-        public Proto.SimplePublicKey? PublicKey { get; set; }
+        public Proto.PublicKey? PublicKey { get; set; }
 
         [JsonPropertyName("mode_info")]
         [ProtoMember(2, Name = "mode_info")]
@@ -23,7 +23,7 @@ namespace CosmosNetwork.Serialization
         public Any? PublicKeyPacked
         {
             get => this.PublicKey is null ? null : Any.Pack(this.PublicKey);
-            set => this.PublicKey = value?.Unpack<Proto.SimplePublicKey>();
+            set => this.PublicKey = value?.Unpack<Proto.PublicKey>();
         }
     }
 

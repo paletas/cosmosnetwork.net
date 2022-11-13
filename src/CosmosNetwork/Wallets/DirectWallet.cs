@@ -1,5 +1,4 @@
 ﻿using CosmosNetwork.API;
-using CosmosNetwork.Keys;
 using CosmosNetwork.Serialization.Proto;
 
 namespace CosmosNetwork.Wallets
@@ -9,30 +8,25 @@ namespace CosmosNetwork.Wallets
         private readonly CosmosApiOptions _options;
         private readonly IWalletApi _walletApi;
         private readonly ITransactionsApi _transactionsApi;
-        private readonly Key _key;
+        private readonly IKeySource _keySource;
 
-        public DirectWallet(CosmosApiOptions options, Key key, IWalletApi walletApi, ITransactionsApi transactionsApi)
+        public DirectWallet(CosmosApiOptions options, IKeySource keySource, IWalletApi walletApi, ITransactionsApi transactionsApi)
         {
             this._options = options;
             this._walletApi = walletApi;
             this._transactionsApi = transactionsApi;
-            this._key = key;
+            this._keySource = keySource;
         }
 
-        public PublicKey PublicKey => this._key.PublicKey;
+        public IPublicKey PublicKey => this._keySource.PublicKey;
 
-        public CosmosAddress? AccountAddress => this.PublicKey is null ? null : (CosmosAddress)this.PublicKey.GetAddress(this._options.Network?.AddressPrefix ?? throw new InvalidOperationException());
+        public CosmosAddress? AccountAddress => this.PublicKey is null ? null : (CosmosAddress)this.PublicKey.AsAddress(this._options.Network?.AddressPrefix ?? throw new InvalidOperationException());
 
         public string? AccountNumber { get; private set; }
 
         public ulong? Sequence { get; private set; }
 
         protected bool RequiresAccountUpdate { get; private set; } = true;
-
-        public IEnumerable<IKey> GetKeys()
-        {
-            yield return this._key;
-        }
 
         public async Task<AccountInformation?> GetAccountInformation(CancellationToken cancellationToken = default)
         {
@@ -100,7 +94,7 @@ namespace CosmosNetwork.Wallets
 
             Serialization.SignatureDescriptor signatureDescriptor = new()
             {
-                PublicKey = this.PublicKey.ToSimpleProto(),
+                PublicKey = this.PublicKey.ToProto(),
                 Data = new Serialization.SignatureMode
                 {
                     Single = new Serialization.SingleMode(Serialization.SignModeEnum.Direct)

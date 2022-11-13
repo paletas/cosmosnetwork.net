@@ -17,7 +17,6 @@ namespace CosmosNetwork.Modules.Authz
             messageRegistry.RegisterMessage<MessageExecute, Serialization.MessageExecute>();
             messageRegistry.RegisterMessage<MessageGrant, Serialization.MessageGrant>();
             messageRegistry.RegisterMessage<MessageRevoke, Serialization.MessageRevoke>();
-
         }
     }
 }

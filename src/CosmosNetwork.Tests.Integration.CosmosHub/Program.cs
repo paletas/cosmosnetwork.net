@@ -34,7 +34,7 @@ while (mnemonicKey is null)
     mnemonicKey = Console.ReadLine();
 }
 
-IWallet wallet = await cosmosApi.Wallet.GetWallet(mnemonicKey, new CosmosNetwork.Keys.MnemonicKeyOptions());
+IWallet wallet = await cosmosApi.Wallet.GetWallet(mnemonicKey, new CosmosNetwork.Keys.Sources.MnemonicKeyOptions());
 
 do
 {

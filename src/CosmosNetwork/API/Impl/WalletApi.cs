@@ -1,4 +1,4 @@
-﻿using CosmosNetwork.Keys;
+﻿using CosmosNetwork.Keys.Sources;
 using CosmosNetwork.Serialization.Json.Responses;
 using CosmosNetwork.Wallets;
 using Microsoft.Extensions.Logging;
@@ -24,7 +24,7 @@ namespace CosmosNetwork.API.Impl
 
         public ValueTask<IWallet> GetWallet(string mnemonicKey, MnemonicKeyOptions keyOptions, CancellationToken cancellationToken = default)
         {
-            return ValueTask.FromResult<IWallet>(new DirectWallet(this.Options, new MnemonicKey(mnemonicKey, keyOptions, this._networkOptions), this, this._transactionsApi));
+            return ValueTask.FromResult<IWallet>(new DirectWallet(this.Options, new MnemonicKeySource(mnemonicKey, keyOptions, this._networkOptions), this, this._transactionsApi));
         }
 
         public async Task<AccountInformation?> GetAccountInformation(string accountAddress, CancellationToken cancellationToken = default)

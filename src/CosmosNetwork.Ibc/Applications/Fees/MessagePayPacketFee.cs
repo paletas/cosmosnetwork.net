@@ -10,7 +10,7 @@
     {
         public const string COSMOS_DESCRIPTOR = "/ibc.applications.fee.v1.MsgPayPacketFee";
 
-        protected override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
+        public override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.Applications.Fees.MessagePayPacketFee(
                 this.Fee.ToSerialization(),

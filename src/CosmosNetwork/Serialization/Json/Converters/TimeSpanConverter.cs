@@ -22,7 +22,7 @@ namespace CosmosNetwork.Serialization.Json.Converters
 
             return unit switch
             {
-                's' => TimeSpan.FromSeconds(double.Parse(value[..1])),
+                's' => TimeSpan.FromSeconds(double.Parse(value[..^1])),
                 _ => throw new NotSupportedException($"unit {unit} is not supported in TimeSpan deserialization"),
             };
         }

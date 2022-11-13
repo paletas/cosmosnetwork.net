@@ -75,7 +75,18 @@ namespace CosmosNetwork.Serialization.Json
         }
     }
 
-    public record TransactionResponse(ulong Height, [property: JsonPropertyName("txhash")] string TransactionHash, string Codespace, ulong Code, string Data, string RawLog, TransactionLog[] Logs, string Info, ulong GasWanted, ulong GasUsed, TransactionEvent[] Events, [property: JsonPropertyName("tx/timestamp")] DateTime Timestamp)
+    public record TransactionResponse(
+        ulong Height, 
+        [property: JsonPropertyName("txhash")] string TransactionHash, 
+        string Codespace, 
+        ulong Code,
+        string Data, 
+        string RawLog, 
+        TransactionLog[] Logs, 
+        string Info, 
+        ulong GasWanted, ulong GasUsed, 
+        TransactionEvent[] Events, 
+        [property: JsonPropertyName("timestamp")] DateTime Timestamp)
     {
         internal ExecutionResult ToModel()
         {

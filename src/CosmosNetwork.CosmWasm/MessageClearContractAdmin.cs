@@ -9,7 +9,7 @@ namespace CosmosNetwork.CosmWasm
     {
         public const string COSMOS_DESCRIPTOR = "/terra.wasm.v1beta1.MsgClearContractAdmin";
 
-        protected override SerializerMessage ToSerialization()
+        public override SerializerMessage ToSerialization()
         {
             return new Serialization.MessageClearContractAdmin(this.Admin, this.Contract);
         }

@@ -2,7 +2,7 @@
 {
     public record Validator(
         CosmosAddress Operator,
-        SignatureKey ConsensusPublicKey,
+        IKey ConsensusPublicKey,
         bool Jailed,
         BondStatusEnum Status,
         ulong Tokens,

@@ -5,7 +5,7 @@
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.staking.v1beta1.MsgUndelegate";
 
-        protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
+        public override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.MessageUndelegate(
                 this.Delegator.Address,

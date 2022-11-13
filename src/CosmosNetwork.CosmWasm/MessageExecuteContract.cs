@@ -12,7 +12,7 @@ namespace CosmosNetwork.CosmWasm
     {
         public const string COSMOS_DESCRIPTOR = "/cosmwasm.wasm.v1.MsgExecuteContract";
 
-        protected override SerializerMessage ToSerialization()
+        public override SerializerMessage ToSerialization()
         {
             return new Serialization.MessageExecuteContract(
                 this.Coins.Select(coin => coin.ToSerialization()).ToArray(),

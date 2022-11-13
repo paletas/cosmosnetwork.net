@@ -1,7 +1,7 @@
 ﻿namespace CosmosNetwork.Ibc.LightClients.SoloMachine
 {
     public record ConsensusState(
-        SignatureKey PublicKey,
+        IPublicKey PublicKey,
         string Diversifier,
         ulong Timestamp) : IConsensusState
     {

@@ -14,7 +14,7 @@ namespace CosmosNetwork.CosmWasm
     {
         public const string COSMOS_DESCRIPTOR = "/cosmwasm.wasm.v1.MsgInstantiateContract";
 
-        protected override SerializerMessage ToSerialization()
+        public override SerializerMessage ToSerialization()
         {
             return new Serialization.MessageInstantiateContract(
                 this.Sender.Address,

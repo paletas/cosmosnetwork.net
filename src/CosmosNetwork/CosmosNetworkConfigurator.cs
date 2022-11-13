@@ -6,6 +6,7 @@ using CosmosNetwork.Modules.Bank;
 using CosmosNetwork.Modules.Distribution;
 using CosmosNetwork.Modules.FeeGrant;
 using CosmosNetwork.Modules.Gov;
+using CosmosNetwork.Modules.Params;
 using CosmosNetwork.Modules.Slashing;
 using CosmosNetwork.Modules.Staking;
 using CosmosNetwork.Serialization.Proto;
@@ -127,6 +128,7 @@ namespace CosmosNetwork
             CosmosMessageRegistry cosmosMessageRegistry = new();
             options ??= new CosmosApiOptions(DEFAULT_HTTPCLIENT);
             options.MessageRegistry = cosmosMessageRegistry;
+            options.HttpClientName ??= DEFAULT_HTTPCLIENT;
 
             if ((options.HttpClientName ?? DEFAULT_HTTPCLIENT) == DEFAULT_HTTPCLIENT)
             {
@@ -142,11 +144,13 @@ namespace CosmosNetwork
             cosmosNetworkConfigurator.AddMessageModule<FeeGrantModule>();
             cosmosNetworkConfigurator.AddMessageModule<SlashingModule>();
             cosmosNetworkConfigurator.AddMessageModule<StakingModule>();
+            cosmosNetworkConfigurator.AddMessageModule<ParamsModule>();
 
             cosmosNetworkConfigurator.AddApiModule<IBlocksApi, BlocksApi>();
             cosmosNetworkConfigurator.AddApiModule<ITransactionsApi, TransactionsApi>();
             cosmosNetworkConfigurator.AddApiModule<IWalletApi, WalletApi>();
             cosmosNetworkConfigurator.AddApiModule<IStakingApi, StakingApi>();
+            cosmosNetworkConfigurator.AddApiModule<IGovApi, GovApi>();
 
             services.AddSingleton(cosmosNetworkConfigurator);
             services.AddSingleton(options);

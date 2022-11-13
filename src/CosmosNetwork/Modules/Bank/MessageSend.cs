@@ -8,7 +8,7 @@
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.bank.v1beta1.MsgSend";
 
-        protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
+        public override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.MessageSend(
                 this.From.Address,

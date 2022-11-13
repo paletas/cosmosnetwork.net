@@ -9,7 +9,7 @@ namespace CosmosNetwork.Ibc.Applications.Fees
     {
         public const string COSMOS_DESCRIPTOR = "/ibc.applications.fee.v1.MsgPayPacketFeeAsync";
 
-        protected override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
+        public override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.Applications.Fees.MessagePayPacketFeeAsync(
                 this.PacketId.ToSerialization(),

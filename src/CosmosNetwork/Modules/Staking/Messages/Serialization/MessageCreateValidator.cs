@@ -14,7 +14,7 @@ namespace CosmosNetwork.Modules.Staking.Messages.Serialization
         [property: ProtoMember(2, Name = "commission")] Staking.Serialization.ValidatorCommissionRates Commission,
         [property: ProtoMember(7, Name = "value")] DenomAmount Value,
         [property: JsonPropertyName("pubkey"), JsonConverter(typeof(PublicKeyConverter))] CosmosNetwork.Serialization.Json.PublicKey PublicKeyJson,
-        [property: ProtoMember(6, Name = "pubkey")] CosmosNetwork.Serialization.Proto.SimplePublicKey PublicKeyProto
+        [property: ProtoMember(6, Name = "pubkey")] CosmosNetwork.Serialization.Proto.PublicKey PublicKeyProto
     ) : SerializerMessage(Messages.MessageCreateValidator.COSMOS_DESCRIPTOR)
     {
         protected internal override Message ToModel()

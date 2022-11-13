@@ -12,7 +12,7 @@ namespace CosmosNetwork.Ibc.Core.Connection
     {
         public const string COSMOS_DESCRIPTOR = "/ibc.core.connection.v1.MsgConnectionOpenInit";
 
-        protected override SerializerMessage ToSerialization()
+        public override SerializerMessage ToSerialization()
         {
             return new Serialization.Core.Connection.MessageConnectionOpenInit(
                 this.ClientId,

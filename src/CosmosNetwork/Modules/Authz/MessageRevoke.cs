@@ -10,7 +10,7 @@ namespace CosmosNetwork.Modules.Authz
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.msgauth.v1beta1.MsgRevoke";
 
-        protected internal override SerializerMessage ToSerialization()
+        public override SerializerMessage ToSerialization()
         {
             return new Serialization.MessageRevoke(this.Granter.Address, this.Grantee.Address, this.MessageTypeUrl);
         }

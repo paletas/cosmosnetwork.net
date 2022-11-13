@@ -8,11 +8,11 @@
         ValidatorDescription Description,
         ValidatorCommissionRates Comission,
         Coin SelfDelegation,
-        SignatureKey PublicKey) : Message
+        IPublicKey PublicKey) : Message
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.staking.v1beta1.MsgCreateValidator";
 
-        protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
+        public override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.MessageCreateValidator(
                 this.Delegator.Address, this.Validator.Address, this.MinimumSelfDelegation,

@@ -17,7 +17,7 @@ namespace CosmosNetwork
             this.HttpClientName = httpClientName;
         }
 
-        public string? HttpClientName { get; }
+        public string? HttpClientName { get; set; }
 
         internal NetworkOptions? Network { get; set; }
 

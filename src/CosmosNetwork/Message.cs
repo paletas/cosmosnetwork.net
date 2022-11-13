@@ -7,7 +7,7 @@ namespace CosmosNetwork
         private string? _messageType;
         public virtual string MessageType => this._messageType ??= GetMessageType();
 
-        protected internal abstract Serialization.SerializerMessage ToSerialization();
+        public abstract Serialization.SerializerMessage ToSerialization();
 
         private string GetMessageType()
         {

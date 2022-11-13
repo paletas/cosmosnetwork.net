@@ -2,9 +2,9 @@
 {
     public record SignOptions(string ChainId);
 
-    public record TransactionSignature(SignatureKey Key, string Signature);
+    public record TransactionSignature(IPublicKey Key, string Signature);
 
-    public record TransactionSigner(SignatureKey Key, SignatureDescriptor Data, ulong Sequence)
+    public record TransactionSigner(IPublicKey Key, SignatureDescriptor Data, ulong Sequence)
         : TransactionSignature(Key, Data.Signature);
 
     public record SignatureDescriptor(SignerModeEnum Mode, string Signature);

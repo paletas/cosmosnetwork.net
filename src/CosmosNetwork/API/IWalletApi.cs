@@ -1,4 +1,4 @@
-﻿using CosmosNetwork.Keys;
+﻿using CosmosNetwork.Keys.Sources;
 
 namespace CosmosNetwork.API
 {

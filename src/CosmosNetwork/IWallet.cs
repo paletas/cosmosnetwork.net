@@ -8,8 +8,6 @@
 
         ulong? Sequence { get; }
 
-        IEnumerable<IKey> GetKeys();
-
         Task UpdateAccountInformation(CancellationToken cancellationToken = default);
 
         Task<AccountInformation?> GetAccountInformation(CancellationToken cancellationToken = default);

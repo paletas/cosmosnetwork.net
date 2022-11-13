@@ -10,7 +10,7 @@ namespace CosmosNetwork.Ibc.Applications.Fees
     {
         public const string COSMOS_DESCRIPTOR = "/ibc.applications.fee.v1.MsgRegisterCounterpartyAddress";
 
-        protected override SerializerMessage ToSerialization()
+        public override SerializerMessage ToSerialization()
         {
             return new Serialization.Applications.Fees.MessageRegisterCounterpartyAddress(
                 this.Address.Address,

@@ -1,47 +1,45 @@
-﻿using ProtoBuf;
+﻿using CosmosNetwork.Keys;
+using ProtoBuf;
 
 namespace CosmosNetwork.Serialization.Proto
 {
     [ProtoContract]
-    public class PublicKey : IHasAny
+    [ProtoInclude(1, typeof(Secp256k1))]
+    [ProtoInclude(2, typeof(Ed25519))]
+    [ProtoInclude(3, typeof(MultisigKey))]
+    public abstract record PublicKey([property: ProtoIgnore] string TypeUrl) : IHasAny
     {
-        private DiscriminatedUnionObject _discriminatedObject = new();
+        public abstract IPublicKey ToModel();
+    }
 
-        [ProtoIgnore]
-        public string TypeUrl => "/tendermint.crypto.PublicKey";
-
-        public PublicKeyDiscriminator Discriminator => (PublicKeyDiscriminator)this._discriminatedObject.Discriminator;
-
-        [ProtoMember(2, Name = "ed25519")]
-        public byte[]? Ed25519
+    [ProtoContract]
+    internal record Secp256k1(
+        [property: ProtoMember(1, Name = "key")] string Value) : PublicKey("/cosmos.crypto.secp256k1.PubKey")
+    {
+        public override IPublicKey ToModel()
         {
-            get => this.Discriminator == PublicKeyDiscriminator.Ed25519 ? this._discriminatedObject.Object as byte[] : null;
-
-            set => this._discriminatedObject = new DiscriminatedUnionObject((int)PublicKeyDiscriminator.Ed25519, value);
-        }
-
-        [ProtoMember(3, Name = "secp256k1")]
-        public byte[]? Secp256k1
-        {
-            get => this.Discriminator == PublicKeyDiscriminator.Secp256k1 ? this._discriminatedObject.Object as byte[] : null;
-
-            set => this._discriminatedObject = new DiscriminatedUnionObject((int)PublicKeyDiscriminator.Secp256k1, value);
-        }
-
-        public SignatureKey ToModel()
-        {
-            return this.Discriminator switch
-            {
-                PublicKeyDiscriminator.Ed25519 => new Ed25519Key(Convert.ToBase64String(this.Ed25519!)),
-                PublicKeyDiscriminator.Secp256k1 => new Ed25519Key(Convert.ToBase64String(this.Secp256k1!)),
-                _ => throw new NotImplementedException(),
-            };
+            return new BasicPublicKey(this.Value, BasicPublicKey.CurveAlgorithm.Secp256k1);
         }
     }
 
-    public enum PublicKeyDiscriminator
+    [ProtoContract]
+    internal record Ed25519(
+        [property: ProtoMember(1, Name = "key")] string Value) : PublicKey("/cosmos.crypto.ed25519.PubKey")
     {
-        Ed25519 = 2,
-        Secp256k1 = 3
+        public override IPublicKey ToModel()
+        {
+            return new BasicPublicKey(this.Value, BasicPublicKey.CurveAlgorithm.Ed25519);
+        }
+    }
+
+    [ProtoContract]
+    internal record MultisigKey(
+        [property: ProtoMember(1, Name = "threshold")] uint Threshold,
+        [property: ProtoMember(2, Name = "public_keys")] PublicKey[] PublicKeys) : PublicKey("/cosmos.crypto.multisig.LegacyAminoPubKey")
+    {
+        public override IPublicKey ToModel()
+        {
+            return new MultisigPublicKey(this.Threshold, this.PublicKeys.Select(key => key.ToModel()).ToArray());
+        }
     }
 }

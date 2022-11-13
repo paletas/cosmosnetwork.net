@@ -1,57 +1,6 @@
-﻿using DevHawk.Security.Cryptography;
-using System.Security.Cryptography;
-
-namespace CosmosNetwork
+﻿namespace CosmosNetwork
 {
-    public class PublicKey
-    {
-        public PublicKey(byte[] key)
-        {
-            this.RawKey = key;
-        }
-
-        public PublicKey(string key)
-            : this(Convert.FromBase64String(key))
-        { }
-
-        public byte[] RawKey { get; }
-
-        public byte[] RawAddress => new RIPEMD160().ComputeHash(SHA256.HashData(this.RawKey));
-
-        public string GetAddress(string prefix) => Converter.EncodeBech32(prefix, this.RawAddress);
-
-        internal SignatureKey ToSignatureKey()
-        {
-            return new Secp256k1Key(Convert.ToBase64String(this.RawKey));
-        }
-
-        internal Serialization.Proto.PublicKey ToProto()
-        {
-            return new Serialization.Proto.PublicKey
-            {
-                Secp256k1 = this.RawKey
-            };
-        }
-
-        internal Serialization.Proto.SimplePublicKey ToSimpleProto()
-        {
-            return new Serialization.Proto.Secp256k1(Convert.ToBase64String(this.RawKey));
-        }
-    }
-
-    internal class Bech32ConversionException : Exception
-    {
-        public Bech32ConversionException()
-            : base()
-        {
-        }
-        public Bech32ConversionException(string message)
-            : base(message)
-        {
-        }
-    }
-
-    internal static class Converter
+    internal static class Bech32
     {
         private const string CHARSET_BECH32 = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
 
@@ -131,9 +80,9 @@ namespace CosmosNetwork
         // witness program is 20-byte RIPEMD160(SHA256(pubkey)) for P2WPKH
         // and 32-byte SHA256(script) for P2WSH
         // https://bitcoin.stackexchange.com/a/71219
-        public static string EncodeBech32(string prefix, byte[] publicKey, int limit = 90)
+        public static string Encode(string prefix, byte[] key, int limit = 90)
         {
-            int[] words = ConvertBits(publicKey, 8, 5, true);
+            int[] words = ConvertBits(key, 8, 5, true);
             if (prefix.Length + 7 + words.Length > limit)
             {
                 throw new InvalidOperationException("Exceeds length limit");
