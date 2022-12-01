@@ -14,11 +14,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using ProtoBuf.Meta;
-using UltimateOrb;
 
 namespace CosmosNetwork
 {
-    public class CosmosNetworkConfigurator
+  public class CosmosNetworkConfigurator
     {
         internal CosmosNetworkConfigurator(IServiceCollection services, string endpoint, CosmosMessageRegistry registry, CosmosApiOptions options)
         {
@@ -154,12 +153,6 @@ namespace CosmosNetwork
 
             services.AddSingleton(cosmosNetworkConfigurator);
             services.AddSingleton(options);
-
-            if (RuntimeTypeModel.Default.IsDefined(typeof(UInt128)) == false)
-            {
-                RuntimeTypeModel.Default.Add<UInt128>()
-                    .SetSurrogate(typeof(ProtoUInt128));
-            }
 
             return cosmosNetworkConfigurator;
         }

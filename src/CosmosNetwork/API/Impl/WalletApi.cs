@@ -2,11 +2,10 @@
 using CosmosNetwork.Serialization.Json.Responses;
 using CosmosNetwork.Wallets;
 using Microsoft.Extensions.Logging;
-using UltimateOrb;
 
 namespace CosmosNetwork.API.Impl
 {
-    internal class WalletApi : CosmosApiModule, IWalletApi
+  internal class WalletApi : CosmosApiModule, IWalletApi
     {
         private readonly NetworkOptions _networkOptions;
         private readonly ITransactionsApi _transactionsApi;
@@ -42,7 +41,7 @@ namespace CosmosNetwork.API.Impl
                 ? throw new InvalidOperationException()
                 : new AccountBalances(accountBalances.Balances.Select(bal =>
                 {
-                    return UInt128.TryParseCStyleNormalizedU128(bal.Amount, out UInt128 amount) == false
+                    return UInt128.TryParse(bal.Amount, out UInt128 amount) == false
                         ? throw new InvalidOperationException($"amount format is invalid: {bal.Amount}")
                         : new NativeCoin(bal.Denom, amount);
                 }));

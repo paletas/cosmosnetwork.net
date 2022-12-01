@@ -1,16 +1,15 @@
 ﻿using ProtoBuf;
-using UltimateOrb;
 
 namespace CosmosNetwork.Serialization
 {
-    [ProtoContract]
+  [ProtoContract]
     public record DenomAmount(
         [property: ProtoMember(1, Name = "denom")] string Denom,
         [property: ProtoMember(2, Name = "amount")] string Amount)
     {
         public virtual Coin ToModel()
         {
-            return UInt128.TryParseCStyleNormalizedU128(this.Amount, out UInt128 amount) == false
+            return UInt128.TryParse(this.Amount, out UInt128 amount) == false
                 ? throw new InvalidOperationException($"invalid amount format: {this.Amount}")
                 : (Coin)new NativeCoin(this.Denom, amount);
         }
