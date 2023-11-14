@@ -9,15 +9,13 @@ using CosmosNetwork.Modules.Gov;
 using CosmosNetwork.Modules.Params;
 using CosmosNetwork.Modules.Slashing;
 using CosmosNetwork.Modules.Staking;
-using CosmosNetwork.Serialization.Proto;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using ProtoBuf.Meta;
+using Microsoft.Extensions.Hosting;
 
 namespace CosmosNetwork
 {
-  public class CosmosNetworkConfigurator
+    public class CosmosNetworkConfigurator
     {
         internal CosmosNetworkConfigurator(IServiceCollection services, string endpoint, CosmosMessageRegistry registry, CosmosApiOptions options)
         {
@@ -169,9 +167,9 @@ namespace CosmosNetwork
             configurator.Services.AddSingleton(networkOptions);
         }
 
-        public static void UseCosmosNetwork(this IApplicationBuilder application)
+        public static void UseCosmosNetwork(this IHost application)
         {
-            application.ApplicationServices.UseCosmosNetwork();
+            application.Services.UseCosmosNetwork();
         }
 
         public static void UseCosmosNetwork(this IServiceProvider provider)
