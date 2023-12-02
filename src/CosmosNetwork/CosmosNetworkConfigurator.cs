@@ -9,7 +9,6 @@ using CosmosNetwork.Modules.Gov;
 using CosmosNetwork.Modules.Params;
 using CosmosNetwork.Modules.Slashing;
 using CosmosNetwork.Modules.Staking;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -241,11 +240,6 @@ namespace CosmosNetwork
             configurator.Network = networkOptions;
             configurator.Services.AddScoped<T>();
             configurator.Services.AddSingleton(networkOptions);
-        }
-
-        public static void UseCosmosNetwork(this IApplicationBuilder application)
-        {
-            application.ApplicationServices.UseCosmosNetwork();
         }
 
         public static void UseCosmosNetwork(this IServiceProvider provider)
