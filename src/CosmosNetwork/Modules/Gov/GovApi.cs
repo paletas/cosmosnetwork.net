@@ -1,11 +1,19 @@
 ﻿using CosmosNetwork.API;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CosmosNetwork.Modules.Gov
 {
     internal class GovApi : CosmosApiModule, IGovApi
     {
-        public GovApi(CosmosApiOptions options, IHttpClientFactory httpClientFactory, ILogger<CosmosApiModule> logger) : base(options, httpClientFactory, logger)
+        public GovApi(CosmosApiOptions options, IHttpClientFactory httpClientFactory, ILogger<GovApi> logger) : base(options, httpClientFactory, logger)
+        { }
+
+        public GovApi(
+            [ServiceKey] string servicesKey,
+            IServiceProvider serviceProvider,
+            IHttpClientFactory httpClientFactory,
+            ILogger<GovApi> logger) : base(servicesKey, serviceProvider, httpClientFactory, logger)
         { }
 
         public async Task<GovParams> GetGovernanceParams(CancellationToken cancellationToken = default)

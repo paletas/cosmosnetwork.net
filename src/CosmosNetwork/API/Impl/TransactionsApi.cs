@@ -1,6 +1,7 @@
 ﻿using CosmosNetwork.Exceptions;
 using CosmosNetwork.Serialization.Json.Requests;
 using CosmosNetwork.Serialization.Json.Responses;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Runtime.CompilerServices;
 
@@ -17,6 +18,15 @@ namespace CosmosNetwork.API.Impl
             IBlocksApi blocksApi) : base(options, httpClientFactory, logger)
         {
             this._blocksApi = blocksApi;
+        }
+
+        public TransactionsApi(
+            [ServiceKey] string servicesKey,
+            IServiceProvider serviceProvider,
+            IHttpClientFactory httpClientFactory,
+            ILogger<TransactionsApi> logger) : base(servicesKey, serviceProvider, httpClientFactory, logger)
+        {
+            this._blocksApi = serviceProvider.GetRequiredKeyedService<IBlocksApi>(servicesKey);
         }
 
         public async IAsyncEnumerable<BlockTransaction> GetTransactions(ulong height, [EnumeratorCancellation] CancellationToken cancellationToken = default)

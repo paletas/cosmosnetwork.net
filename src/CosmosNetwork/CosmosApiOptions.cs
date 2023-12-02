@@ -7,7 +7,7 @@ namespace CosmosNetwork
 {
     public class CosmosApiOptions
     {
-        public CosmosApiOptions(string? httpClientName = null, ulong? minimumAvailableBlockHeight = default)
+        public CosmosApiOptions(string httpClientName, ulong? minimumAvailableBlockHeight = default)
         {
             if (minimumAvailableBlockHeight.HasValue)
             {
@@ -17,7 +17,9 @@ namespace CosmosNetwork
             this.HttpClientName = httpClientName;
         }
 
-        public string? HttpClientName { get; set; }
+        public string HttpClientName { get; }
+
+        public bool SkipHttpClientConfiguration { get; set; }
 
         internal NetworkOptions? Network { get; set; }
 

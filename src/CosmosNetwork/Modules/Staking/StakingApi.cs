@@ -1,4 +1,5 @@
 ﻿using CosmosNetwork.API;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Web;
 
@@ -6,9 +7,16 @@ namespace CosmosNetwork.Modules.Staking
 {
     internal class StakingApi : CosmosApiModule, IStakingApi
     {
-        public StakingApi(CosmosApiOptions options, IHttpClientFactory httpClientFactory, ILogger<CosmosApiModule> logger) : base(options, httpClientFactory, logger)
+        public StakingApi(CosmosApiOptions options, IHttpClientFactory httpClientFactory, ILogger<StakingApi> logger) : base(options, httpClientFactory, logger)
         {
         }
+
+        public StakingApi(
+            [ServiceKey] string servicesKey,
+            IServiceProvider serviceProvider,
+            IHttpClientFactory httpClientFactory,
+            ILogger<StakingApi> logger) : base(servicesKey, serviceProvider, httpClientFactory, logger)
+        { }
 
         public async Task<StakingPool> GetStakingDetails(CancellationToken cancellationToken = default)
         {

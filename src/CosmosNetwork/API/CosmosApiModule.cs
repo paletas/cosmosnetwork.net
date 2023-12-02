@@ -1,11 +1,12 @@
 ﻿using CosmosNetwork.Exceptions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Text;
 using System.Text.Json;
 
 namespace CosmosNetwork.API
 {
-    public class CosmosApiModule
+    public abstract class CosmosApiModule
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<CosmosApiModule> _logger;
@@ -18,6 +19,10 @@ namespace CosmosNetwork.API
             this.Options = options;
             this.JsonSerializerOptions = options.JsonSerializerOptions;
         }
+
+        protected internal CosmosApiModule(string serviceKey, IServiceProvider serviceProvider, IHttpClientFactory httpClientFactory, ILogger<CosmosApiModule> logger)
+            : this(serviceProvider.GetRequiredKeyedService<CosmosApiOptions>(serviceKey), httpClientFactory, logger)
+        { }
 
         protected JsonSerializerOptions JsonSerializerOptions { get; init; }
 

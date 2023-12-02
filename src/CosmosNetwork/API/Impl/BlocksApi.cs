@@ -1,4 +1,5 @@
 ﻿using CosmosNetwork.Exceptions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CosmosNetwork.API.Impl
@@ -9,6 +10,13 @@ namespace CosmosNetwork.API.Impl
             CosmosApiOptions options, 
             IHttpClientFactory httpClientFactory, 
             ILogger<BlocksApi> logger) : base(options, httpClientFactory, logger)
+        { }
+
+        public BlocksApi(
+            [ServiceKey] string servicesKey,
+            IServiceProvider serviceProvider,
+            IHttpClientFactory httpClientFactory,
+            ILogger<BlocksApi> logger) : base(servicesKey, serviceProvider, httpClientFactory, logger)
         { }
 
         public async Task<Block?> GetBlock(ulong height, CancellationToken cancellationToken = default)

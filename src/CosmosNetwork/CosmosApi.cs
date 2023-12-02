@@ -2,7 +2,6 @@
 using CosmosNetwork.Modules.Gov;
 using CosmosNetwork.Modules.Staking;
 using Microsoft.Extensions.DependencyInjection;
-using System.Runtime.CompilerServices;
 
 namespace CosmosNetwork
 {

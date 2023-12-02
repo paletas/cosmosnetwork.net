@@ -1,5 +1,7 @@
-﻿using CosmosNetwork.Modules.Distribution.Serialization.Proposals;
+﻿using CosmosNetwork.Modules.Authz;
+using CosmosNetwork.Modules.Distribution.Serialization.Proposals;
 using CosmosNetwork.Modules.Gov;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CosmosNetwork.Modules.Distribution
 {
@@ -10,6 +12,11 @@ namespace CosmosNetwork.Modules.Distribution
         public DistributionModule(GovModule governanceModule)
         {
             this._governanceModule = governanceModule;
+        }
+
+        public DistributionModule([ServiceKey] string serviceKey, IServiceProvider serviceProvider)
+        {
+            this._governanceModule = serviceProvider.GetRequiredKeyedService<GovModule>(serviceKey);
         }
 
         public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)

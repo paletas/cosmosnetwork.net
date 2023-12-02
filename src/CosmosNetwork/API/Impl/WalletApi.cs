@@ -1,6 +1,7 @@
 ﻿using CosmosNetwork.Keys.Sources;
 using CosmosNetwork.Serialization.Json.Responses;
 using CosmosNetwork.Wallets;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CosmosNetwork.API.Impl
@@ -11,7 +12,7 @@ namespace CosmosNetwork.API.Impl
         private readonly ITransactionsApi _transactionsApi;
 
         public WalletApi(
-            CosmosApiOptions apiOptions, 
+            CosmosApiOptions apiOptions,
             NetworkOptions networkOptions,
             IHttpClientFactory httpClientFactory, 
             ILogger<WalletApi> logger,
@@ -19,6 +20,16 @@ namespace CosmosNetwork.API.Impl
         {
             this._networkOptions = networkOptions;
             this._transactionsApi = transactionsApi;
+        }
+
+        public WalletApi(
+            [ServiceKey] string servicesKey,
+            IServiceProvider serviceProvider,
+            IHttpClientFactory httpClientFactory,
+            ILogger<WalletApi> logger) : base(servicesKey, serviceProvider, httpClientFactory, logger)
+        {
+            this._networkOptions = serviceProvider.GetRequiredKeyedService<NetworkOptions>(servicesKey);
+            this._transactionsApi = serviceProvider.GetRequiredKeyedService<ITransactionsApi>(servicesKey);
         }
 
         public ValueTask<IWallet> GetWallet(string mnemonicKey, MnemonicKeyOptions keyOptions, CancellationToken cancellationToken = default)
