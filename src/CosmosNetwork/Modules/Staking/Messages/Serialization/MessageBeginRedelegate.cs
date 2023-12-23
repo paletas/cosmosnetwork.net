@@ -14,10 +14,10 @@ namespace CosmosNetwork.Modules.Staking.Messages.Serialization
         protected internal override Message ToModel()
         {
             return new Staking.Messages.MessageBeginRedelegate(
-                DelegatorAddress,
-                SourceValidatorAddress,
-                DestinationValidatorAddress,
-                Amount.ToModel());
+                this.DelegatorAddress,
+                this.SourceValidatorAddress,
+                this.DestinationValidatorAddress,
+                this.Amount.ToModel());
         }
     }
 }

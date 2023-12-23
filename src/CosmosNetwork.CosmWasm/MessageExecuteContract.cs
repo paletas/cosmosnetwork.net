@@ -12,13 +12,13 @@ namespace CosmosNetwork.CosmWasm
     {
         public const string COSMOS_DESCRIPTOR = "/cosmwasm.wasm.v1.MsgExecuteContract";
 
-        protected override SerializerMessage ToSerialization()
+        public override SerializerMessage ToSerialization()
         {
             return new Serialization.MessageExecuteContract(
-                Coins.Select(coin => coin.ToSerialization()).ToArray(),
-                Sender.Address,
-                Contract.Address,
-                JsonDocument.Parse(ExecuteMessage));
+                this.Coins.Select(coin => coin.ToSerialization()).ToArray(),
+                this.Sender.Address,
+                this.Contract.Address,
+                JsonDocument.Parse(this.ExecuteMessage));
         }
     }
 }

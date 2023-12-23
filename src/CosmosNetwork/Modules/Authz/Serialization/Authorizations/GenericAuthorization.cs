@@ -4,14 +4,14 @@
     {
         public GenericAuthorization(string messageType)
         {
-            TypeUrl = messageType;
+            this.TypeUrl = messageType;
         }
 
         public string TypeUrl { get; set; }
 
         public Authz.Authorizations.IAuthorization ToModel()
         {
-            return new Authz.Authorizations.GenericAuthorization(TypeUrl);
+            return new Authz.Authorizations.GenericAuthorization(this.TypeUrl);
         }
     }
 }

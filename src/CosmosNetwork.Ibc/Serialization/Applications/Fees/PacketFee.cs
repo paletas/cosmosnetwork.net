@@ -11,9 +11,9 @@ namespace CosmosNetwork.Ibc.Serialization.Applications.Fees
         public Ibc.Applications.Fees.PacketFee ToModel()
         {
             return new Ibc.Applications.Fees.PacketFee(
-                Fee.ToModel(),
-                RefundAddress,
-                Relayers);
+                this.Fee.ToModel(),
+                this.RefundAddress,
+                this.Relayers);
         }
     }
 }

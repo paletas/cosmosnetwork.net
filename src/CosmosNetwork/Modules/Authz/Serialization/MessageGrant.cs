@@ -13,9 +13,9 @@ namespace CosmosNetwork.Modules.Authz.Serialization
         protected internal override Message ToModel()
         {
             return new CosmosNetwork.Modules.Authz.MessageGrant(
-                GranterAddress,
-                GranteeAddress,
-                Grant.ToModel());
+                this.GranterAddress,
+                this.GranteeAddress,
+                this.Grant.ToModel());
         }
     }
 }

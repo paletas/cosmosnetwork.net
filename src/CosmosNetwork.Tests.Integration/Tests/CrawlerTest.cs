@@ -17,7 +17,7 @@ namespace CosmosNetwork.Tests.Integration.Tests
 
         public async Task Execute(IWallet wallet, CancellationToken cancellationToken = default)
         {
-            var latestBlock = await _cosmosApi.Blocks.GetLatestBlock(cancellationToken);
+            var latestBlock = await this._cosmosApi.Blocks.GetLatestBlock(cancellationToken);
 
             do
             {
@@ -57,7 +57,7 @@ namespace CosmosNetwork.Tests.Integration.Tests
 
         private static async Task<ulong?> GetCurrentHeight()
         {
-            if (File.Exists("local.state") == false) return 10687242;
+            if (File.Exists("local.state") == false) return default;
             return ulong.Parse(await File.ReadAllTextAsync("local.state"));
         }
 

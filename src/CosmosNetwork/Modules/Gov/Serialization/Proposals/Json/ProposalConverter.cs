@@ -9,7 +9,7 @@ namespace CosmosNetwork.Modules.Gov.Serialization.Proposals.Json
 
         public ProposalConverter(ProposalsRegistry registry)
         {
-            _registry = registry;
+            this._registry = registry;
         }
 
         public override IProposal? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -32,9 +32,12 @@ namespace CosmosNetwork.Modules.Gov.Serialization.Proposals.Json
             }
 
             string? type = innerReader.GetString();
-            if (type is null) throw new JsonException();
+            if (type is null)
+            {
+                throw new JsonException();
+            }
 
-            Type proposalType = _registry.GetProposalByTypeName(type);
+            Type proposalType = this._registry.GetProposalByTypeName(type);
             return (IProposal?)JsonSerializer.Deserialize(ref reader, proposalType, options);
         }
 

@@ -15,7 +15,7 @@ namespace CosmosNetwork.Ibc.Applications.Transfer
     {
         public const string COSMOS_DESCRIPTOR = "/ibc.applications.transfer.v1.MsgTransfer";
 
-        protected override SerializerMessage ToSerialization()
+        public override SerializerMessage ToSerialization()
         {
             return new Serialization.Applications.Transfer.MessageTransfer(
                 this.SourcePort,

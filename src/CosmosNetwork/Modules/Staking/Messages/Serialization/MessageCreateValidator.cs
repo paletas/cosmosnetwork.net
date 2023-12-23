@@ -14,17 +14,17 @@ namespace CosmosNetwork.Modules.Staking.Messages.Serialization
         [property: ProtoMember(2, Name = "commission")] Staking.Serialization.ValidatorCommissionRates Commission,
         [property: ProtoMember(7, Name = "value")] DenomAmount Value,
         [property: JsonPropertyName("pubkey"), JsonConverter(typeof(PublicKeyConverter))] CosmosNetwork.Serialization.Json.PublicKey PublicKeyJson,
-        [property: ProtoMember(6, Name = "pubkey")] CosmosNetwork.Serialization.Proto.SimplePublicKey PublicKeyProto
+        [property: ProtoMember(6, Name = "pubkey")] CosmosNetwork.Serialization.Proto.PublicKey PublicKeyProto
     ) : SerializerMessage(Messages.MessageCreateValidator.COSMOS_DESCRIPTOR)
     {
         protected internal override Message ToModel()
         {
             return new Staking.Messages.MessageCreateValidator(
-                DelegatorAddress, ValidatorAddress, MinimumSelfDelegation,
-                new Staking.ValidatorDescription(Description.Moniker, Description.Identity, Description.Details, Description.Website, Description.SecurityContact),
-                new Staking.ValidatorCommissionRates(Commission.Rate, Commission.MaxRate, Commission.MaxRateChange),
-                Value.ToModel(),
-                PublicKeyJson.ToModel());
+                this.DelegatorAddress, this.ValidatorAddress, this.MinimumSelfDelegation,
+                new Staking.ValidatorDescription(this.Description.Moniker, this.Description.Identity, this.Description.Details, this.Description.Website, this.Description.SecurityContact),
+                new Staking.ValidatorCommissionRates(this.Commission.Rate, this.Commission.MaxRate, this.Commission.MaxRateChange),
+                this.Value.ToModel(),
+                this.PublicKeyJson.ToModel());
         }
     }
 

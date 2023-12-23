@@ -4,9 +4,9 @@ namespace CosmosNetwork.Ibc.Serialization.LightClients.SoloMachine
 {
     [ProtoContract]
     internal record MisbehaviourV1(
-        [property: ProtoMember(1, Name = "client_id")]string ClientId,
-        [property: ProtoMember(2, Name = "sequence")]ulong Sequence,
-        [property: ProtoMember(3, Name = "signature_one")]SignatureAndData SignatureOne,
+        [property: ProtoMember(1, Name = "client_id")] string ClientId,
+        [property: ProtoMember(2, Name = "sequence")] ulong Sequence,
+        [property: ProtoMember(3, Name = "signature_one")] SignatureAndData SignatureOne,
         [property: ProtoMember(4, Name = "signature_two")] SignatureAndData SignatureTwo) : IMisbehaviour
     {
         public const string AnyType = "/ibc.lightclients.solomachine.v1.Misbehaviour";

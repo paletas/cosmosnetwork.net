@@ -5,12 +5,12 @@
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.gov.v1beta1.MsgVote";
 
-        protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
+        public override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.MessageVote(
-                ProposalId,
-                Voter.Address,
-                (Serialization.VoteOptionEnum)Option);
+                this.ProposalId,
+                this.Voter.Address,
+                (Serialization.VoteOptionEnum)this.Option);
         }
     }
 

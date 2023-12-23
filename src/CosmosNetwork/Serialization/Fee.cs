@@ -12,10 +12,10 @@ namespace CosmosNetwork.Serialization
         public CosmosNetwork.Fee ToModel()
         {
             return new CosmosNetwork.Fee(
-                GasLimit,
-                Amount?.Select(c => c.ToModel()).ToArray(),
-                PayerAddress is null ? null : (CosmosAddress)PayerAddress,
-                GranterAddress is null ? null : (CosmosAddress)GranterAddress);
+                this.GasLimit,
+                this.Amount?.Select(c => c.ToModel()).ToArray(),
+                this.PayerAddress is null ? null : (CosmosAddress)this.PayerAddress,
+                this.GranterAddress is null ? null : (CosmosAddress)this.GranterAddress);
         }
     }
 }

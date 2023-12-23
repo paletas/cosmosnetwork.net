@@ -10,7 +10,7 @@ namespace CosmosNetwork.Modules.Authz
 
         internal Modules.Authz.Serialization.Grant ToSerialization()
         {
-            IAuthorization? authorizationSerializable = Authorization;
+            IAuthorization? authorizationSerializable = this.Authorization;
             return authorizationSerializable is null
                 ? throw new InvalidProgramException()
                 : new Serialization.Grant

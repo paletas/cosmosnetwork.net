@@ -1,25 +1,40 @@
-﻿using CosmosNetwork.Keys;
+﻿using CosmosNetwork.Keys.Sources;
 using CosmosNetwork.Serialization.Json.Responses;
 using CosmosNetwork.Wallets;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using UltimateOrb;
 
 namespace CosmosNetwork.API.Impl
 {
-    internal class WalletApi : CosmosApiModule, IWalletApi
+  internal class WalletApi : CosmosApiModule, IWalletApi
     {
         private readonly NetworkOptions _networkOptions;
         private readonly ITransactionsApi _transactionsApi;
 
-        public WalletApi(CosmosApiOptions apiOptions, NetworkOptions networkOptions, HttpClient httpClient, ILogger<WalletApi> logger, ITransactionsApi transactionsApi) : base(apiOptions, httpClient, logger)
+        public WalletApi(
+            CosmosApiOptions apiOptions,
+            NetworkOptions networkOptions,
+            IHttpClientFactory httpClientFactory, 
+            ILogger<WalletApi> logger,
+            ITransactionsApi transactionsApi) : base(apiOptions, httpClientFactory, logger)
         {
-            _networkOptions = networkOptions;
-            _transactionsApi = transactionsApi;
+            this._networkOptions = networkOptions;
+            this._transactionsApi = transactionsApi;
+        }
+
+        public WalletApi(
+            [ServiceKey] string servicesKey,
+            IServiceProvider serviceProvider,
+            IHttpClientFactory httpClientFactory,
+            ILogger<WalletApi> logger) : base(servicesKey, serviceProvider, httpClientFactory, logger)
+        {
+            this._networkOptions = serviceProvider.GetRequiredKeyedService<NetworkOptions>(servicesKey);
+            this._transactionsApi = serviceProvider.GetRequiredKeyedService<ITransactionsApi>(servicesKey);
         }
 
         public ValueTask<IWallet> GetWallet(string mnemonicKey, MnemonicKeyOptions keyOptions, CancellationToken cancellationToken = default)
         {
-            return ValueTask.FromResult<IWallet>(new DirectWallet(Options, new MnemonicKey(mnemonicKey, keyOptions, _networkOptions), this, _transactionsApi));
+            return ValueTask.FromResult<IWallet>(new DirectWallet(this.Options, new MnemonicKeySource(mnemonicKey, keyOptions, this._networkOptions), this, this._transactionsApi));
         }
 
         public async Task<AccountInformation?> GetAccountInformation(string accountAddress, CancellationToken cancellationToken = default)
@@ -37,9 +52,9 @@ namespace CosmosNetwork.API.Impl
                 ? throw new InvalidOperationException()
                 : new AccountBalances(accountBalances.Balances.Select(bal =>
                 {
-                    if (UInt128.TryParseCStyleNormalizedU128(bal.Amount, out UInt128 amount) == false)
-                        throw new InvalidOperationException($"amount format is invalid: {bal.Amount}");
-                    return new NativeCoin(bal.Denom, amount); 
+                    return UInt128.TryParse(bal.Amount, out UInt128 amount) == false
+                        ? throw new InvalidOperationException($"amount format is invalid: {bal.Amount}")
+                        : new NativeCoin(bal.Denom, amount);
                 }));
         }
     }

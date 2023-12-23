@@ -1,9 +1,7 @@
 ﻿using CosmosNetwork.Confio.Types.Serialization;
 using CosmosNetwork.Ibc.Serialization.Core.Client;
-using CosmosNetwork.Ibc.Serialization.Json;
 using ProtoBuf;
 using ProtoBuf.WellKnownTypes;
-using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Ibc.Serialization.LightClients.Tendermint
 {

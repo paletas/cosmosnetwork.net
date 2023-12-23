@@ -14,15 +14,15 @@ namespace CosmosNetwork.CosmWasm
     {
         public const string COSMOS_DESCRIPTOR = "/cosmwasm.wasm.v1.MsgInstantiateContract";
 
-        protected override SerializerMessage ToSerialization()
+        public override SerializerMessage ToSerialization()
         {
             return new Serialization.MessageInstantiateContract(
-                Sender.Address,
-                Admin?.Address,
-                CodeId,
-                Label,
-                JsonDocument.Parse(InitMessage),
-                InitCoins.Select(coin => coin.ToSerialization()).ToArray());
+                this.Sender.Address,
+                this.Admin?.Address,
+                this.CodeId,
+                this.Label,
+                JsonDocument.Parse(this.InitMessage),
+                this.InitCoins.Select(coin => coin.ToSerialization()).ToArray());
         }
     }
 }

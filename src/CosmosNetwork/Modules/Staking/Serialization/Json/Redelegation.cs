@@ -27,14 +27,14 @@ namespace CosmosNetwork.Modules.Staking.Serialization.Json
     }
 
     internal record Redelegation(
-        string DelegatorAddress, 
+        string DelegatorAddress,
         [property: JsonPropertyName("validator_src_address")] string SourceValidatorAddress,
         [property: JsonPropertyName("validator_dst_address")] string DestinationValidatorAddress,
         RedelegationEntry[] Entries);
 
     internal record RedelegationEntry(
-        ulong CreationHeight, 
-        DateTime CompletionTime, 
-        decimal InitialBalance, 
+        ulong CreationHeight,
+        DateTime CompletionTime,
+        decimal InitialBalance,
         [property: JsonPropertyName("shares_dst")] decimal SharesDestination);
 }

@@ -1,5 +1,4 @@
-﻿using CosmosNetwork.Confio.Types;
-using ProtoBuf;
+﻿using ProtoBuf;
 
 namespace CosmosNetwork.Confio.Types.Serialization
 {
@@ -14,11 +13,11 @@ namespace CosmosNetwork.Confio.Types.Serialization
         public Types.LeafOp ToModel()
         {
             return new Types.LeafOp(
-                (Types.HashOperationEnum)Hash,
-                (Types.HashOperationEnum)PreHashKey,
-                (Types.HashOperationEnum)PreHashValue,
-                (Types.LengthOperationEnum)Length,
-                Prefix);
+                (Types.HashOperationEnum)this.Hash,
+                (Types.HashOperationEnum)this.PreHashKey,
+                (Types.HashOperationEnum)this.PreHashValue,
+                (Types.LengthOperationEnum)this.Length,
+                this.Prefix);
         }
     }
 }

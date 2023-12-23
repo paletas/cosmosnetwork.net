@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosNetwork.Ibc", "src\Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosNetwork.CosmWasm", "src\CosmosNetwork.CosmWasm\CosmosNetwork.CosmWasm.csproj", "{377C5331-2014-4FA1-A6E7-A9EBEDBBB240}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosNetwork.Networks.TerraClassic", "src\CosmosNetwork.Networks.TerraClassic\CosmosNetwork.Networks.TerraClassic.csproj", "{4F31BD68-B5C3-4237-AB84-F0E56739E885}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosNetwork.Tendermint.Types", "src\CosmosNetwork.Tendermint.Types\CosmosNetwork.Tendermint.Types.csproj", "{F391478B-066A-4DF1-891E-1F1A75D633AF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosNetwork.Confio.Types", "src\CosmosNetwork.Confio.Types\CosmosNetwork.Confio.Types.csproj", "{3917103F-697F-4C11-A15A-C8237F0B301A}"
@@ -29,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosNetwork.Tests.Integra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosNetwork.Tests.Integration.Terra", "src\CosmosNetwork.Tests.Integration.Terra\CosmosNetwork.Tests.Integration.Terra.csproj", "{F271738D-6BD3-4BEA-96AC-26445F4F067C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CosmosNetwork.Tests.Integration", "src\CosmosNetwork.Tests.Integration\CosmosNetwork.Tests.Integration.csproj", "{BB3A37BE-DBC8-4E82-B80D-F2A063C88E30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CosmosNetwork.Tests.Integration", "src\CosmosNetwork.Tests.Integration\CosmosNetwork.Tests.Integration.csproj", "{BB3A37BE-DBC8-4E82-B80D-F2A063C88E30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,10 +47,6 @@ Global
 		{377C5331-2014-4FA1-A6E7-A9EBEDBBB240}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{377C5331-2014-4FA1-A6E7-A9EBEDBBB240}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{377C5331-2014-4FA1-A6E7-A9EBEDBBB240}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4F31BD68-B5C3-4237-AB84-F0E56739E885}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F31BD68-B5C3-4237-AB84-F0E56739E885}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F31BD68-B5C3-4237-AB84-F0E56739E885}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F31BD68-B5C3-4237-AB84-F0E56739E885}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F391478B-066A-4DF1-891E-1F1A75D633AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F391478B-066A-4DF1-891E-1F1A75D633AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F391478B-066A-4DF1-891E-1F1A75D633AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -86,7 +80,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{4F31BD68-B5C3-4237-AB84-F0E56739E885} = {4EB2AFC2-7E3C-4808-808A-2EE1D37D271A}
 		{5B8F36DA-327B-4CA6-BA2D-2B87D3CC9101} = {512FAED7-B21A-4296-8A8B-A0A4B999BF71}
 		{739E48B9-69D0-4DB3-8749-2AEDB81E5A16} = {4EB2AFC2-7E3C-4808-808A-2EE1D37D271A}
 		{1B9F5127-014F-4E43-861F-6A3BC0D764B9} = {4EB2AFC2-7E3C-4808-808A-2EE1D37D271A}

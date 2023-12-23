@@ -11,7 +11,7 @@ namespace CosmosNetwork.Modules.Distribution.Serialization
 
         protected internal override Message ToModel()
         {
-            return new Distribution.MessageWithdrawValidatorCommission(ValidatorAddress);
+            return new Distribution.MessageWithdrawValidatorCommission(this.ValidatorAddress);
         }
     }
 }

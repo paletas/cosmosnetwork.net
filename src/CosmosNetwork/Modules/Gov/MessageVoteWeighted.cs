@@ -5,12 +5,12 @@
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.gov.v1beta1.MsgVoteWeighted";
 
-        protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
+        public override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.MessageVoteWeighted(
-                ProposalId,
-                Voter.Address,
-                Options.Select(opt => opt.ToJson()).ToArray());
+                this.ProposalId,
+                this.Voter.Address,
+                this.Options.Select(opt => opt.ToJson()).ToArray());
         }
     }
 
@@ -19,8 +19,8 @@
         internal Serialization.WeightedVoteOption ToJson()
         {
             return new Serialization.WeightedVoteOption(
-                (Serialization.VoteOptionEnum)Option,
-                Weight);
+                (Serialization.VoteOptionEnum)this.Option,
+                this.Weight);
         }
     }
 }

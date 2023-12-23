@@ -11,12 +11,12 @@
         internal Serialization.InnerSpec ToSerialization()
         {
             return new Serialization.InnerSpec(
-                ChildOrder,
-                ChildSize,
-                MinPrefixLength,
-                MaxPrefixLength,
-                EmptyChild,
-                (Serialization.HashOperationEnum)Hash);
+                this.ChildOrder,
+                this.ChildSize,
+                this.MinPrefixLength,
+                this.MaxPrefixLength,
+                this.EmptyChild,
+                (Serialization.HashOperationEnum)this.Hash);
         }
     }
 }

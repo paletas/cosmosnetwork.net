@@ -14,11 +14,11 @@ namespace CosmosNetwork.Ibc.Serialization.Applications.Fees
         protected override Message ToModel()
         {
             return new Ibc.Applications.Fees.MessagePayPacketFee(
-                Fee.ToModel(),
-                SourcePortId,
-                SourceChannelId,
-                Signer,
-                Relayers);
+                this.Fee.ToModel(),
+                this.SourcePortId,
+                this.SourceChannelId,
+                this.Signer,
+                this.Relayers);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace CosmosNetwork.Ibc.Core.Channel
     {
         public const string COSMOS_DESCRIPTOR = "/ibc.core.channel.v1.MsgAcknowledgement";
 
-        protected override SerializerMessage ToSerialization()
+        public override SerializerMessage ToSerialization()
         {
             return new Serialization.Core.Channel.MessageAcknowledgement(
                 this.Packet.ToSerialization(),

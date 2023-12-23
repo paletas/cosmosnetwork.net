@@ -11,8 +11,8 @@ namespace CosmosNetwork.Modules.FeeGrant.Serialization.Allowances
         public FeeGrant.Allowances.IAllowance ToModel()
         {
             return new FeeGrant.Allowances.BasicAllowance(
-                SpendLimit.Select(coin => coin.ToModel()).ToArray(),
-                Expiration);
+                this.SpendLimit.Select(coin => coin.ToModel()).ToArray(),
+                this.Expiration);
         }
     }
 }

@@ -1,23 +1,28 @@
 ﻿using CosmosNetwork.Exceptions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Text;
 using System.Text.Json;
 
 namespace CosmosNetwork.API
 {
-    public class CosmosApiModule
+    public abstract class CosmosApiModule
     {
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<CosmosApiModule> _logger;
 
-        protected internal CosmosApiModule(CosmosApiOptions options, HttpClient httpClient, ILogger<CosmosApiModule> logger)
+        protected internal CosmosApiModule(CosmosApiOptions options, IHttpClientFactory httpClientFactory, ILogger<CosmosApiModule> logger)
         {
-            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            _logger = logger;
+            this._httpClientFactory = httpClientFactory;
+            this._logger = logger;
 
-            Options = options;
-            JsonSerializerOptions = options.JsonSerializerOptions;
+            this.Options = options;
+            this.JsonSerializerOptions = options.JsonSerializerOptions;
         }
+
+        protected internal CosmosApiModule(string serviceKey, IServiceProvider serviceProvider, IHttpClientFactory httpClientFactory, ILogger<CosmosApiModule> logger)
+            : this(serviceProvider.GetRequiredKeyedService<CosmosApiOptions>(serviceKey), httpClientFactory, logger)
+        { }
 
         protected JsonSerializerOptions JsonSerializerOptions { get; init; }
 
@@ -25,21 +30,19 @@ namespace CosmosNetwork.API
 
         protected Task<T?> Get<T>(string endpoint, CancellationToken cancellationToken = default)
         {
-            if (this._httpClient.BaseAddress is null)
-                throw new InvalidOperationException();
-
-            return this.Get<T>(new Uri(this._httpClient.BaseAddress, PrepareEndpoint(endpoint)), cancellationToken);
+            return Get<T>(PrepareEndpoint(endpoint), cancellationToken);
         }
 
         protected async Task<T?> Get<T>(Uri endpoint, CancellationToken cancellationToken = default)
         {
-            _logger.LogTrace("GET {endpoint}", endpoint);
+            this._logger.LogTrace("GET {endpoint}", endpoint);
 
-            HttpResponseMessage httpResponse = await _httpClient.GetAsync(endpoint, cancellationToken);
+            HttpClient httpClient = GetHttpClient();
+            HttpResponseMessage httpResponse = await httpClient.GetAsync(endpoint, cancellationToken);
 
             if (httpResponse.IsSuccessStatusCode == false)
             {
-                _logger.LogError("GET {endpoint}: {statusCode} - {reasonPhrase}", endpoint, httpResponse.StatusCode, httpResponse.ReasonPhrase);
+                this._logger.LogError("GET {endpoint}: {statusCode} - {reasonPhrase}", endpoint, httpResponse.StatusCode, httpResponse.ReasonPhrase);
                 return default;
             }
 
@@ -47,76 +50,95 @@ namespace CosmosNetwork.API
 
 #if DEBUG_API
             string stringResponse = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-            _logger.LogTrace($"Get {endpoint} received {stringResponse}");
+            this._logger.LogTrace("Get {endpoint} received {response}", endpoint, stringResponse);
 #endif
 
             Stream streamResponse = await httpResponse.Content.ReadAsStreamAsync(cancellationToken);
-            return await JsonSerializer.DeserializeAsync<T>(streamResponse, options: JsonSerializerOptions, cancellationToken: cancellationToken);
+            return await JsonSerializer.DeserializeAsync<T>(streamResponse, options: this.JsonSerializerOptions, cancellationToken: cancellationToken);
         }
 
-        protected async Task<TR?> Post<TP, TR>(string endpoint, TP request, CancellationToken cancellationToken = default)
+        protected Task<TR?> Post<TP, TR>(string endpoint, TP request, CancellationToken cancellationToken = default)
         {
-            string serializedRequest = JsonSerializer.Serialize(request, options: JsonSerializerOptions);
+            return Post<TP, TR>(PrepareEndpoint(endpoint), request, cancellationToken);
+        }
+            
+        protected async Task<TR?> Post<TP, TR>(Uri endpoint, TP request, CancellationToken cancellationToken = default)
+        {
+            string serializedRequest = JsonSerializer.Serialize(request, options: this.JsonSerializerOptions);
             using StringContent httpContent = new(serializedRequest, Encoding.UTF8, "application/json");
 
 #if DEBUG_API
-            _logger.LogTrace($"Post {endpoint} sending {serializedRequest}");
+            this._logger.LogTrace("Post {endpoint} sending {request}", endpoint, serializedRequest);
 #endif
 
-            using HttpResponseMessage httpResponse = await _httpClient.PostAsync(PrepareEndpoint(endpoint), httpContent).ConfigureAwait(false);
+            HttpClient httpClient = GetHttpClient();
+            using HttpResponseMessage httpResponse = await httpClient.PostAsync(endpoint, httpContent, cancellationToken).ConfigureAwait(false);
             httpResponse.EnsureSuccessStatusCode();
 
 #if DEBUG_API
             string stringResponse = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-            _logger.LogTrace($"Post {endpoint} received {stringResponse}");
+            this._logger.LogTrace("Post {endpoint} received {response}", endpoint, stringResponse);
 #endif
 
             Stream streamResponse = await httpResponse.Content.ReadAsStreamAsync(cancellationToken);
-            return await JsonSerializer.DeserializeAsync<TR>(streamResponse, options: JsonSerializerOptions, cancellationToken: cancellationToken);
+            return await JsonSerializer.DeserializeAsync<TR>(streamResponse, options: this.JsonSerializerOptions, cancellationToken: cancellationToken);
         }
 
-        protected async Task<(TR? ResponseOK, TErr? ResponseError)> Post<TP, TR, TErr>(string endpoint, TP request, CancellationToken cancellationToken = default)
+        protected Task<(TR? ResponseOK, TErr? ResponseError)> Post<TP, TR, TErr>(string endpoint, TP request, CancellationToken cancellationToken = default)
         {
-            string serializedRequest = JsonSerializer.Serialize(request, options: JsonSerializerOptions);
+            return Post<TP, TR, TErr>(PrepareEndpoint(endpoint), request, cancellationToken);
+        }
+         
+        protected async Task<(TR? ResponseOK, TErr? ResponseError)> Post<TP, TR, TErr>(Uri endpoint, TP request, CancellationToken cancellationToken = default)
+        {
+            string serializedRequest = JsonSerializer.Serialize(request, options: this.JsonSerializerOptions);
             using StringContent httpContent = new(serializedRequest, Encoding.UTF8, "application/json");
 
 #if DEBUG_API
-            _logger.LogTrace($"Post {endpoint} sending {serializedRequest}");
+            this._logger.LogTrace("Post {endpoint} sending {request}", endpoint, serializedRequest);
 #endif
 
-            using HttpResponseMessage httpResponse = await _httpClient.PostAsync(PrepareEndpoint(endpoint), httpContent).ConfigureAwait(false);
+            HttpClient httpClient = GetHttpClient();
+            using HttpResponseMessage httpResponse = await httpClient.PostAsync(endpoint, httpContent, cancellationToken).ConfigureAwait(false);
 
 #if DEBUG_API
             string stringResponse = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-            _logger.LogTrace($"Post {endpoint} received {stringResponse}");
+            this._logger.LogTrace("Post {endpoint} received {response}", endpoint, stringResponse);
 #endif
 
             if (httpResponse.IsSuccessStatusCode)
             {
                 Stream streamResponse = await httpResponse.Content.ReadAsStreamAsync(cancellationToken);
-                return (ResponseOK: await JsonSerializer.DeserializeAsync<TR>(streamResponse, options: JsonSerializerOptions, cancellationToken: cancellationToken), ResponseError: default);
+                return (ResponseOK: await JsonSerializer.DeserializeAsync<TR>(streamResponse, options: this.JsonSerializerOptions, cancellationToken: cancellationToken), ResponseError: default);
             }
             else
             {
                 try
                 {
                     Stream streamResponse = await httpResponse.Content.ReadAsStreamAsync(cancellationToken);
-                    return (ResponseOK: default, ResponseError: await JsonSerializer.DeserializeAsync<TErr>(streamResponse, options: JsonSerializerOptions, cancellationToken: cancellationToken));
+                    return (ResponseOK: default, ResponseError: await JsonSerializer.DeserializeAsync<TErr>(streamResponse, options: this.JsonSerializerOptions, cancellationToken: cancellationToken));
                 }
                 catch (JsonException)
                 {
 #if DEBUG_API == false
                     var stringResponse = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
 #endif
-                    _logger.LogError($"Invalid json detected: {stringResponse}");
+                    this._logger.LogError("Invalid json detected: {reponse}", stringResponse);
                     throw new InvalidResponseException(stringResponse);
                 }
             }
         }
 
-        private static string PrepareEndpoint(string endpoint)
+        private static Uri PrepareEndpoint(string endpoint)
         {
-            return endpoint.StartsWith('/') ? endpoint[1..] : endpoint;
+            return new Uri(endpoint.StartsWith('/') ? endpoint[1..] : endpoint, UriKind.Relative);
+        }
+
+        private HttpClient GetHttpClient()
+        {
+            return this.Options.HttpClientName is null
+                ? this._httpClientFactory.CreateClient()
+                : this._httpClientFactory.CreateClient(this.Options.HttpClientName);
         }
     }
 }

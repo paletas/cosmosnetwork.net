@@ -9,10 +9,10 @@
         public Serialization.ProofSpec ToSerialization()
         {
             return new Serialization.ProofSpec(
-                LeafSpec.ToSerialization(),
-                InnerSpec.ToSerialization(),
-                MaxDepth,
-                MinDepth);
+                this.LeafSpec.ToSerialization(),
+                this.InnerSpec.ToSerialization(),
+                this.MaxDepth,
+                this.MinDepth);
         }
     }
 }

@@ -8,9 +8,9 @@
         internal Serialization.Applications.Fees.PacketFee ToSerialization()
         {
             return new Serialization.Applications.Fees.PacketFee(
-                Fee.ToSerialization(),
-                RefundAddress.Address,
-                Relayers);
+                this.Fee.ToSerialization(),
+                this.RefundAddress.Address,
+                this.Relayers);
         }
     }
 }

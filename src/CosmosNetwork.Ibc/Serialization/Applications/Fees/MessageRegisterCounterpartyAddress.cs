@@ -12,9 +12,9 @@ namespace CosmosNetwork.Ibc.Serialization.Applications.Fees
         protected override Message ToModel()
         {
             return new Ibc.Applications.Fees.MessageRegisterCounterpartyAddress(
-                Address,
-                CounterpartyAddress,
-                ChannelId);
+                this.Address,
+                this.CounterpartyAddress,
+                this.ChannelId);
         }
     }
 }

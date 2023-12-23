@@ -16,10 +16,10 @@ namespace CosmosNetwork.CosmWasm.Serialization
         protected override Message ToModel()
         {
             return new CosmWasm.MessageExecuteContract(
-                Coins.Select(c => c.ToModel()).ToArray(),
-                SenderAddress,
-                ContractAddress,
-                ToJsonString(ExecuteMessage));
+                this.Coins.Select(c => c.ToModel()).ToArray(),
+                this.SenderAddress,
+                this.ContractAddress,
+                ToJsonString(this.ExecuteMessage));
         }
 
         private static string ToJsonString(JsonDocument jdoc)

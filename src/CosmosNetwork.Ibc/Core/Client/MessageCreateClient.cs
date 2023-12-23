@@ -11,7 +11,7 @@ namespace CosmosNetwork.Ibc.Core.Client
     {
         public const string COSMOS_DESCRIPTOR = "/ibc.core.client.v1.MsgCreateClient";
 
-        protected override SerializerMessage ToSerialization()
+        public override SerializerMessage ToSerialization()
         {
             return new Serialization.Core.Client.MessageCreateClient(this.Signer)
             {

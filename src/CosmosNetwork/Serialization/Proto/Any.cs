@@ -1,5 +1,4 @@
 ﻿using ProtoBuf;
-using System.Text.Json;
 
 namespace CosmosNetwork.Serialization.Proto
 {
@@ -32,7 +31,7 @@ namespace CosmosNetwork.Serialization.Proto
 
         public object? Unpack(Type type)
         {
-            using MemoryStream memoryStream = new(Value);
+            using MemoryStream memoryStream = new(this.Value);
             return Serializer.Deserialize(memoryStream, type);
         }
 

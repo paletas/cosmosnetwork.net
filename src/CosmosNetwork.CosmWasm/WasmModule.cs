@@ -1,6 +1,7 @@
 ﻿using CosmosNetwork.CosmWasm.Serialization.Proposals;
 using CosmosNetwork.Modules;
 using CosmosNetwork.Modules.Gov;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CosmosNetwork.CosmWasm
 {
@@ -11,6 +12,11 @@ namespace CosmosNetwork.CosmWasm
         public WasmModule(GovModule governanceModule)
         {
             this._governanceModule = governanceModule;
+        }
+
+        public WasmModule([ServiceKey] string serviceKey, IServiceProvider serviceProvider)
+        {
+            this._governanceModule = serviceProvider.GetRequiredKeyedService<GovModule>(serviceKey);
         }
 
         public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)

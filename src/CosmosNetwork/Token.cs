@@ -1,9 +1,8 @@
 ﻿using CosmosNetwork.Serialization;
-using UltimateOrb;
 
 namespace CosmosNetwork
 {
-    public record DenomMetadata(string Description, DenomUnit[] Units, string BaseDenom, string DisplayDenom, string Name, string Symbol);
+  public record DenomMetadata(string Description, DenomUnit[] Units, string BaseDenom, string DisplayDenom, string Name, string Symbol);
 
     public record DenomUnit(string Denom, ushort Decimals, string[] Aliases);
 
@@ -11,7 +10,7 @@ namespace CosmosNetwork
     {
         public DenomAmount ToSerialization()
         {
-            return new DenomAmount(Denom, Amount.ToStringCStyleU128());
+            return new DenomAmount(this.Denom, this.Amount.ToString());
         }
     }
 

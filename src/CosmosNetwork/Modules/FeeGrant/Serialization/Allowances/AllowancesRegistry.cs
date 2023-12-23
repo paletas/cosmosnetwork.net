@@ -7,15 +7,15 @@
         public void Register<T>(string typeName)
             where T : IAllowance
         {
-            if (_allowancesRegistry.ContainsKey(typeName) == false)
+            if (this._allowancesRegistry.ContainsKey(typeName) == false)
             {
-                _allowancesRegistry.Add(typeName, typeof(T));
+                this._allowancesRegistry.Add(typeName, typeof(T));
             }
         }
 
         public Type GetProposalByTypeName(string typeName)
         {
-            return _allowancesRegistry[typeName];
+            return this._allowancesRegistry[typeName];
         }
     }
 }

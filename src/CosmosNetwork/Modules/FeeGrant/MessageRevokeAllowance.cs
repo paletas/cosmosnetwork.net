@@ -5,11 +5,11 @@
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.feegrant.v1beta1.MsgRevokeAllowance";
 
-        protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
+        public override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.MessageRevokeAllowance(
-                Granter.Address,
-                Grantee.Address);
+                this.Granter.Address,
+                this.Grantee.Address);
         }
     }
 }

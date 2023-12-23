@@ -7,9 +7,9 @@
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward";
 
-        protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
+        public override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
-            return new Serialization.MessageWithdrawDelegatorReward(Delegator.Address, Validator.Address);
+            return new Serialization.MessageWithdrawDelegatorReward(this.Delegator.Address, this.Validator.Address);
         }
     }
 }

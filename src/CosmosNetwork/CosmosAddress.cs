@@ -14,7 +14,7 @@
 
         public override string ToString()
         {
-            return Address;
+            return this.Address;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace CosmosNetwork.CosmWasm.Serialization
         protected override Message ToModel()
         {
             return new CosmWasm.MessageStoreContractCode(
-                this.SenderAddress, 
+                this.SenderAddress,
                 this.WasmByteCode,
                 this.InstantiatePermission?.ToModel());
         }

@@ -7,14 +7,14 @@
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.bank.v1beta1.MsgMultiSend";
 
-        protected internal override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
+        public override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {
             return new Serialization.MessageMultiSend(
-                Inputs.Select(i => new Serialization.MessageMultiSendInputOutput(
+                this.Inputs.Select(i => new Serialization.MessageMultiSendInputOutput(
                     i.Address.Address,
                     i.Coins.Select(coin => coin.ToSerialization()).ToArray())
                 ).ToArray(),
-                Outputs.Select(i => new Serialization.MessageMultiSendInputOutput(
+                this.Outputs.Select(i => new Serialization.MessageMultiSendInputOutput(
                     i.Address.Address,
                     i.Coins.Select(coin => coin.ToSerialization()).ToArray())
                 ).ToArray()

@@ -12,9 +12,9 @@ namespace CosmosNetwork.Ibc.Serialization.Applications.Fees
         public Ibc.Applications.Fees.Fee ToModel()
         {
             return new Ibc.Applications.Fees.Fee(
-                ReceiverFee.Select(fee => fee.ToModel()).ToArray(),
-                AcknowledgeFee.Select(fee => fee.ToModel()).ToArray(),
-                TimeoutFee.Select(fee => fee.ToModel()).ToArray());
+                this.ReceiverFee.Select(fee => fee.ToModel()).ToArray(),
+                this.AcknowledgeFee.Select(fee => fee.ToModel()).ToArray(),
+                this.TimeoutFee.Select(fee => fee.ToModel()).ToArray());
         }
     }
 }

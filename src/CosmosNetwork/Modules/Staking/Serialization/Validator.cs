@@ -19,17 +19,17 @@ namespace CosmosNetwork.Modules.Staking.Serialization
         public Staking.Validator ToModel()
         {
             return new Staking.Validator(
-                OperatorAddress,
-                ConsensusPublicKey.ToModel(),
-                Jailed,
-                (Staking.BondStatusEnum)Status,
-                Tokens,
-                DelegatorShares,
-                Description.ToModel(),
-                UnbondingHeight,
-                UnbondingTime,
-                Commission.ToModel(),
-                MinimumSelfDelegation);
+                this.OperatorAddress,
+                this.ConsensusPublicKey.ToModel(),
+                this.Jailed,
+                (Staking.BondStatusEnum)this.Status,
+                this.Tokens,
+                this.DelegatorShares,
+                this.Description.ToModel(),
+                this.UnbondingHeight,
+                this.UnbondingTime,
+                this.Commission.ToModel(),
+                this.MinimumSelfDelegation);
         }
     }
 
@@ -37,7 +37,7 @@ namespace CosmosNetwork.Modules.Staking.Serialization
     {
         public Staking.ValidatorDescription ToModel()
         {
-            return new Staking.ValidatorDescription(Moniker, Identity, Details, Website, SecurityContact);
+            return new Staking.ValidatorDescription(this.Moniker, this.Identity, this.Details, this.Website, this.SecurityContact);
         }
     }
 
@@ -45,7 +45,7 @@ namespace CosmosNetwork.Modules.Staking.Serialization
     {
         public Staking.ValidatorCommission ToModel()
         {
-            return new Staking.ValidatorCommission(CommissionRates.ToModel(), UpdateTime);
+            return new Staking.ValidatorCommission(this.CommissionRates.ToModel(), this.UpdateTime);
         }
     }
 
@@ -53,7 +53,7 @@ namespace CosmosNetwork.Modules.Staking.Serialization
     {
         public Staking.ValidatorCommissionRates ToModel()
         {
-            return new Staking.ValidatorCommissionRates(Rate, MaxRate, MaxRateChange);
+            return new Staking.ValidatorCommissionRates(this.Rate, this.MaxRate, this.MaxRateChange);
         }
     }
 

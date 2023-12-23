@@ -1,6 +1,5 @@
 ﻿using CosmosNetwork.Serialization;
 using ProtoBuf;
-using System;
 using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.CosmWasm.Serialization
@@ -12,7 +11,7 @@ namespace CosmosNetwork.CosmWasm.Serialization
     {
         protected override Message ToModel()
         {
-            return new CosmWasm.MessageClearContractAdmin(AdminAddress, ContractAddress);
+            return new CosmWasm.MessageClearContractAdmin(this.AdminAddress, this.ContractAddress);
         }
     }
 }

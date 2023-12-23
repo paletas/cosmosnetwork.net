@@ -1,6 +1,5 @@
 ﻿using CosmosNetwork.Tendermint.Types.Serialization.Version;
 using ProtoBuf;
-using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Tendermint.Types.Serialization
 {

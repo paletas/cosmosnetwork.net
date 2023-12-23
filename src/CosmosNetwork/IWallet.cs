@@ -1,6 +1,4 @@
-﻿using CosmosNetwork.Keys;
-
-namespace CosmosNetwork
+﻿namespace CosmosNetwork
 {
     public interface IWallet
     {
@@ -9,8 +7,6 @@ namespace CosmosNetwork
         string? AccountNumber { get; }
 
         ulong? Sequence { get; }
-
-        IEnumerable<IKey> GetKeys();
 
         Task UpdateAccountInformation(CancellationToken cancellationToken = default);
 

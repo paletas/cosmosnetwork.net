@@ -7,15 +7,15 @@
         public void Register<T>(string typeName)
             where T : IProposal
         {
-            if (_proposalsRegistry.ContainsKey(typeName) == false)
+            if (this._proposalsRegistry.ContainsKey(typeName) == false)
             {
-                _proposalsRegistry.Add(typeName, typeof(T));
+                this._proposalsRegistry.Add(typeName, typeof(T));
             }
         }
 
         internal Type GetProposalByTypeName(string typeName)
         {
-            return _proposalsRegistry[typeName];
+            return this._proposalsRegistry[typeName];
         }
     }
 }

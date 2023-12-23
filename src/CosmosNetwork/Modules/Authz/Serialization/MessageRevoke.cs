@@ -13,7 +13,7 @@ namespace CosmosNetwork.Modules.Authz.Serialization
     {
         protected internal override Message ToModel()
         {
-            return new CosmosNetwork.Modules.Authz.MessageRevoke(GranterAddress, GranteeAddress, MessageTypeUrl);
+            return new CosmosNetwork.Modules.Authz.MessageRevoke(this.GranterAddress, this.GranteeAddress, this.MessageTypeUrl);
         }
     }
 }

@@ -1,28 +1,23 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using UltimateOrb;
 
 namespace CosmosNetwork.Serialization.Json.Converters
 {
-    internal class Uint128Converter : JsonConverter<UInt128>
+  internal class Uint128Converter : JsonConverter<UInt128>
     {
         public override UInt128 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             string? extraLong = reader.GetString();
-            if (extraLong is null)
-                throw new JsonException();
-
-            if (extraLong.Equals("0", StringComparison.InvariantCulture))
-                return UInt128.FromBits(0, 0);
-            else if (UInt128.TryParseCStyleNormalizedU128(extraLong, out UInt128 int128))
-                return int128;
-            else
-                throw new JsonException();
+            return extraLong is null
+                ? throw new JsonException()
+                : extraLong.Equals("0", StringComparison.InvariantCulture)
+                ? UInt128.Zero
+                : UInt128.TryParse(extraLong, out UInt128 int128) ? int128 : throw new JsonException();
         }
 
         public override void Write(Utf8JsonWriter writer, UInt128 value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue(value.ToStringCStyleU128());
+            writer.WriteStringValue(value.ToString());
         }
     }
 }

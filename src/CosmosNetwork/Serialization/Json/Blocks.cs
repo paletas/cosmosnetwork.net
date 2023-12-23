@@ -7,7 +7,7 @@ namespace CosmosNetwork.Serialization.Json
     {
         internal CosmosNetwork.Block ToModel()
         {
-            return new CosmosNetwork.Block(BlockId?.ToModel(), Details.ToModel());
+            return new CosmosNetwork.Block(this.BlockId?.ToModel(), this.Details.ToModel());
         }
     }
 
@@ -15,7 +15,7 @@ namespace CosmosNetwork.Serialization.Json
     {
         internal CosmosNetwork.BlockIdentification ToModel()
         {
-            return new CosmosNetwork.BlockIdentification(Hash, Parts.ToModel());
+            return new CosmosNetwork.BlockIdentification(this.Hash, this.Parts.ToModel());
         }
     }
 
@@ -23,7 +23,7 @@ namespace CosmosNetwork.Serialization.Json
     {
         internal CosmosNetwork.BlockIdentificationParts ToModel()
         {
-            return new CosmosNetwork.BlockIdentificationParts(Total, Hash);
+            return new CosmosNetwork.BlockIdentificationParts(this.Total, this.Hash);
         }
     }
 
@@ -31,7 +31,7 @@ namespace CosmosNetwork.Serialization.Json
     {
         internal CosmosNetwork.BlockDetails ToModel()
         {
-            return new CosmosNetwork.BlockDetails(Header.ToModel(), Data.ToModel(), LastCommit?.ToModel());
+            return new CosmosNetwork.BlockDetails(this.Header.ToModel(), this.Data.ToModel(), this.LastCommit?.ToModel());
         }
     }
 
@@ -57,20 +57,20 @@ namespace CosmosNetwork.Serialization.Json
         {
             return new CosmosNetwork.BlockHeader
             (
-                Version.ToModel(),
-                ChainId,
-                Height,
-                Time,
-                LastBlock.ToModel(),
-                LastCommitHash,
-                DataHash,
-                ValidatorsHash,
-                NextValidatorsHash,
-                ConsensusHash,
-                AppHash,
-                LastResultsHash,
-                EvidenceHash,
-                ProposerAddress
+                this.Version.ToModel(),
+                this.ChainId,
+                this.Height,
+                this.Time,
+                this.LastBlock.ToModel(),
+                this.LastCommitHash,
+                this.DataHash,
+                this.ValidatorsHash,
+                this.NextValidatorsHash,
+                this.ConsensusHash,
+                this.AppHash,
+                this.LastResultsHash,
+                this.EvidenceHash,
+                this.ProposerAddress
             );
         }
     }
@@ -79,7 +79,7 @@ namespace CosmosNetwork.Serialization.Json
     {
         internal CosmosNetwork.BlockVersion ToModel()
         {
-            return new CosmosNetwork.BlockVersion(Block);
+            return new CosmosNetwork.BlockVersion(this.Block);
         }
     }
 
@@ -87,7 +87,7 @@ namespace CosmosNetwork.Serialization.Json
     {
         internal CosmosNetwork.BlockData ToModel()
         {
-            return new CosmosNetwork.BlockData(Transactions);
+            return new CosmosNetwork.BlockData(this.Transactions);
         }
     }
 
@@ -95,7 +95,7 @@ namespace CosmosNetwork.Serialization.Json
     {
         internal CosmosNetwork.BlockCommit ToModel()
         {
-            return new CosmosNetwork.BlockCommit(Height, Round, BlockId.ToModel(), Signatures.Select(sig => sig.ToModel()).ToArray());
+            return new CosmosNetwork.BlockCommit(this.Height, this.Round, this.BlockId.ToModel(), this.Signatures.Select(sig => sig.ToModel()).ToArray());
         }
     }
 
@@ -103,7 +103,7 @@ namespace CosmosNetwork.Serialization.Json
     {
         internal CosmosNetwork.BlockSignature ToModel()
         {
-            return new CosmosNetwork.BlockSignature((CosmosNetwork.BlockFlagEnum)BlockIdFlag, ValidatorAddress, Timestamp, Signature);
+            return new CosmosNetwork.BlockSignature((CosmosNetwork.BlockFlagEnum)this.BlockIdFlag, this.ValidatorAddress, this.Timestamp, this.Signature);
         }
     }
 

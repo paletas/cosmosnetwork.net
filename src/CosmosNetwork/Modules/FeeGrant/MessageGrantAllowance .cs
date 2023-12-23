@@ -11,13 +11,13 @@ namespace CosmosNetwork.Modules.FeeGrant
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.feegrant.v1beta1.MsgGrantAllowance";
 
-        protected internal override SerializerMessage ToSerialization()
+        public override SerializerMessage ToSerialization()
         {
             return new Serialization.MessageGrantAllowance(
-                Granter.Address,
-                Grantee.Address)
+                this.Granter.Address,
+                this.Grantee.Address)
             {
-                Allowance = Allowance.ToSerialization()
+                Allowance = this.Allowance.ToSerialization()
             };
         }
     }

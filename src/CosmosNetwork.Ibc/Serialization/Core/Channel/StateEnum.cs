@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace CosmosNetwork.Ibc.Serialization.Core.Channel
 {
     [ProtoContract]
-    [JsonConverter(typeof(JsonStringEnumMemberConverter))] 
+    [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum StateEnum
     {
         [ProtoEnum(Name = "STATE_UNINITIALIZED_UNSPECIFIED")]

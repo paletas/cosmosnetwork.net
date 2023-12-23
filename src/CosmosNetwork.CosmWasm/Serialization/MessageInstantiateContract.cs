@@ -16,15 +16,15 @@ namespace CosmosNetwork.CosmWasm.Serialization
     {
         protected override Message ToModel()
         {
-            string initMessageJson = JsonSerializer.Serialize(Msg);
+            string initMessageJson = JsonSerializer.Serialize(this.Msg);
 
             return new CosmWasm.MessageInstantiateContract(
-                SenderAddress,
-                string.IsNullOrWhiteSpace(AdminAddress) ? null : new CosmosAddress(AdminAddress),
-                CodeId,
-                Label,
+                this.SenderAddress,
+                string.IsNullOrWhiteSpace(this.AdminAddress) ? null : new CosmosAddress(this.AdminAddress),
+                this.CodeId,
+                this.Label,
                 initMessageJson,
-                Funds.Select(coin => coin.ToModel()).ToArray());
+                this.Funds.Select(coin => coin.ToModel()).ToArray());
         }
     }
 }

@@ -4,7 +4,7 @@
         ulong Sequence,
         ulong Timestamp,
         byte[] Signature,
-        SignatureKey NewPublicKey,
+        IPublicKey NewPublicKey,
         string NewDiversifier) : IHeader
     {
         public Serialization.LightClients.IHeader ToSerialization()
@@ -13,7 +13,7 @@
                 this.Sequence,
                 this.Timestamp,
                 this.Signature,
-                this.NewPublicKey.ToJson().ToProto(),
+                this.NewPublicKey.ToProto(),
                 this.NewDiversifier);
         }
     }

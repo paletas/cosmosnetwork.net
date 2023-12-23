@@ -16,11 +16,11 @@ namespace CosmosNetwork.Modules.FeeGrant.Serialization.Allowances
         public FeeGrant.Allowances.IAllowance ToModel()
         {
             return new FeeGrant.Allowances.PeriodicAllowance(
-                (FeeGrant.Allowances.BasicAllowance)Basic.ToModel(),
-                Period,
-                PeriodSpendLimit.Select(coin => coin.ToModel()).ToArray(),
-                PeriodCanSpend.Select(coin => coin.ToModel()).ToArray(),
-                PeriodReset);
+                (FeeGrant.Allowances.BasicAllowance)this.Basic.ToModel(),
+                this.Period,
+                this.PeriodSpendLimit.Select(coin => coin.ToModel()).ToArray(),
+                this.PeriodCanSpend.Select(coin => coin.ToModel()).ToArray(),
+                this.PeriodReset);
         }
     }
 }

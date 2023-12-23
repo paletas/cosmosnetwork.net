@@ -21,30 +21,30 @@ namespace CosmosNetwork.Modules.FeeGrant.Serialization
         [ProtoMember(3, Name = "allowance")]
         public Any AllowancePack
         {
-            get => _allowancePack ??= Any.Pack(Allowance ?? throw new InvalidOperationException());
-            set => _allowancePack = value;
+            get => this._allowancePack ??= Any.Pack(this.Allowance ?? throw new InvalidOperationException());
+            set => this._allowancePack = value;
         }
 
         [ProtoAfterDeserialization]
         public void OnDeserialization()
         {
-            switch (AllowancePack.TypeUrl)
+            switch (this.AllowancePack.TypeUrl)
             {
                 case BasicAllowance.AllowanceType:
-                    Allowance = AllowancePack.Unpack<BasicAllowance>();
+                    this.Allowance = this.AllowancePack.Unpack<BasicAllowance>();
                     break;
                 case PeriodicAllowance.AllowanceType:
-                    Allowance = AllowancePack.Unpack<PeriodicAllowance>();
+                    this.Allowance = this.AllowancePack.Unpack<PeriodicAllowance>();
                     break;
                 case AllowedMessageAllowance.AllowanceType:
-                    Allowance = AllowancePack.Unpack<AllowedMessageAllowance>();
+                    this.Allowance = this.AllowancePack.Unpack<AllowedMessageAllowance>();
                     break;
             }
         }
 
         protected internal override Message ToModel()
         {
-            return new CosmosNetwork.Modules.FeeGrant.MessageGrantAllowance(GranterAddress, GranteeAddress, Allowance.ToModel());
+            return new CosmosNetwork.Modules.FeeGrant.MessageGrantAllowance(this.GranterAddress, this.GranteeAddress, this.Allowance.ToModel());
         }
     }
 }

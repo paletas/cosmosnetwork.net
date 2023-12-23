@@ -1,4 +1,4 @@
 ﻿namespace CosmosNetwork
 {
-    public record NetworkOptions(string ChainId, string CoinType, string AddressPrefix);
+    public record NetworkOptions(string ChainId, string CoinType, string AddressPrefix, string[] DefaultDenoms);
 }

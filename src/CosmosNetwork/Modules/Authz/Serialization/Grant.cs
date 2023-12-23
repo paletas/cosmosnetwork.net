@@ -15,8 +15,8 @@ namespace CosmosNetwork.Modules.Authz.Serialization
         [ProtoMember(1, Name = "authorization")]
         public Any AuthorizationPack
         {
-            get => Any.Pack(Authorization);
-            set => Authorization = value.Unpack<Authorizations.IAuthorization>() ?? throw new NotImplementedException();
+            get => Any.Pack(this.Authorization);
+            set => this.Authorization = value.Unpack<Authorizations.IAuthorization>() ?? throw new NotImplementedException();
         }
 
         [ProtoMember(2, Name = "expiration")]
@@ -26,7 +26,7 @@ namespace CosmosNetwork.Modules.Authz.Serialization
         {
             return new CosmosNetwork.Modules.Authz.Grant
             {
-                Authorization = Authorization.ToModel(),
+                Authorization = this.Authorization.ToModel(),
                 Expiration = Expiration
             };
         }

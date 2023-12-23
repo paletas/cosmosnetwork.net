@@ -1,4 +1,5 @@
-﻿using CosmosNetwork.Serialization.Json.Converters;
+﻿using CosmosNetwork.Keys;
+using CosmosNetwork.Serialization.Json.Converters;
 using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Serialization.Json
@@ -6,7 +7,7 @@ namespace CosmosNetwork.Serialization.Json
     [JsonConverter(typeof(PublicKeyConverter))]
     public abstract record PublicKey(KeyTypeEnum Type)
     {
-        public abstract SignatureKey ToModel();
+        public abstract IPublicKey ToModel();
 
         public abstract Proto.PublicKey ToProto();
     }
@@ -15,15 +16,12 @@ namespace CosmosNetwork.Serialization.Json
     {
         public override Proto.PublicKey ToProto()
         {
-            return new Proto.PublicKey
-            {
-                Secp256k1 = Convert.FromBase64String(Value)
-            };
+            return new Proto.Secp256k1(this.Value);
         }
 
-        public override SignatureKey ToModel()
+        public override IPublicKey ToModel()
         {
-            return new Secp256k1Key(Value);
+            return new BasicPublicKey(this.Value, BasicPublicKey.CurveAlgorithm.Secp256k1);
         }
     }
 
@@ -31,15 +29,12 @@ namespace CosmosNetwork.Serialization.Json
     {
         public override Proto.PublicKey ToProto()
         {
-            return new Proto.PublicKey
-            {
-                Ed25519 = Convert.FromBase64String(Value)
-            };
+            return new Proto.Ed25519(this.Value);
         }
 
-        public override SignatureKey ToModel()
+        public override IPublicKey ToModel()
         {
-            return new Ed25519Key(Value);
+            return new BasicPublicKey(this.Value, BasicPublicKey.CurveAlgorithm.Ed25519);
         }
     }
 
@@ -47,12 +42,12 @@ namespace CosmosNetwork.Serialization.Json
     {
         public override Proto.PublicKey ToProto()
         {
-            throw new NotImplementedException();
+            return new Proto.MultisigKey(this.Threshold, this.PublicKeys.Select(pk => pk.ToProto()).ToArray());
         }
 
-        public override SignatureKey ToModel()
+        public override IPublicKey ToModel()
         {
-            return new CosmosNetwork.MultisigKey(Threshold, PublicKeys.Select(pk => pk.ToModel()).ToArray());
+            return new MultisigPublicKey(this.Threshold, this.PublicKeys.Select(pk => pk.ToModel()).ToArray());
         }
     }
 }
