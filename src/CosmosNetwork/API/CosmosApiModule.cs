@@ -11,18 +11,16 @@ namespace CosmosNetwork.API
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<CosmosApiModule> _logger;
 
-        protected internal CosmosApiModule(CosmosApiOptions options, IHttpClientFactory httpClientFactory, ILogger<CosmosApiModule> logger)
+        protected internal CosmosApiModule(string serviceKey, IServiceProvider serviceProvider, IHttpClientFactory httpClientFactory, ILogger<CosmosApiModule> logger)
         {
+            CosmosApiOptions options = serviceProvider.GetRequiredKeyedService<CosmosApiOptions>(serviceKey);
+
             this._httpClientFactory = httpClientFactory;
             this._logger = logger;
 
             this.Options = options;
             this.JsonSerializerOptions = options.JsonSerializerOptions;
         }
-
-        protected internal CosmosApiModule(string serviceKey, IServiceProvider serviceProvider, IHttpClientFactory httpClientFactory, ILogger<CosmosApiModule> logger)
-            : this(serviceProvider.GetRequiredKeyedService<CosmosApiOptions>(serviceKey), httpClientFactory, logger)
-        { }
 
         protected JsonSerializerOptions JsonSerializerOptions { get; init; }
 
@@ -43,7 +41,14 @@ namespace CosmosNetwork.API
             if (httpResponse.IsSuccessStatusCode == false)
             {
                 this._logger.LogError("GET {endpoint}: {statusCode} - {reasonPhrase}", endpoint, httpResponse.StatusCode, httpResponse.ReasonPhrase);
-                return default;
+                if (httpResponse.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return default;
+                }
+                else
+                {
+                    throw new CosmosApiException(httpResponse.StatusCode, $"an error occurred while calling {endpoint}");
+                }
             }
 
             httpResponse.EnsureSuccessStatusCode();

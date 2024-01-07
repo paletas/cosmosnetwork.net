@@ -12,17 +12,6 @@ namespace CosmosNetwork.API.Impl
         private readonly ITransactionsApi _transactionsApi;
 
         public WalletApi(
-            CosmosApiOptions apiOptions,
-            NetworkOptions networkOptions,
-            IHttpClientFactory httpClientFactory, 
-            ILogger<WalletApi> logger,
-            ITransactionsApi transactionsApi) : base(apiOptions, httpClientFactory, logger)
-        {
-            this._networkOptions = networkOptions;
-            this._transactionsApi = transactionsApi;
-        }
-
-        public WalletApi(
             [ServiceKey] string servicesKey,
             IServiceProvider serviceProvider,
             IHttpClientFactory httpClientFactory,

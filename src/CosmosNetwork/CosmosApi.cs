@@ -8,12 +8,16 @@ namespace CosmosNetwork
     public class CosmosApi
     {
         public CosmosApi(IServiceProvider serviceProvider)
+            : this(CosmosNetworkConfigurator.DEFAULT_KEY, serviceProvider)
+        { }
+
+        public CosmosApi([ServiceKey] string serviceKey, IServiceProvider serviceProvider)
         {
-            this.Blocks = serviceProvider.GetRequiredService<IBlocksApi>();
-            this.Transactions = serviceProvider.GetRequiredService<ITransactionsApi>();
-            this.Wallet = serviceProvider.GetRequiredService<IWalletApi>();
-            this.Staking = serviceProvider.GetRequiredService<IStakingApi>();
-            this.Governance = serviceProvider.GetRequiredService<IGovApi>();
+            this.Blocks = serviceProvider.GetRequiredKeyedService<IBlocksApi>(serviceKey);
+            this.Transactions = serviceProvider.GetRequiredKeyedService<ITransactionsApi>(serviceKey);
+            this.Wallet = serviceProvider.GetRequiredKeyedService<IWalletApi>(serviceKey);
+            this.Staking = serviceProvider.GetRequiredKeyedService<IStakingApi>(serviceKey);
+            this.Governance = serviceProvider.GetRequiredKeyedService<IGovApi>(serviceKey);
         }
 
         public IBlocksApi Blocks { get; init; }

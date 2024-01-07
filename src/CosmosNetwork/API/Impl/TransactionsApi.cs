@@ -10,16 +10,7 @@ namespace CosmosNetwork.API.Impl
     internal class TransactionsApi : CosmosApiModule, ITransactionsApi
     {
         private readonly IBlocksApi _blocksApi;
-
-        public TransactionsApi(
-            CosmosApiOptions options, 
-            IHttpClientFactory httpClientFactory, 
-            ILogger<TransactionsApi> logger, 
-            IBlocksApi blocksApi) : base(options, httpClientFactory, logger)
-        {
-            this._blocksApi = blocksApi;
-        }
-
+        
         public TransactionsApi(
             [ServiceKey] string servicesKey,
             IServiceProvider serviceProvider,

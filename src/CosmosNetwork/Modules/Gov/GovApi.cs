@@ -6,9 +6,6 @@ namespace CosmosNetwork.Modules.Gov
 {
     internal class GovApi : CosmosApiModule, IGovApi
     {
-        public GovApi(CosmosApiOptions options, IHttpClientFactory httpClientFactory, ILogger<GovApi> logger) : base(options, httpClientFactory, logger)
-        { }
-
         public GovApi(
             [ServiceKey] string servicesKey,
             IServiceProvider serviceProvider,

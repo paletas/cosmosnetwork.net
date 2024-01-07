@@ -7,10 +7,6 @@ namespace CosmosNetwork.Modules.Staking
 {
     internal class StakingApi : CosmosApiModule, IStakingApi
     {
-        public StakingApi(CosmosApiOptions options, IHttpClientFactory httpClientFactory, ILogger<StakingApi> logger) : base(options, httpClientFactory, logger)
-        {
-        }
-
         public StakingApi(
             [ServiceKey] string servicesKey,
             IServiceProvider serviceProvider,

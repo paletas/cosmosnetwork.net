@@ -16,13 +16,14 @@ namespace CosmosNetwork
 {
     public class CosmosNetworkConfigurator
     {
-        private readonly bool _useKeyedInstances;
-        private readonly string? _serviceKey;
+        internal const string DEFAULT_KEY = "DEFAULT";
+
+        private readonly string _serviceKey;
+        private readonly List<Type> _configuredModuleTypes = [];
 
         protected internal CosmosNetworkConfigurator(IServiceCollection services, CosmosMessageRegistry registry, CosmosApiOptions options, bool useKeyedInstances, string? serviceKey = null)
         {
-            this._useKeyedInstances = useKeyedInstances;
-            this._serviceKey = serviceKey;
+            this._serviceKey = useKeyedInstances ? serviceKey! : DEFAULT_KEY;
 
             this.Services = services;
             this.Options = options;
@@ -36,6 +37,8 @@ namespace CosmosNetwork
         public virtual IServiceCollection Services { get; }
 
         public virtual NetworkOptions? Network { get; set; }
+
+        internal IEnumerable<Type> ConfiguredModules => this._configuredModuleTypes;
 
         public virtual CosmosNetworkConfigurator SetGasOptions(decimal gasAdjustment)
         {
@@ -56,16 +59,10 @@ namespace CosmosNetwork
         public CosmosNetworkConfigurator AddMessageModule<T>()
             where T : class, ICosmosMessageModule
         {
-            if (this._useKeyedInstances)
-            {
-                this.Services.AddKeyedSingleton<T>(this._serviceKey);
-                this.Services.AddKeyedSingleton<ICosmosMessageModule>(this._serviceKey, (sp, key) => sp.GetRequiredKeyedService<T>(key));
-            }
-            else
-            {
-                this.Services.AddSingleton<T>();
-                this.Services.AddSingleton<ICosmosMessageModule>(sp => sp.GetRequiredService<T>());
-            }
+            this._configuredModuleTypes.Add(typeof(T));
+
+            this.Services.AddKeyedSingleton<T>(this._serviceKey);
+            this.Services.AddKeyedSingleton<ICosmosMessageModule>(this._serviceKey, (sp, key) => sp.GetRequiredKeyedService<T>(key));
 
             return this;
         }
@@ -73,16 +70,10 @@ namespace CosmosNetwork
         public CosmosNetworkConfigurator AddMessageModule<T>(T module)
             where T : class, ICosmosMessageModule
         {
-            if (this._useKeyedInstances)
-            {
-                this.Services.AddKeyedSingleton<T>(this._serviceKey, module);
-                this.Services.AddKeyedSingleton<ICosmosMessageModule>(this._serviceKey, module);
-            }
-            else
-            {
-                this.Services.AddSingleton<T>(module);
-                this.Services.AddSingleton<ICosmosMessageModule>(module);
-            }
+            this._configuredModuleTypes.Add(typeof(T));
+
+            this.Services.AddKeyedSingleton<T>(this._serviceKey, module);
+            this.Services.AddKeyedSingleton<ICosmosMessageModule>(this._serviceKey, module);
 
             return this;
         }
@@ -91,20 +82,13 @@ namespace CosmosNetwork
             where TE : class, ICosmosMessageModule
             where TN : class, ICosmosMessageModule
         {
-            if (this._useKeyedInstances)
-            {
-                this.Services.RemoveAllKeyed<TE>(this._serviceKey);
+            this._configuredModuleTypes.Remove(typeof(TE));
+            this._configuredModuleTypes.Add(typeof(TN));
 
-                this.Services.AddKeyedSingleton<TN>(this._serviceKey, newModule);
-                this.Services.AddKeyedSingleton<ICosmosMessageModule>(this._serviceKey, (sp, key) => newModule);
-            }
-            else
-            {
-                this.Services.RemoveAll<TE>();
+            this.Services.RemoveAllKeyed<TE>(this._serviceKey);
 
-                this.Services.AddSingleton<TN>(newModule);
-                this.Services.AddSingleton<ICosmosMessageModule>(newModule);
-            }
+            this.Services.AddKeyedSingleton<TN>(this._serviceKey, newModule);
+            this.Services.AddKeyedSingleton<ICosmosMessageModule>(this._serviceKey, (sp, key) => newModule);
 
             return this;
         }
@@ -112,14 +96,9 @@ namespace CosmosNetwork
         public CosmosNetworkConfigurator RemoveMessageModule<T>()
             where T : class, ICosmosMessageModule
         {
-            if (this._useKeyedInstances)
-            {
-                this.Services.RemoveAllKeyed<T>(this._serviceKey);
-            }
-            else
-            {
-                this.Services.RemoveAll<T>();
-            }
+            this._configuredModuleTypes.Remove(typeof(T));
+
+            this.Services.RemoveAllKeyed<T>(this._serviceKey);
 
             return this;
         }
@@ -127,14 +106,7 @@ namespace CosmosNetwork
         public CosmosNetworkConfigurator AddApiModule<T>()
             where T : CosmosApiModule
         {
-            if (this._useKeyedInstances)
-            {
-                this.Services.AddKeyedScoped<T>(this._serviceKey);
-            }
-            else
-            {
-                this.Services.AddScoped<T>();
-            }
+            this.Services.AddKeyedScoped<T>(this._serviceKey);
 
             return this;
         }
@@ -143,14 +115,7 @@ namespace CosmosNetwork
             where TI : class
             where TP : CosmosApiModule, TI
         {
-            if (this._useKeyedInstances)
-            {
-                this.Services.AddKeyedScoped<TI, TP>(this._serviceKey);
-            }
-            else
-            {
-                this.Services.AddScoped<TI, TP>();
-            }
+            this.Services.AddKeyedScoped<TI, TP>(this._serviceKey);
 
             return this;
         }
@@ -159,20 +124,26 @@ namespace CosmosNetwork
             where TI : class
             where TP : CosmosApiModule, TI
         {
-            if (this._useKeyedInstances)
-            {
-                this.Services.RemoveAllKeyed<TI>(this._serviceKey);
-                this.Services.AddKeyedScoped<TI, TP>(this._serviceKey);
-            }
-            else
-            {
-                this.Services.RemoveAll<TI>();
-                this.Services.AddScoped<TI, TP>();
-            }
+            this.Services.RemoveAllKeyed<TI>(this._serviceKey);
+            this.Services.AddKeyedScoped<TI, TP>(this._serviceKey);
 
             return this;
         }
-    } 
+
+        internal void SetupChain<T>(NetworkOptions networkOptions)
+            where T : CosmosApi
+        {
+            this.Network = networkOptions;
+
+            if (this._serviceKey == DEFAULT_KEY)
+            {
+                this.Services.AddScoped(sp => sp.GetRequiredKeyedService<T>(DEFAULT_KEY));
+            }
+
+            this.Services.AddKeyedScoped<T>(this._serviceKey);
+            this.Services.AddKeyedSingleton(this._serviceKey, networkOptions);
+        }
+    }
 
     public static class CosmosNetworkConfiguration
     {
@@ -186,7 +157,7 @@ namespace CosmosNetwork
         {
             return AddCosmosNetwork(services, endpoint, clientName, isDefaultClient: false, options);
         }
-        
+
         private static CosmosNetworkConfigurator AddCosmosNetwork(this IServiceCollection services, string endpoint, string clientName, bool isDefaultClient, CosmosApiOptions? options = null)
         {
             CosmosMessageRegistry cosmosMessageRegistry = new();
@@ -196,7 +167,7 @@ namespace CosmosNetwork
             if (options.SkipHttpClientConfiguration == false)
             {
                 services.AddHttpClient(options.HttpClientName, client => client.BaseAddress = new Uri(endpoint));
-            }     
+            }
 
             CosmosNetworkConfigurator cosmosNetworkConfigurator = new(services, cosmosMessageRegistry, options, isDefaultClient == false, clientName);
 
@@ -217,8 +188,8 @@ namespace CosmosNetwork
 
             if (isDefaultClient)
             {
-                services.AddSingleton(cosmosNetworkConfigurator);
-                services.AddSingleton(options);
+                services.AddKeyedSingleton(CosmosNetworkConfigurator.DEFAULT_KEY, cosmosNetworkConfigurator);
+                services.AddKeyedSingleton(CosmosNetworkConfigurator.DEFAULT_KEY, options);
             }
             else
             {
@@ -237,17 +208,21 @@ namespace CosmosNetwork
         public static void SetupChain<T>(this CosmosNetworkConfigurator configurator, NetworkOptions networkOptions)
             where T : CosmosApi
         {
-            configurator.Network = networkOptions;
-            configurator.Services.AddScoped<T>();
-            configurator.Services.AddSingleton(networkOptions);
+            configurator.SetupChain<T>(networkOptions);
         }
 
         public static void UseCosmosNetwork(this IServiceProvider provider)
         {
-            CosmosNetworkConfigurator configurator = provider.GetRequiredService<CosmosNetworkConfigurator>();
-            IEnumerable<ICosmosMessageModule> modules = provider.GetServices<ICosmosMessageModule>();
-            foreach (ICosmosMessageModule module in modules)
+            UseCosmosNetwork(provider, CosmosNetworkConfigurator.DEFAULT_KEY);
+        }
+
+        public static void UseCosmosNetwork(this IServiceProvider provider, string clientName)
+        {
+            CosmosNetworkConfigurator configurator = provider.GetRequiredKeyedService<CosmosNetworkConfigurator>(clientName);
+
+            foreach (Type moduleType in configurator.ConfiguredModules)
             {
+                ICosmosMessageModule module = (ICosmosMessageModule)provider.GetRequiredKeyedService(moduleType, clientName);
                 module.ConfigureModule(configurator.Options, configurator.Registry);
             }
         }
