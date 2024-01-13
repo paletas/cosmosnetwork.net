@@ -11,7 +11,7 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Connection
         [property: ProtoMember(3, Name = "proof_height")] Height ProofHeight,
         [property: ProtoMember(4, Name = "signer")] string Signer) : SerializerMessage(Ibc.Core.Connection.MessageConnectionOpenConfirm.COSMOS_DESCRIPTOR)
     {
-        protected override Message ToModel()
+        public override Message ToModel()
         {
             return new Ibc.Core.Connection.MessageConnectionOpenConfirm(
                 this.ConnectionId,

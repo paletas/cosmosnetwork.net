@@ -1,6 +1,6 @@
 ﻿namespace CosmosNetwork.Modules.Gov.Serialization.Proposals
 {
-    internal record TextProposal(string Title, string Description) : IProposalImplementation
+    public record TextProposal(string Title, string Description) : IProposal
     {
         public const string ProposalType = "/cosmos.gov.v1beta1.TextProposal";
 

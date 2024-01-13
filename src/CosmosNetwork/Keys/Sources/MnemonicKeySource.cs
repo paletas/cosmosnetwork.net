@@ -8,7 +8,7 @@
             byte[] privateKey = wallet.GetPrivateKey((int)options.Index);
             byte[] publicKey = Cryptography.ECDSA.Secp256K1Manager.GetPublicKey(privateKey, true);
 
-            base.SetKeys(new BasicPrivateKey(privateKey), new BasicPublicKey(publicKey, BasicPublicKey.CurveAlgorithm.Secp256k1));
+            base.SetKeys(new BasicPrivateKey(privateKey), new BasicPublicKey(publicKey, KeyCurveAlgorithm.Secp256k1));
         }
         
         private static string GetHdPath(string coinType, uint account, uint index)

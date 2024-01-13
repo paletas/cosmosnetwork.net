@@ -1,6 +1,6 @@
 ﻿namespace CosmosNetwork.Modules.Staking.Serialization.Json
 {
-    internal record UnbondingDelegation(string DelegatorAddress, string ValidatorAddress, UnbondingDelegationEntry[] Entries)
+    public record UnbondingDelegation(string DelegatorAddress, string ValidatorAddress, UnbondingDelegationEntry[] Entries)
     {
         public Staking.UnbondingDelegation ToModel()
         {
@@ -8,7 +8,7 @@
         }
     }
 
-    internal record UnbondingDelegationEntry(ulong CreationHeight, DateTime CompletionTime, decimal InitialBalance, decimal Balance)
+    public record UnbondingDelegationEntry(ulong CreationHeight, DateTime CompletionTime, decimal InitialBalance, decimal Balance)
     {
         public Staking.UnbondingDelegationEntry ToModel()
         {

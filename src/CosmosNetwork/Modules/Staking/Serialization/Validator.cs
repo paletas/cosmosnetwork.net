@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Modules.Staking.Serialization
 {
-    internal record Validator(
+    public record Validator(
         string OperatorAddress,
         [property: JsonPropertyName("consensus_pubkey")] CosmosNetwork.Serialization.Json.PublicKey ConsensusPublicKey,
         bool Jailed,
@@ -16,7 +16,7 @@ namespace CosmosNetwork.Modules.Staking.Serialization
         ValidatorCommission Commission,
         [property: JsonPropertyName("min_self_delegation")] decimal MinimumSelfDelegation)
     {
-        public Staking.Validator ToModel()
+        public Staking.Validator ToModel(ValidatorPower? validatorPower)
         {
             return new Staking.Validator(
                 this.OperatorAddress,
@@ -29,11 +29,12 @@ namespace CosmosNetwork.Modules.Staking.Serialization
                 this.UnbondingHeight,
                 this.UnbondingTime,
                 this.Commission.ToModel(),
-                this.MinimumSelfDelegation);
+                this.MinimumSelfDelegation,
+                validatorPower?.Power ?? default);
         }
     }
 
-    internal record ValidatorDescription(string Moniker, string Identity, string Details, string Website, string SecurityContact)
+    public record ValidatorDescription(string Moniker, string Identity, string Details, string Website, string SecurityContact)
     {
         public Staking.ValidatorDescription ToModel()
         {
@@ -41,7 +42,7 @@ namespace CosmosNetwork.Modules.Staking.Serialization
         }
     }
 
-    internal record ValidatorCommission(ValidatorCommissionRates CommissionRates, DateTime UpdateTime)
+    public record ValidatorCommission(ValidatorCommissionRates CommissionRates, DateTime UpdateTime)
     {
         public Staking.ValidatorCommission ToModel()
         {
@@ -49,7 +50,7 @@ namespace CosmosNetwork.Modules.Staking.Serialization
         }
     }
 
-    internal record ValidatorCommissionRates(decimal Rate, decimal MaxRate, decimal MaxRateChange)
+    public record ValidatorCommissionRates(decimal Rate, decimal MaxRate, decimal MaxRateChange)
     {
         public Staking.ValidatorCommissionRates ToModel()
         {
@@ -58,7 +59,7 @@ namespace CosmosNetwork.Modules.Staking.Serialization
     }
 
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
-    internal enum BondStatusEnum
+    public enum BondStatusEnum
     {
         [EnumMember(Value = "BOND_STATUS_UNSPECIFIED")]
         Unspecified = 0,

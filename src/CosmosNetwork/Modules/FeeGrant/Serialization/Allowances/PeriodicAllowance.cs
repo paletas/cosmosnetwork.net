@@ -2,7 +2,7 @@
 
 namespace CosmosNetwork.Modules.FeeGrant.Serialization.Allowances
 {
-    internal record PeriodicAllowance(
+    public record PeriodicAllowance(
         BasicAllowance Basic,
         TimeSpan Period,
         DenomAmount[] PeriodSpendLimit,

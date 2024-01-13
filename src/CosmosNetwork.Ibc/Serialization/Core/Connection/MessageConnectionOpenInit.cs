@@ -11,7 +11,7 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Connection
         [property: ProtoMember(4, Name = "delay_period")] ulong DelayPeriod,
         [property: ProtoMember(5, Name = "signer")] string Signer) : SerializerMessage(Ibc.Core.Connection.MessageConnectionOpenInit.COSMOS_DESCRIPTOR)
     {
-        protected override Message ToModel()
+        public override Message ToModel()
         {
             return new Ibc.Core.Connection.MessageConnectionOpenInit(
                 this.ClientId,

@@ -11,7 +11,7 @@ namespace CosmosNetwork.Modules.Staking.Messages.Serialization
         [property: ProtoMember(1, Name = "description")] Staking.Serialization.ValidatorDescription Description,
         [property: ProtoMember(3, Name = "commission_rate")] decimal? ComissionRate) : SerializerMessage(Staking.Messages.MessageEditValidator.COSMOS_DESCRIPTOR)
     {
-        protected internal override Message ToModel()
+        public override Message ToModel()
         {
             return new Staking.Messages.MessageEditValidator(
                 this.ValidatorAddress, this.MinimumSelfDelegation,

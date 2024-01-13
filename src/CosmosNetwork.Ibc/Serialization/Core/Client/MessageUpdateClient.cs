@@ -20,7 +20,7 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Client
             set => this.Header = value.UnpackHeader();
         }
 
-        protected override Message ToModel()
+        public override Message ToModel()
         {
             return new Ibc.Core.Client.MessageUpdateClient(
                 this.ClientId,

@@ -26,7 +26,7 @@ namespace CosmosNetwork.Modules.Gov
         {
             const string Url = "/cosmos/gov/v1beta1/params/{0}";
 
-            Serialization.Json.GovParams? response = await Get<Serialization.Json.GovParams>(string.Format(Url, "deposit"), cancellationToken);
+            Serialization.GovParams? response = await Get<Serialization.GovParams>(string.Format(Url, "deposit"), cancellationToken);
             if (response is null) throw new InvalidOperationException();
             return response.DepositParams.ToModel();
         }
@@ -35,7 +35,7 @@ namespace CosmosNetwork.Modules.Gov
         {
             const string Url = "/cosmos/gov/v1beta1/params/{0}";
 
-            Serialization.Json.GovParams? response = await Get<Serialization.Json.GovParams>(string.Format(Url, "tallying"), cancellationToken);
+            Serialization.GovParams? response = await Get<Serialization.GovParams>(string.Format(Url, "tallying"), cancellationToken);
             if (response is null) throw new InvalidOperationException();
             return response.TallyParams.ToModel();
         }
@@ -44,7 +44,7 @@ namespace CosmosNetwork.Modules.Gov
         {
             const string Url = "/cosmos/gov/v1beta1/params/{0}";
 
-            Serialization.Json.GovParams? response = await Get<Serialization.Json.GovParams>(string.Format(Url, "voting"), cancellationToken);
+            Serialization.GovParams? response = await Get<Serialization.GovParams>(string.Format(Url, "voting"), cancellationToken);
             if (response is null) throw new InvalidOperationException();
             return response.VotingParams.ToModel();
         }

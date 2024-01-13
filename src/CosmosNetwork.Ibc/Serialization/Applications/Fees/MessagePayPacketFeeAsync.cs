@@ -9,7 +9,7 @@ namespace CosmosNetwork.Ibc.Serialization.Applications.Fees
         [property: ProtoMember(1, Name = "packet_id")] PacketId PacketId,
         [property: ProtoMember(2, Name = "packet_fee")] PacketFee PacketFee) : SerializerMessage(Ibc.Applications.Fees.MessagePayPacketFeeAsync.COSMOS_DESCRIPTOR)
     {
-        protected override Message ToModel()
+        public override Message ToModel()
         {
             return new Ibc.Applications.Fees.MessagePayPacketFeeAsync(
                 this.PacketId.ToModel(),

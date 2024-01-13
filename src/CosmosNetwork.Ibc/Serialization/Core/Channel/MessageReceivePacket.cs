@@ -11,7 +11,7 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Channel
         [property: ProtoMember(3, Name = "proof_height")] Height ProofHeight,
         [property: ProtoMember(4, Name = "signer")] string Signer) : SerializerMessage(Ibc.Core.Channel.MessageReceivePacket.COSMOS_DESCRIPTOR)
     {
-        protected override Message ToModel()
+        public override Message ToModel()
         {
             return new Ibc.Core.Channel.MessageReceivePacket(
                 this.Packet.ToModel(),

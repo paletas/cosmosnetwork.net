@@ -11,7 +11,7 @@ namespace CosmosNetwork.Modules.Authz.Serialization
         string MessageTypeUrl)
         : SerializerMessage(Authz.MessageRevoke.COSMOS_DESCRIPTOR)
     {
-        protected internal override Message ToModel()
+        public override Message ToModel()
         {
             return new CosmosNetwork.Modules.Authz.MessageRevoke(this.GranterAddress, this.GranteeAddress, this.MessageTypeUrl);
         }

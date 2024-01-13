@@ -10,7 +10,7 @@ namespace CosmosNetwork.Modules.Authz.Serialization
         [property: ProtoMember(2, Name = "grantee"), JsonPropertyName("grantee")] string GranteeAddress,
         [property: ProtoMember(3, Name = "grant")] Grant Grant) : SerializerMessage(Authz.MessageGrant.COSMOS_DESCRIPTOR)
     {
-        protected internal override Message ToModel()
+        public override Message ToModel()
         {
             return new CosmosNetwork.Modules.Authz.MessageGrant(
                 this.GranterAddress,

@@ -9,7 +9,7 @@ namespace CosmosNetwork.Modules.Staking.Messages.Serialization
         [property: ProtoMember(2, Name = "validator_address")] string ValidatorAddress,
         [property: ProtoMember(3, Name = "amount")] DenomAmount Amount) : SerializerMessage(Staking.Messages.MessageUndelegate.COSMOS_DESCRIPTOR)
     {
-        protected internal override Message ToModel()
+        public override Message ToModel()
         {
             return new Staking.Messages.MessageUndelegate(this.DelegatorAddress, this.ValidatorAddress, this.Amount.ToModel());
         }

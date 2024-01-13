@@ -13,6 +13,8 @@ namespace CosmosNetwork.CosmWasm.Serialization.Proposals
     {
         public const string ProposalType = "/cosmwasm.wasm.v1.SudoContractProposal";
 
+        public string TypeUrl => ProposalType;
+
         public Modules.Gov.Proposals.IProposal ToModel()
         {
             return new CosmWasm.Proposals.SudoContractProposal(

@@ -11,7 +11,7 @@ namespace CosmosNetwork.Modules.FeeGrant.Serialization
     {
         public const string TERRA_DESCRIPTOR = "feegrant/MsgRevokeAllowance";
 
-        protected internal override Message ToModel()
+        public override Message ToModel()
         {
             return new FeeGrant.MessageRevokeAllowance(this.GranterAddress, this.GranteeAddress);
         }

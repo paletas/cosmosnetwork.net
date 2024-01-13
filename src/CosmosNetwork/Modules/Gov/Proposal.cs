@@ -1,5 +1,4 @@
 ﻿using CosmosNetwork.Modules.Gov.Proposals;
-using System.Numerics;
 
 namespace CosmosNetwork.Modules.Gov
 {
@@ -14,14 +13,20 @@ namespace CosmosNetwork.Modules.Gov
         DateTime? VotingStartTime,
         DateTime? VotingEndTime)
     {
-    }
-
-    public record ProposalTally(
-        BigInteger Yes,
-        BigInteger Abstain,
-        BigInteger No,
-        BigInteger NoWithVeto)
-    {
-
+        internal Serialization.Proposal ToSerialization()
+        {
+            return new Serialization.Proposal
+            {
+                Content = this.Content.ToSerialization(),
+                DepositEndTime = this.DepositEndTime,
+                FinalTallyResult = this.FinalTallyResult.ToSerialization(),
+                ProposalId = this.ProposalId,
+                Status = (Serialization.ProposalStatusEnum)this.Status,
+                SubmitTime = this.SubmitTime,
+                TotalDeposit = this.TotalDeposit.Select(x => x.ToSerialization()).ToArray(),
+                VotingEndTime = this.VotingEndTime,
+                VotingStartTime = this.VotingStartTime
+            };
+        }
     }
 }

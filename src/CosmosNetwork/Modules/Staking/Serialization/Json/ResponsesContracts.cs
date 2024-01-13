@@ -1,20 +1,20 @@
 ﻿namespace CosmosNetwork.Modules.Staking.Serialization.Json
 {
-    internal record GetAddressDelegationsResponse(DelegationBalance[] DelegationResponses, CosmosNetwork.Serialization.Json.Pagination Pagination);
+    public record GetAddressDelegationsResponse(DelegationBalance[] DelegationResponses, CosmosNetwork.Serialization.Json.Pagination Pagination);
 
-    internal record GetAddressDelegationResponse(DelegationBalance DelegationResponse);
+    public record GetAddressDelegationResponse(DelegationBalance DelegationResponse);
 
-    internal record GetAddressRedelegationsResponse(RedelegationResponse[] RedelegationResponses, CosmosNetwork.Serialization.Json.Pagination Pagination);
+    public record GetAddressRedelegationsResponse(RedelegationResponse[] RedelegationResponses, CosmosNetwork.Serialization.Json.Pagination Pagination);
 
-    internal record GetAddressUnbondingDelegationsResponse(UnbondingDelegation[] UnbondingResponses, CosmosNetwork.Serialization.Json.Pagination Pagination);
+    public record GetAddressUnbondingDelegationsResponse(UnbondingDelegation[] UnbondingResponses, CosmosNetwork.Serialization.Json.Pagination Pagination);
 
-    internal record GetAddressUnbondingDelegationResponse(UnbondingDelegation UnbondingResponse);
+    public record GetAddressUnbondingDelegationResponse(UnbondingDelegation UnbondingResponse);
 
-    internal record GetValidatorResponse(Validator Validator);
+    public record GetValidatorResponse(Validator Validator);
 
-    internal record GetValidatorsResponse(Validator[] Validators, CosmosNetwork.Serialization.Json.Pagination Pagination);
+    public record GetValidatorsResponse(Validator[] Validators, CosmosNetwork.Serialization.Json.Pagination Pagination);
 
-    internal record GetDelegationParamsResponse(DelegationParams Params);
+    public record GetDelegationParamsResponse(DelegationParams Params);
 
-    internal record GetDelegationPoolResponse(StakingPool Pool);
+    public record GetDelegationPoolResponse(StakingPool Pool);
 }

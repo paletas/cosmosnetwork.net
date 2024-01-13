@@ -14,7 +14,7 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Channel
         [property: ProtoMember(5, Name = "next_sequence_recv"), JsonPropertyName("next_sequence_recv")] ulong NextSequenceReceiver,
         [property: ProtoMember(6, Name = "signer")] string Signer) : SerializerMessage(Ibc.Core.Channel.MessageTimeoutOnClose.COSMOS_DESCRIPTOR)
     {
-        protected override Message ToModel()
+        public override Message ToModel()
         {
             return new Ibc.Core.Channel.MessageTimeoutOnClose(
                 this.Packet.ToModel(),

@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Modules.Authz.Serialization.Json
 {
-    internal class AuthorizationsConverter : JsonConverter<Serialization.Authorizations.IAuthorization[]>
+    public class AuthorizationsConverter : JsonConverter<Serialization.Authorizations.IAuthorization[]>
     {
         private readonly AuthorizationRegistry _registry;
 
@@ -50,7 +50,7 @@ namespace CosmosNetwork.Modules.Authz.Serialization.Json
         }
     }
 
-    internal class AuthorizationConverter : JsonConverter<Authorizations.IAuthorization>
+    public class AuthorizationConverter : JsonConverter<Authorizations.IAuthorization>
     {
         private readonly AuthorizationRegistry _registry;
 

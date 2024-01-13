@@ -5,13 +5,15 @@ using ProtoBuf;
 namespace CosmosNetwork.Modules.Distribution.Serialization.Proposals
 {
     [ProtoContract]
-    internal record CommunityPoolSpendProposal(
+    public record CommunityPoolSpendProposal(
         [property: ProtoMember(1, Name = "title")] string Title,
         [property: ProtoMember(2, Name = "description")] string Description,
         [property: ProtoMember(3, Name = "recipient")] string RecipientAddress,
         [property: ProtoMember(4, Name = "amount")] DenomAmount[] Amount) : IProposal
     {
         public const string ProposalType = "/cosmos.distribution.v1beta1.CommunityPoolSpendProposal";
+
+        public string TypeUrl => ProposalType;
 
         public Gov.Proposals.IProposal ToModel()
         {

@@ -13,7 +13,7 @@ namespace CosmosNetwork.CosmWasm.Serialization
         [property: ProtoMember(2, Name = "contract"), JsonPropertyName("contract")] string ContractAddress,
         [property: ProtoMember(3, Name = "msg"), JsonPropertyName("msg")] JsonDocument ExecuteMessage) : SerializerMessage(CosmWasm.MessageExecuteContract.COSMOS_DESCRIPTOR)
     {
-        protected override Message ToModel()
+        public override Message ToModel()
         {
             return new CosmWasm.MessageExecuteContract(
                 this.Coins.Select(c => c.ToModel()).ToArray(),

@@ -1,4 +1,5 @@
-﻿using CosmosNetwork.Serialization.Json;
+﻿using CosmosNetwork.Modules.Auth.Serialization.Json;
+using CosmosNetwork.Serialization.Json;
 using CosmosNetwork.Serialization.Json.Converters;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -7,7 +8,7 @@ namespace CosmosNetwork
 {
     public class CosmosApiOptions
     {
-        public CosmosApiOptions(string httpClientName, ulong? minimumAvailableBlockHeight = default)
+        public CosmosApiOptions(string? httpClientName = null, ulong? minimumAvailableBlockHeight = default)
         {
             if (minimumAvailableBlockHeight.HasValue)
             {
@@ -15,11 +16,12 @@ namespace CosmosNetwork
             }
 
             this.HttpClientName = httpClientName;
+            this.SkipHttpClientConfiguration = httpClientName is null;
         }
 
-        public string HttpClientName { get; }
+        public string? HttpClientName { get; }
 
-        public bool SkipHttpClientConfiguration { get; set; }
+        public bool SkipHttpClientConfiguration { get; }
 
         internal NetworkOptions? Network { get; set; }
 
@@ -41,9 +43,10 @@ namespace CosmosNetwork
                 PropertyNameCaseInsensitive = true,
                 NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                PropertyNamingPolicy = new SnakeCaseNamingPolicy()
+                PropertyNamingPolicy = new SnakeCaseNamingPolicy(),
             };
 
+            options.Converters.Add(new JsonStringEnumMemberConverter());
             options.Converters.Add(new Uint128Converter());
             options.Converters.Add(new Int128Converter());
             options.Converters.Add(new BlockFlagConverter());
@@ -51,6 +54,7 @@ namespace CosmosNetwork
             options.Converters.Add(new TimeSpanConverter());
             options.Converters.Add(new TimestampConverter());
             options.Converters.Add(new MessagesConverter(this.MessageRegistry ?? throw new InvalidOperationException()));
+            options.Converters.Add(new AccountConverter());
 
             return options;
         }

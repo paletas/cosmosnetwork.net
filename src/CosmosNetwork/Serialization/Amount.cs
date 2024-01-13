@@ -13,5 +13,12 @@ namespace CosmosNetwork.Serialization
                 ? throw new InvalidOperationException($"invalid amount format: {this.Amount}")
                 : (Coin)new NativeCoin(this.Denom, amount);
         }
+
+        public virtual CoinDecimal ToDecimalModel()
+        {
+            return decimal.TryParse(this.Amount, out decimal amount) == false
+                ? throw new InvalidOperationException($"invalid amount format: {this.Amount}")
+                : new CoinDecimal(this.Denom, amount, true);
+        }
     };
 }

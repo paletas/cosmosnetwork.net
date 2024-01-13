@@ -11,7 +11,8 @@
         ulong? UnbondingHeight,
         DateTime? UnbondingTime,
         ValidatorCommission Commission,
-        decimal MinimumSelfDelegation);
+        decimal MinimumSelfDelegation,
+        decimal Power);
 
     public record ValidatorDescription(string Moniker, string Identity, string Details, string Website, string SecurityContact);
 

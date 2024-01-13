@@ -7,8 +7,6 @@ namespace CosmosNetwork.Modules.Authz.Serialization.Authorizations
     [JsonConverter(typeof(AuthorizationsConverter))]
     public interface IAuthorization : IHasAny
     {
-        new string TypeUrl { get; }
-
         Authz.Authorizations.IAuthorization ToModel();
     }
 }

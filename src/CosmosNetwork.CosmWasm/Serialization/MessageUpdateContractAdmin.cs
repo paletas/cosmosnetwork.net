@@ -12,7 +12,7 @@ namespace CosmosNetwork.CosmWasm.Serialization
     {
         public const string TERRA_DESCRIPTOR = "wasm/MsgUpdateContractAdmin";
 
-        protected override Message ToModel()
+        public override Message ToModel()
         {
             return new CosmWasm.MessageUpdateContractAdmin(this.AdminAddress, this.NewAdminAddress, this.ContractAddress);
         }

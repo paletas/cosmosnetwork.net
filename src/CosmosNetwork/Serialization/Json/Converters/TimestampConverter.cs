@@ -14,13 +14,13 @@ namespace CosmosNetwork.Serialization.Json.Converters
             }
 
             string? value = reader.GetString();
-            if (value is null)
+            if (value is null || long.TryParse(value, out long longTimestamp) == false)
             {
                 throw new JsonException();
             }
 
-            DateTime timestamp = DateTime.Parse(value);
-            return new Timestamp(timestamp);
+            DateTimeOffset timestamp = DateTimeOffset.FromUnixTimeSeconds(longTimestamp);
+            return new Timestamp(timestamp.UtcDateTime);
         }
 
         public override void Write(Utf8JsonWriter writer, Timestamp value, JsonSerializerOptions options)

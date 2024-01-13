@@ -15,11 +15,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="API\Internal\**" />
-    <EmbeddedResource Remove="API\Internal\**" />
-    <None Remove="API\Internal\**" />
+    <InternalsVisibleTo Include="CosmosNetwork.Tests" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="Cryptography.ECDSA.Secp256K1" Version="1.1.3" />
     <PackageReference Include="DevHawk.RIPEMD160" Version="3.0.27" />

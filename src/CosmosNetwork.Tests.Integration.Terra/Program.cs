@@ -1,5 +1,6 @@
 ﻿using CosmosNetwork;
 using CosmosNetwork.Tests.Integration;
+using CosmosNetwork.Tests.Integration.Modules;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -9,71 +10,42 @@ services.AddCosmosNetwork("https://pisco-lcd.terra.dev", new CosmosApiOptions())
 
 services.AddLogging(builder => builder.SetMinimumLevel(LogLevel.Information).AddConsole());
 
-services.AddSingleton<IntegrationTestLibrary>();
+services.ConfigureIntegrationTests();
 
 var serviceProvider = services.BuildServiceProvider();
 serviceProvider.UseCosmosNetwork();
 
-var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
-var integrationTestLibrary = serviceProvider.GetRequiredService<IntegrationTestLibrary>();
-
-var integrationTests = integrationTestLibrary.GetTests();
-var integrationTestsQuantity = integrationTests.Count();
-
-CosmosApi cosmosApi = serviceProvider.GetRequiredService<CosmosApi>();
-Console.WriteLine("Setup wallet, mnemonic key:");
-string? mnemonicKey = Console.ReadLine();
-
-while (mnemonicKey is null)
-{
-    Console.Clear();
-    Console.WriteLine("Setup wallet, mnemonic key:");
-    mnemonicKey = Console.ReadLine();
-}
-
-IWallet wallet = await cosmosApi.Wallet.GetWallet(mnemonicKey, new CosmosNetwork.Keys.Sources.MnemonicKeyOptions());
+IEnumerable<IModule> modules = serviceProvider.GetServices<IModule>();
 
 do
 {
-    Console.WriteLine("Integration Tests Available");
+    Console.WriteLine($"[Q] Exit");
     int ix = 1;
-    foreach (var test in integrationTests)
+    foreach (IModule module in modules)
     {
-        Console.WriteLine($"[{ix++}] {test.Name}");
+        Console.WriteLine($"[{ix++}] - {module.Name}");
     }
 
-    IIntegrationTest? testChoosen = null;
-    bool testChoiceStatus = false;
-    do
-    {
-        Console.Write("Choose a test: ");
-        var choosenTestNumberString = Console.ReadLine();
-        int choosenTestNumber;
+    Console.Write("Choose: ");
+    string? key = Console.ReadLine();
 
-        if (int.TryParse(choosenTestNumberString, out choosenTestNumber))
+    if (key is null || key.Equals("q", StringComparison.InvariantCultureIgnoreCase))
+    {
+        break;
+    }
+    else
+    {
+        if (int.TryParse(key, out int choice) && choice > 0 && choice <= modules.Count())
         {
-            if (choosenTestNumber <= 0 || choosenTestNumber > integrationTestsQuantity)
-            {
-                Console.WriteLine($"There's no such test, pick a number between 1 and {integrationTestsQuantity}");
-            }
-            else
-            {
-                testChoosen = integrationTests.ElementAt(choosenTestNumber - 1);
-                testChoiceStatus = true;
-            }
+            IModule module = modules.ElementAt(choice - 1);
+            await module.Execute(CancellationToken.None);
         }
         else
         {
-            Console.WriteLine($"Invalid input! Numbers only.");
+            Console.WriteLine("Wrong value! Try again.. Press to continue.");
+            Console.ReadKey();
+            Console.Clear();
         }
     }
-    while (testChoiceStatus == false);
-
-    if (testChoosen is null) throw new InvalidOperationException();
-    await testChoosen.Execute(wallet);
-
-    Console.ReadKey();
-
-    Console.Clear();
 }
 while (true);

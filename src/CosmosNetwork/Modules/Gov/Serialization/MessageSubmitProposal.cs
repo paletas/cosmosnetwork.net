@@ -19,11 +19,11 @@ namespace CosmosNetwork.Modules.Gov.Serialization
         [JsonIgnore]
         public Any ContentPack
         {
-            get => Any.Pack((IProposalImplementation)this.Content);
-            set => this.Content = value.Unpack<IProposalImplementation>() ?? throw new InvalidOperationException();
+            get => Any.Pack((IProposal)this.Content);
+            set => this.Content = value.Unpack<IProposal>() ?? throw new InvalidOperationException();
         }
 
-        protected internal override Message ToModel()
+        public override Message ToModel()
         {
             return new Gov.MessageSubmitProposal(
                 this.Content.ToModel(),

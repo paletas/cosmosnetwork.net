@@ -11,7 +11,7 @@ namespace CosmosNetwork.Ibc.Serialization.Applications.Fees
         [property: ProtoMember(4, Name = "signer")] string Signer,
         [property: ProtoMember(5, Name = "relayers")] string[] Relayers) : SerializerMessage(Ibc.Applications.Fees.MessagePayPacketFee.COSMOS_DESCRIPTOR)
     {
-        protected override Message ToModel()
+        public override Message ToModel()
         {
             return new Ibc.Applications.Fees.MessagePayPacketFee(
                 this.Fee.ToModel(),

@@ -2,7 +2,7 @@
 
 namespace CosmosNetwork.Modules.FeeGrant.Serialization.Allowances
 {
-    internal record BasicAllowance(DenomAmount[] SpendLimit, DateTime? Expiration) : IAllowance
+    public record BasicAllowance(DenomAmount[] SpendLimit, DateTime? Expiration) : IAllowance
     {
         internal const string AllowanceType = "cosmos.feegrant.v1beta1.BasicAllowance";
 

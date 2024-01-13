@@ -27,8 +27,8 @@ namespace CosmosNetwork.Serialization.Json.Converters
             string? type = innerReader.GetString();
             PublicKey? returnObj = type switch
             {
-                "/cosmos.crypto.secp256k1.PubKey" => JsonSerializer.Deserialize<Secp256k1>(ref reader, options),
-                "/cosmos.crypto.ed25519.PubKey" => JsonSerializer.Deserialize<Ed25519>(ref reader, options),
+                "/cosmos.crypto.secp256k1.PubKey" or "tendermint/PubKeySecp256k1" => JsonSerializer.Deserialize<Secp256k1>(ref reader, options),
+                "/cosmos.crypto.ed25519.PubKey" or "tendermint/PubKeyEd25519" => JsonSerializer.Deserialize<Ed25519>(ref reader, options),
                 "/cosmos.crypto.multisig.LegacyAminoPubKey" => JsonSerializer.Deserialize<MultisigKey>(ref reader, options),
                 _ => throw new JsonException($"type {type} not supported"),
             };

@@ -102,8 +102,11 @@ namespace CosmosNetwork.Serialization
 
     public enum KeyTypeEnum
     {
+        [EnumMember(Value = "tendermint/PubKeySecp256k1")]
         Secp256k1,
+        [EnumMember(Value = "tendermint/PubKeyEd25519")]
         Ed25519,
+        [EnumMember(Value = "tendermint/Multisig")]
         Multisig
     }
 }

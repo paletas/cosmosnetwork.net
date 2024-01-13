@@ -3,23 +3,17 @@ using System.Security.Cryptography;
 
 namespace CosmosNetwork.Keys
 {
-    internal class BasicPublicKey : IPublicKey
+    internal partial class BasicPublicKey : IPublicKey
     {
-        private readonly CurveAlgorithm _curveAlgorithm;
+        private readonly KeyCurveAlgorithm _curveAlgorithm;
 
-        public enum CurveAlgorithm
-        {
-            Secp256k1 = 1,
-            Ed25519 = 2
-        }
-
-        public BasicPublicKey(byte[] key, CurveAlgorithm curveAlgorithm)
+        public BasicPublicKey(byte[] key, KeyCurveAlgorithm curveAlgorithm)
         {
             this.RawKey = key;
             this._curveAlgorithm = curveAlgorithm;
         }
 
-        public BasicPublicKey(string key, CurveAlgorithm curveAlgorithm)
+        public BasicPublicKey(string key, KeyCurveAlgorithm curveAlgorithm)
             : this(Convert.FromBase64String(key), curveAlgorithm)
         { }
 
@@ -33,8 +27,8 @@ namespace CosmosNetwork.Keys
         {
             return this._curveAlgorithm switch
             {
-                CurveAlgorithm.Secp256k1 => new Serialization.Json.Secp256k1(Convert.ToBase64String(this.RawKey)),
-                CurveAlgorithm.Ed25519 => new Serialization.Json.Ed25519(Convert.ToBase64String(this.RawKey)),
+                KeyCurveAlgorithm.Secp256k1 => new Serialization.Json.Secp256k1(Convert.ToBase64String(this.RawKey)),
+                KeyCurveAlgorithm.Ed25519 => new Serialization.Json.Ed25519(Convert.ToBase64String(this.RawKey)),
                 _ => throw new NotImplementedException()
             };
         }

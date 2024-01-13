@@ -2,13 +2,8 @@
 
 namespace CosmosNetwork.Modules.Gov.Serialization.Proposals
 {
-    public interface IProposal
+    public interface IProposal : IHasAny
     {
         Gov.Proposals.IProposal ToModel();
-    }
-
-    internal interface IProposalImplementation : IProposal, IHasAny
-    {
-
     }
 }

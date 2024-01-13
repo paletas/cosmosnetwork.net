@@ -21,7 +21,7 @@ namespace CosmosNetwork.Serialization.Json
 
         public override IPublicKey ToModel()
         {
-            return new BasicPublicKey(this.Value, BasicPublicKey.CurveAlgorithm.Secp256k1);
+            return new BasicPublicKey(this.Value, KeyCurveAlgorithm.Secp256k1);
         }
     }
 
@@ -34,7 +34,7 @@ namespace CosmosNetwork.Serialization.Json
 
         public override IPublicKey ToModel()
         {
-            return new BasicPublicKey(this.Value, BasicPublicKey.CurveAlgorithm.Ed25519);
+            return new BasicPublicKey(this.Value, KeyCurveAlgorithm.Ed25519);
         }
     }
 

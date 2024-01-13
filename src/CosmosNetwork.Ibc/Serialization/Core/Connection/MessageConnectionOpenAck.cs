@@ -28,7 +28,7 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Connection
             set => this.ClientState = value.UnpackClientState();
         }
 
-        protected override Message ToModel()
+        public override Message ToModel()
         {
             return new Ibc.Core.Connection.MessageConnectionOpenAck(
                 this.ConnectionId,

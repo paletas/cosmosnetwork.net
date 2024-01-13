@@ -9,7 +9,7 @@ namespace CosmosNetwork.Ibc.Serialization.Applications.Fees
         [property: ProtoMember(2, Name = "counterparty_address")] string CounterpartyAddress,
         [property: ProtoMember(3, Name = "channel_id")] string ChannelId) : SerializerMessage(Ibc.Applications.Fees.MessageRegisterCounterpartyAddress.COSMOS_DESCRIPTOR)
     {
-        protected override Message ToModel()
+        public override Message ToModel()
         {
             return new Ibc.Applications.Fees.MessageRegisterCounterpartyAddress(
                 this.Address,

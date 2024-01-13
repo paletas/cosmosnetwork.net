@@ -38,7 +38,7 @@ namespace CosmosNetwork.Modules.Staking
 
             Serialization.Json.GetValidatorResponse? response = await Get<Serialization.Json.GetValidatorResponse>(PrepareEndpoint(Url, validator.Address), cancellationToken);
 
-            return response?.Validator.ToModel();
+            return response?.Validator.ToModel(validatorPower: null);
         }
 
         public async Task<(DelegationBalance[] Delegations, Pagination Pagination)> GetValidatorDelegation(CosmosAddress validator, PaginationFilter? pagination = null, CancellationToken cancellationToken = default)
@@ -69,7 +69,7 @@ namespace CosmosNetwork.Modules.Staking
 
             return response is null
                 ? ((Validator[] Validators, Pagination Pagination))(Array.Empty<Validator>(), new Pagination(null, 0))
-                : ((Validator[] Validators, Pagination Pagination))(response.Validators.Select(d => d.ToModel()).ToArray(), response.Pagination.ToModel());
+                : ((Validator[] Validators, Pagination Pagination))(response.Validators.Select(d => d.ToModel(validatorPower: null)).ToArray(), response.Pagination.ToModel());
         }
 
         public async Task<(UnbondingDelegation[] UnbondingDelegations, Pagination Pagination)> GetValidatorUnbondingDelegations(CosmosAddress validator, PaginationFilter? pagination = null, CancellationToken cancellationToken = default)
@@ -131,7 +131,7 @@ namespace CosmosNetwork.Modules.Staking
 
             Serialization.Json.GetValidatorResponse? response = await Get<Serialization.Json.GetValidatorResponse>(PrepareEndpoint(Url, delegator.Address, validator.Address), cancellationToken);
 
-            return response?.Validator.ToModel();
+            return response?.Validator.ToModel(validatorPower: null);
         }
 
         public async Task<(Validator[] Validators, Pagination Pagination)> GetWalletValidators(CosmosAddress delegator, PaginationFilter? pagination = null, CancellationToken cancellationToken = default)
@@ -142,7 +142,7 @@ namespace CosmosNetwork.Modules.Staking
 
             return response is null
                 ? ((Validator[] Validators, Pagination Pagination))(Array.Empty<Validator>(), new Pagination(null, 0))
-                : ((Validator[] Validators, Pagination Pagination))(response.Validators.Select(d => d.ToModel()).ToArray(), response.Pagination.ToModel());
+                : ((Validator[] Validators, Pagination Pagination))(response.Validators.Select(d => d.ToModel(validatorPower: null)).ToArray(), response.Pagination.ToModel());
         }
 
         private IDictionary<string, string> AsQueryParams(PaginationFilter? paginationFilter)

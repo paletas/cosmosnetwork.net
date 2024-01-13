@@ -1,6 +1,6 @@
 ﻿namespace CosmosNetwork.Modules.Staking.Serialization.Json
 {
-    internal record StakingPool(ulong BondedTokens, ulong NotBondedTokens)
+    public record StakingPool(ulong BondedTokens, ulong NotBondedTokens)
     {
         public Staking.StakingPool ToModel()
         {

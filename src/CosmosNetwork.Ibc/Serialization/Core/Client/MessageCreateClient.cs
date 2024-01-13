@@ -29,7 +29,7 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Client
             set => this.ConsensusState = value.UnpackConsensusState();
         }
 
-        protected override Message ToModel()
+        public override Message ToModel()
         {
             return new Ibc.Core.Client.MessageCreateClient(
                 this.ClientState.ToModel(),

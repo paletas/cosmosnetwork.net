@@ -14,7 +14,7 @@ namespace CosmosNetwork.Ibc.Serialization.Applications.Transfer
         [property: ProtoMember(6, Name = "timeout_height")] Height TimeoutHeight,
         [property: ProtoMember(7, Name = "timeout_timestamp")] ulong TimeoutTimestamp) : SerializerMessage(Ibc.Applications.Transfer.MessageTransfer.COSMOS_DESCRIPTOR)
     {
-        protected override Message ToModel()
+        public override Message ToModel()
         {
             return new Ibc.Applications.Transfer.MessageTransfer(
                 this.SourcePort,

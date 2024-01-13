@@ -14,7 +14,7 @@ namespace CosmosNetwork.CosmWasm.Serialization
         [property: ProtoMember(5, Name = "msg")] JsonDocument Msg,
         [property: ProtoMember(6, Name = "funds")] DenomAmount[] Funds) : SerializerMessage(CosmWasm.MessageInstantiateContract.COSMOS_DESCRIPTOR)
     {
-        protected override Message ToModel()
+        public override Message ToModel()
         {
             string initMessageJson = JsonSerializer.Serialize(this.Msg);
 

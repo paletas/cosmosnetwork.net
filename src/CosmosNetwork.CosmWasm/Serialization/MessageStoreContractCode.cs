@@ -10,7 +10,7 @@ namespace CosmosNetwork.CosmWasm.Serialization
         [property: ProtoMember(2, Name = "wasm_byte_code")] string WasmByteCode,
         [property: ProtoMember(5, Name = "instantiate_permission")] AccessConfig? InstantiatePermission) : SerializerMessage(CosmWasm.MessageStoreContractCode.COSMOS_DESCRIPTOR)
     {
-        protected override Message ToModel()
+        public override Message ToModel()
         {
             return new CosmWasm.MessageStoreContractCode(
                 this.SenderAddress,

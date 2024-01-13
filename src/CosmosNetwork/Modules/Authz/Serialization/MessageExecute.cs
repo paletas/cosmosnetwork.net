@@ -30,7 +30,7 @@ namespace CosmosNetwork.Modules.Authz.Serialization
                 : (SerializerMessage)(message.Unpack(msgType) ?? throw new InvalidOperationException());
         }
 
-        protected internal override Message ToModel()
+        public override Message ToModel()
         {
             return new Authz.MessageExecute(
                 this.GranteeAddress,

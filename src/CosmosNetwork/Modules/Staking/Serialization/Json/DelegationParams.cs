@@ -1,6 +1,6 @@
 ﻿namespace CosmosNetwork.Modules.Staking.Serialization.Json
 {
-    internal record DelegationParams(
+    public record DelegationParams(
         TimeSpan UnbondingTime,
         uint MaxValidators,
         uint MaxEntries,

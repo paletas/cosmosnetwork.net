@@ -12,7 +12,7 @@ namespace CosmosNetwork.CosmWasm.Serialization
         [property: ProtoMember(3, Name = "code_id")] ulong CodeId,
         [property: ProtoMember(4, Name = "msg")] JsonDocument MigrateMsg) : SerializerMessage(CosmWasm.MessageMigrateContractCode.COSMOS_DESCRIPTOR)
     {
-        protected override Message ToModel()
+        public override Message ToModel()
         {
             string migrateMessageJson = JsonSerializer.Serialize(this.MigrateMsg);
 

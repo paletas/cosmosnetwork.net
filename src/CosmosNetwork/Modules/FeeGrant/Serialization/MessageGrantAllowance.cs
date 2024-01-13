@@ -42,7 +42,7 @@ namespace CosmosNetwork.Modules.FeeGrant.Serialization
             }
         }
 
-        protected internal override Message ToModel()
+        public override Message ToModel()
         {
             return new CosmosNetwork.Modules.FeeGrant.MessageGrantAllowance(this.GranterAddress, this.GranteeAddress, this.Allowance.ToModel());
         }

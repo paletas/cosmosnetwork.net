@@ -17,7 +17,7 @@ namespace CosmosNetwork.Modules.Staking.Messages.Serialization
         [property: ProtoMember(6, Name = "pubkey")] CosmosNetwork.Serialization.Proto.PublicKey PublicKeyProto
     ) : SerializerMessage(Messages.MessageCreateValidator.COSMOS_DESCRIPTOR)
     {
-        protected internal override Message ToModel()
+        public override Message ToModel()
         {
             return new Staking.Messages.MessageCreateValidator(
                 this.DelegatorAddress, this.ValidatorAddress, this.MinimumSelfDelegation,

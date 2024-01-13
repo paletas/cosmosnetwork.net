@@ -2,7 +2,7 @@
 
 namespace CosmosNetwork.Modules.Staking.Serialization.Json
 {
-    internal record Delegation(string DelegatorAddress, string ValidatorAddress, decimal Shares)
+    public record Delegation(string DelegatorAddress, string ValidatorAddress, decimal Shares)
     {
         public Staking.Delegation ToModel()
         {
@@ -10,7 +10,7 @@ namespace CosmosNetwork.Modules.Staking.Serialization.Json
         }
     }
 
-    internal record DelegationBalance(Delegation Delegation, DenomAmount Balance)
+    public record DelegationBalance(Delegation Delegation, DenomAmount Balance)
     {
         public Staking.DelegationBalance ToModel()
         {

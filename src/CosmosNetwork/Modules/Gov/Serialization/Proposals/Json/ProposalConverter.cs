@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Modules.Gov.Serialization.Proposals.Json
 {
-    internal class ProposalConverter : JsonConverter<IProposal>
+    public class ProposalConverter : JsonConverter<IProposal>
     {
         private readonly ProposalsRegistry _registry;
 

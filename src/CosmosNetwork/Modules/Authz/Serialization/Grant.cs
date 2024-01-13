@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace CosmosNetwork.Modules.Authz.Serialization
 {
     [ProtoContract]
-    internal class Grant
+    public class Grant
     {
         [ProtoIgnore]
         [JsonConverter(typeof(AuthorizationConverter))]
