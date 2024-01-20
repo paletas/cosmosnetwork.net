@@ -10,9 +10,11 @@ namespace CosmosNetwork.Ibc.LightClients.Tendermint
         public Serialization.LightClients.IConsensusState ToSerialization()
         {
             return new Serialization.LightClients.Tendermint.ConsensusState(
-                this.Timestamp,
                 this.Root.ToSerialization(),
-                this.NextValidatorsHash);
+                this.NextValidatorsHash)
+            {
+                Timestamp = this.Timestamp
+            };
         }
     }
 }

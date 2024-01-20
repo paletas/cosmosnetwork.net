@@ -3,14 +3,13 @@
     public record ConsensusState(
         IPublicKey PublicKey,
         string Diversifier,
-        ulong Timestamp) : IConsensusState
+        DateTime Timestamp) : IConsensusState
     {
         public Serialization.LightClients.IConsensusState ToSerialization()
         {
-            return new Serialization.LightClients.SoloMachine.ConsensusState(
-                this.Diversifier,
-                this.Timestamp)
+            return new Serialization.LightClients.SoloMachine.ConsensusState(this.Diversifier)
             {
+                TimestampDateTime = this.Timestamp,
                 PublicKey = this.PublicKey.ToJson().ToProto()
             };
         }
