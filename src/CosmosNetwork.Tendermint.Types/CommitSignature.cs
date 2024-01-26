@@ -11,8 +11,10 @@
             return new Serialization.CommitSig(
                 (Serialization.BlockIdFlagEnum)this.BlockIdFlag,
                 this.ValidatorAddress,
-                this.Timestamp,
-                this.Signature);
+                this.Signature)
+            {
+                Timestamp = this.Timestamp
+            };
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CosmosNetwork.Tendermint.Types.Serialization.Version;
 using ProtoBuf;
+using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Tendermint.Types.Serialization
 {
@@ -8,7 +9,6 @@ namespace CosmosNetwork.Tendermint.Types.Serialization
         [property: ProtoMember(1, Name = "version")] Consensus Version,
         [property: ProtoMember(2, Name = "chain_id")] string ChainId,
         [property: ProtoMember(3, Name = "height")] ulong Height,
-        [property: ProtoMember(4, Name = "time")] ProtoBuf.WellKnownTypes.Timestamp Time,
         [property: ProtoMember(5, Name = "last_block_id")] BlockId LastBlockId,
         [property: ProtoMember(6, Name = "last_commit_hash")] byte[] LastCommitHash,
         [property: ProtoMember(7, Name = "data_hash")] byte[] DataHash,
@@ -20,6 +20,16 @@ namespace CosmosNetwork.Tendermint.Types.Serialization
         [property: ProtoMember(13, Name = "evidence_hash")] byte[] EvidenceHash,
         [property: ProtoMember(14, Name = "proposer_address")] byte[] ProposerAddress)
     {
+        [ProtoMember(4, Name = "time"), JsonIgnore]
+        public ProtoBuf.WellKnownTypes.Timestamp TimeProto
+        {
+            get { return new ProtoBuf.WellKnownTypes.Timestamp(this.Time); }
+            set { this.Time = value.AsDateTime(); }
+        }
+
+        [JsonPropertyName("time"), ProtoIgnore]
+        public DateTime Time { get; set; }
+
         public Types.Header ToModel()
         {
             return new Types.Header(

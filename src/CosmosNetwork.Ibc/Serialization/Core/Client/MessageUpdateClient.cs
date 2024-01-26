@@ -2,6 +2,7 @@
 using CosmosNetwork.Serialization;
 using CosmosNetwork.Serialization.Proto;
 using ProtoBuf;
+using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Ibc.Serialization.Core.Client
 {
@@ -10,10 +11,10 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Client
         [property: ProtoMember(1, Name = "client_id")] string ClientId,
         [property: ProtoMember(3, Name = "signer")] string Signer) : SerializerMessage(Ibc.Core.Client.MessageUpdateClient.COSMOS_DESCRIPTOR)
     {
-        [ProtoIgnore]
+        [ProtoIgnore, JsonPropertyName("client_message")]
         public IHeader Header { get; set; } = null!;
 
-        [ProtoMember(2, Name = "header")]
+        [ProtoMember(2, Name = "client_message"), JsonIgnore]
         public Any HeaderPacked
         {
             get => Any.Pack(this.Header);

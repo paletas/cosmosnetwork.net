@@ -24,7 +24,6 @@ namespace CosmosNetwork.Tendermint.Types
                 this.Version.ToSerialization(),
                 this.ChainId,
                 this.Height,
-                this.Time,
                 this.LastBlockId.ToSerialization(),
                 this.LastCommitHash,
                 this.DataHash,
@@ -34,7 +33,10 @@ namespace CosmosNetwork.Tendermint.Types
                 this.AppHash,
                 this.LastResultsHash,
                 this.EvidenceHash,
-                this.ProposerAddress);
+                this.ProposerAddress)
+            {
+                Time = this.Time,
+            };
         }
     }
 }
