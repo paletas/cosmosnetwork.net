@@ -29,8 +29,9 @@ namespace CosmosNetwork
         private static CosmosNetworkConfigurator AddCosmosNetwork(this IServiceCollection services, string endpoint, string clientName, bool isDefaultClient, CosmosApiOptions? options = null)
         {
             CosmosMessageRegistry cosmosMessageRegistry = new();
-            options ??= new CosmosApiOptions(httpClientName: $"HTTP_{clientName}");
+            options ??= new CosmosApiOptions();
             options.MessageRegistry = cosmosMessageRegistry;
+            options.HttpClientName ??= $"HTTP_{clientName}";
 
             if (options.SkipHttpClientConfiguration == false)
             {

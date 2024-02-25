@@ -8,20 +8,19 @@ namespace CosmosNetwork
 {
     public class CosmosApiOptions
     {
-        public CosmosApiOptions(string? httpClientName = null, ulong? minimumAvailableBlockHeight = default)
+        public CosmosApiOptions(ulong? minimumAvailableBlockHeight = default)
         {
             if (minimumAvailableBlockHeight.HasValue)
             {
                 this.MinimumAvailableBlockHeight = minimumAvailableBlockHeight.Value;
             }
 
-            this.HttpClientName = httpClientName;
-            this.SkipHttpClientConfiguration = httpClientName is null;
+            this.SkipHttpClientConfiguration = false;
         }
 
-        public string? HttpClientName { get; }
+        public string? HttpClientName { get; set; }
 
-        public bool SkipHttpClientConfiguration { get; }
+        public bool SkipHttpClientConfiguration { get; set; }
 
         internal NetworkOptions? Network { get; set; }
 
