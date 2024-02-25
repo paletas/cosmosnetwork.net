@@ -6,6 +6,8 @@
 
         Task<BlockTransaction?> GetTransaction(string transactionHash, CancellationToken cancellationToken = default);
 
+        Task<BlockTransaction?> GetTransactionByRawHash(string transactionHash, CancellationToken cancellationToken = default);
+
         Task<(uint? ErrorCode, TransactionSimulationResults? Result)> SimulateTransaction(ITransactionPayload transaction, CancellationToken cancellationToken = default);
 
         Task<(uint? ErrorCode, TransactionBroadcastResults? Result)> BroadcastTransaction(ITransactionPayload transaction, CancellationToken cancellationToken = default);

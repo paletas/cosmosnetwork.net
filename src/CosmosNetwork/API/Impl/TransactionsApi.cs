@@ -22,18 +22,10 @@ namespace CosmosNetwork.API.Impl
 
         public async IAsyncEnumerable<BlockTransaction> GetTransactions(ulong height, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            Block? block = await this._blocksApi.GetBlock(height, cancellationToken);
-
-            if (block is null)
-            {
-                throw new ArgumentException("block not found at height", nameof(height));
-            }
-
+            Block? block = await this._blocksApi.GetBlock(height, cancellationToken) ?? throw new ArgumentException("block not found at height", nameof(height));
             foreach (string tx in block.Details.Data.Transactions)
             {
-                string txHash = HashExtensions.HashToHex(tx);
-
-                yield return await GetTransaction(txHash, cancellationToken) ?? throw new CosmosException();
+                yield return await GetTransactionByRawHash(tx, cancellationToken) ?? throw new CosmosException();
             }
         }
 
@@ -44,6 +36,12 @@ namespace CosmosNetwork.API.Impl
             Serialization.Json.BlockTransaction? transactionResponse = await Get<Serialization.Json.BlockTransaction>(endpoint, cancellationToken);
 
             return transactionResponse?.ToModel();
+        }
+
+        public Task<BlockTransaction?> GetTransactionByRawHash(string transactionBody, CancellationToken cancellationToken = default)
+        {
+            string txHashHex = HashExtensions.HashToHex(transactionBody);
+            return GetTransaction(txHashHex, cancellationToken);
         }
 
         public async Task<Fee> EstimateFee(ITransactionPayload transaction, EstimateFeesOptions? estimateOptions = null, CancellationToken cancellationToken = default)
