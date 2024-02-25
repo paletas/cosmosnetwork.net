@@ -33,9 +33,11 @@ namespace CosmosNetwork
         public decimal GasAdjustment { get; set; } = 1.75M;
 
         private JsonSerializerOptions? _jsonSerializerOptions;
-        public JsonSerializerOptions JsonSerializerOptions => this._jsonSerializerOptions ??= CreateSerializerOptions();
+        public JsonSerializerOptions JsonSerializerOptions => this._jsonSerializerOptions ??= CreateSerializerOptions(this.MessageRegistry);
 
-        private JsonSerializerOptions CreateSerializerOptions()
+        public static JsonSerializerOptions DefaultSerializerOptions => CreateSerializerOptions();
+
+        private static JsonSerializerOptions CreateSerializerOptions(CosmosMessageRegistry? messageRegistry = null)
         {
             JsonSerializerOptions options = new()
             {
@@ -52,7 +54,7 @@ namespace CosmosNetwork
             options.Converters.Add(new DurationConverter());
             options.Converters.Add(new TimeSpanConverter());
             options.Converters.Add(new TimestampConverter());
-            options.Converters.Add(new MessagesConverter(this.MessageRegistry ?? throw new InvalidOperationException()));
+            options.Converters.Add(new MessagesConverter(messageRegistry ?? throw new InvalidOperationException()));
             options.Converters.Add(new AccountConverter());
 
             return options;
