@@ -35,17 +35,24 @@ namespace CosmosNetwork
         private JsonSerializerOptions? _jsonSerializerOptions;
         public JsonSerializerOptions JsonSerializerOptions => this._jsonSerializerOptions ??= CreateSerializerOptions(this.MessageRegistry);
 
-        public static JsonSerializerOptions DefaultSerializerOptions => CreateSerializerOptions();
+        public static JsonSerializerOptions DefaultSerializerOptions => CreateBaseSerializerOptions();
 
-        private static JsonSerializerOptions CreateSerializerOptions(CosmosMessageRegistry? messageRegistry = null)
+        private static JsonSerializerOptions CreateBaseSerializerOptions()
         {
-            JsonSerializerOptions options = new()
+            return new()
             {
                 PropertyNameCaseInsensitive = true,
                 NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                 PropertyNamingPolicy = new SnakeCaseNamingPolicy(),
             };
+        }
+
+        private static JsonSerializerOptions CreateSerializerOptions(CosmosMessageRegistry? messageRegistry)
+        {
+            ArgumentNullException.ThrowIfNull(messageRegistry, nameof(messageRegistry));
+
+            JsonSerializerOptions options = CreateBaseSerializerOptions();
 
             options.Converters.Add(new JsonStringEnumMemberConverter());
             options.Converters.Add(new Uint128Converter());
@@ -54,7 +61,7 @@ namespace CosmosNetwork
             options.Converters.Add(new DurationConverter());
             options.Converters.Add(new TimeSpanConverter());
             options.Converters.Add(new TimestampConverter());
-            options.Converters.Add(new MessagesConverter(messageRegistry ?? throw new InvalidOperationException()));
+            options.Converters.Add(new MessagesConverter(messageRegistry));
             options.Converters.Add(new AccountConverter());
 
             return options;
