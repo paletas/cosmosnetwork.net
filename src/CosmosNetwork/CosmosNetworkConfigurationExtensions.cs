@@ -70,17 +70,21 @@ namespace CosmosNetwork
                 services.AddKeyedSingleton(clientName, options);
             }
 
+            cosmosNetworkConfigurator.SetupModuleClient<CosmosApi>();
+
             return cosmosNetworkConfigurator;
         }
 
         public static void SetupChain(this CosmosNetworkConfigurator configurator, NetworkOptions networkOptions)
         {
-            configurator.SetupChain<CosmosApi>(networkOptions);
+            configurator.SetupChain(networkOptions);
+            configurator.SetupModuleClient<CosmosApi>();
         }
 
         public static void SetupChain<T>(this CosmosNetworkConfigurator configurator, NetworkOptions networkOptions)
             where T : CosmosApi
         {
+            configurator.SetupChain(networkOptions);
             configurator.SetupChain<T>(networkOptions);
         }
 

@@ -5,29 +5,20 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CosmosNetwork
 {
-    public class CosmosApi
+    public partial class CosmosApi([ServiceKey] string serviceKey, IServiceProvider serviceProvider)
     {
         public CosmosApi(IServiceProvider serviceProvider)
             : this(CosmosNetworkConfigurator.DEFAULT_KEY, serviceProvider)
         { }
 
-        public CosmosApi([ServiceKey] string serviceKey, IServiceProvider serviceProvider)
-        {
-            this.Blocks = serviceProvider.GetRequiredKeyedService<IBlocksApi>(serviceKey);
-            this.Transactions = serviceProvider.GetRequiredKeyedService<ITransactionsApi>(serviceKey);
-            this.Wallet = serviceProvider.GetRequiredKeyedService<IWalletApi>(serviceKey);
-            this.Staking = serviceProvider.GetRequiredKeyedService<IStakingApi>(serviceKey);
-            this.Governance = serviceProvider.GetRequiredKeyedService<IGovApi>(serviceKey);
-        }
+        public IBlocksApi Blocks { get; init; } = serviceProvider.GetRequiredKeyedService<IBlocksApi>(serviceKey);
 
-        public IBlocksApi Blocks { get; init; }
+        public ITransactionsApi Transactions { get; init; } = serviceProvider.GetRequiredKeyedService<ITransactionsApi>(serviceKey);
 
-        public ITransactionsApi Transactions { get; init; }
+        public IWalletApi Wallet { get; init; } = serviceProvider.GetRequiredKeyedService<IWalletApi>(serviceKey);
 
-        public IWalletApi Wallet { get; init; }
+        public IStakingApi Staking { get; init; } = serviceProvider.GetRequiredKeyedService<IStakingApi>(serviceKey);
 
-        public IStakingApi Staking { get; init; }
-
-        public IGovApi Governance { get; init; }
+        public IGovApi Governance { get; init; } = serviceProvider.GetRequiredKeyedService<IGovApi>(serviceKey);
     }
 }

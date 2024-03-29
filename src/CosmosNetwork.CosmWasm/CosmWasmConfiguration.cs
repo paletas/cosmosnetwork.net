@@ -1,10 +1,16 @@
-﻿namespace CosmosNetwork.CosmWasm
+﻿using CosmosNetwork.CosmWasm.API;
+using CosmosNetwork.CosmWasm.API.Impl;
+
+namespace CosmosNetwork.CosmWasm
 {
     public static class CosmWasmConfiguration
     {
         public static CosmosNetworkConfigurator AddCosmWasm(this CosmosNetworkConfigurator configurator)
         {
-            _ = configurator.AddMessageModule<WasmModule>();
+            configurator.AddMessageModule<WasmModule>();
+            configurator.AddApiModule<ICosmWasmApi, CosmWasmApi>();
+
+            configurator.SetupModuleClient<CosmWasmCosmosApi>();
 
             return configurator;
         }
