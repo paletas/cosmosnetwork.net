@@ -1,6 +1,6 @@
 ﻿namespace CosmosNetwork
 {
-    internal static class Bech32
+    public static class Bech32
     {
         private const string CHARSET_BECH32 = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
 
@@ -114,6 +114,35 @@
                 result += CHARSET_BECH32[v];
             }
             return result;
+        }
+
+        public static bool IsValid(string address)
+        {
+            address = address.ToLowerInvariant();
+            int pos = address.LastIndexOf('1');
+            if (pos < 1 || pos + 7 > address.Length || address.Length > 90)
+            {
+                return false;
+            }
+
+            int chk = PrefixCheck(address[..pos]);
+            for (int i = pos + 1; i < address.Length; ++i)
+            {
+                int v = address[i];
+                if (v < 33 || v > 126)
+                {
+                    return false;
+                }
+
+                v = CHARSET_BECH32.IndexOf((char)v);
+                if (v == -1)
+                {
+                    return false;
+                }
+
+                chk = PolymodStep(chk) ^ v;
+            }
+            return chk == 1;
         }
     }
 }

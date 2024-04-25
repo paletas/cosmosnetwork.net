@@ -6,6 +6,11 @@
         IConsensusState ConsensusState,
         bool AllowUpdateAfterProposal) : IClientState
     {
+        public ulong GetHeight()
+        {
+            return this.Sequence;
+        }
+
         public Serialization.LightClients.IClientState ToSerialization()
         {
             return new Serialization.LightClients.SoloMachine.ClientState(

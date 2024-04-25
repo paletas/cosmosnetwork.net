@@ -9,7 +9,7 @@ namespace CosmosNetwork.Ibc.Applications.Transfer
         string SourceChannel,
         Coin Token,
         CosmosAddress Sender,
-        CosmosAddress Receiver,
+        string Receiver,
         Height TimeoutHeight,
         ulong TimeoutTimestamp) : Message
     {
@@ -22,7 +22,7 @@ namespace CosmosNetwork.Ibc.Applications.Transfer
                 this.SourceChannel,
                 this.Token.ToSerialization(),
                 this.Sender.Address,
-                this.Receiver.Address,
+                this.Receiver,
                 this.TimeoutHeight.ToSerialization(),
                 this.TimeoutTimestamp);
         }

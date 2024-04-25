@@ -17,6 +17,11 @@ namespace CosmosNetwork.Ibc.LightClients.Tendermint
         bool AllowUpdateAfterExpiry,
         bool AllowUpdateAfterMisbehaviour) : IClientState
     {
+        public ulong GetHeight()
+        {
+            return this.LatestHeight.RevisionHeight;
+        }
+
         public Serialization.LightClients.IClientState ToSerialization()
         {
             return new Serialization.LightClients.Tendermint.ClientState(

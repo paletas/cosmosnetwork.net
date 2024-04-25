@@ -5,6 +5,11 @@
         string Diversifier,
         DateTime Timestamp) : IConsensusState
     {
+        public ulong GetHeight()
+        {
+            return 0;
+        }
+
         public Serialization.LightClients.IConsensusState ToSerialization()
         {
             return new Serialization.LightClients.SoloMachine.ConsensusState(this.Diversifier)
