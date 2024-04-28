@@ -6,6 +6,11 @@
         IConsensusState ConsensusState,
         bool AllowUpdateAfterProposal) : IClientState
     {
+        public string GetBlockchainId()
+        {
+            return "solomachine";
+        }
+
         public ulong GetHeight()
         {
             return this.Sequence;

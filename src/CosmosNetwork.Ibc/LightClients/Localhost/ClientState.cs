@@ -4,6 +4,11 @@ namespace CosmosNetwork.Ibc.LightClients.Localhost
 {
     public record ClientState(string ChainId, Height Height) : IClientState
     {
+        public string GetBlockchainId()
+        {
+            return this.ChainId;
+        }
+
         public ulong GetHeight()
         {
             return this.Height.RevisionHeight;

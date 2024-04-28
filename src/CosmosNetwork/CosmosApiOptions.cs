@@ -39,20 +39,13 @@ namespace CosmosNetwork
 
         private static JsonSerializerOptions CreateBaseSerializerOptions()
         {
-            return new()
+            JsonSerializerOptions options = new()
             {
                 PropertyNameCaseInsensitive = true,
                 NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                 PropertyNamingPolicy = new SnakeCaseNamingPolicy(),
             };
-        }
-
-        private static JsonSerializerOptions CreateSerializerOptions(CosmosMessageRegistry? messageRegistry)
-        {
-            ArgumentNullException.ThrowIfNull(messageRegistry, nameof(messageRegistry));
-
-            JsonSerializerOptions options = CreateBaseSerializerOptions();
 
             options.Converters.Add(new JsonStringEnumMemberConverter());
             options.Converters.Add(new Uint128Converter());
@@ -61,8 +54,18 @@ namespace CosmosNetwork
             options.Converters.Add(new DurationConverter());
             options.Converters.Add(new TimeSpanConverter());
             options.Converters.Add(new TimestampConverter());
-            options.Converters.Add(new MessagesConverter(messageRegistry));
             options.Converters.Add(new AccountConverter());
+
+            return options;
+        }
+
+        private static JsonSerializerOptions CreateSerializerOptions(CosmosMessageRegistry? messageRegistry)
+        {
+            ArgumentNullException.ThrowIfNull(messageRegistry, nameof(messageRegistry));
+
+            JsonSerializerOptions options = CreateBaseSerializerOptions();
+
+            options.Converters.Add(new MessagesConverter(messageRegistry));
 
             return options;
         }

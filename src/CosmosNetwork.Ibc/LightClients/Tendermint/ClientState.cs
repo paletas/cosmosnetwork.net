@@ -17,6 +17,11 @@ namespace CosmosNetwork.Ibc.LightClients.Tendermint
         bool AllowUpdateAfterExpiry,
         bool AllowUpdateAfterMisbehaviour) : IClientState
     {
+        public string GetBlockchainId()
+        {
+            return this.ChainId;
+        }
+
         public ulong GetHeight()
         {
             return this.LatestHeight.RevisionHeight;
