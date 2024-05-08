@@ -1,4 +1,5 @@
 ﻿using CosmosNetwork.Ibc.Core.Client;
+using System.Text;
 
 namespace CosmosNetwork.Ibc.Core.Channel
 {
@@ -8,7 +9,7 @@ namespace CosmosNetwork.Ibc.Core.Channel
         string SourceChannel,
         string DestinationPort,
         string DestinationChannel,
-        byte[] Data,
+        string Data,
         Height TimeoutHeight,
         ulong TimeoutTimestamp)
     {
@@ -20,7 +21,7 @@ namespace CosmosNetwork.Ibc.Core.Channel
                 this.SourceChannel,
                 this.DestinationPort,
                 this.DestinationChannel,
-                this.Data,
+                Encoding.UTF8.GetBytes(this.Data),
                 this.TimeoutHeight.ToSerialization(),
                 this.TimeoutTimestamp);
         }

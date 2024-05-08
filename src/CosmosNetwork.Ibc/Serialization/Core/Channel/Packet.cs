@@ -1,5 +1,6 @@
 ﻿using CosmosNetwork.Ibc.Serialization.Core.Client;
 using ProtoBuf;
+using System.Text;
 
 namespace CosmosNetwork.Ibc.Serialization.Core.Channel
 {
@@ -22,7 +23,7 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Channel
                 this.SourceChannel,
                 this.DestinationPort,
                 this.DestinationChannel,
-                this.Data,
+                Encoding.UTF8.GetString(this.Data),
                 this.TimeoutHeight.ToModel(),
                 this.TimeoutTimestamp);
         }
