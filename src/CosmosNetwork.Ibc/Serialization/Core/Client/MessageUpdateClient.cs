@@ -11,10 +11,10 @@ namespace CosmosNetwork.Ibc.Serialization.Core.Client
         [property: ProtoMember(1, Name = "client_id")] string ClientId,
         [property: ProtoMember(3, Name = "signer")] string Signer) : SerializerMessage(Ibc.Core.Client.MessageUpdateClient.COSMOS_DESCRIPTOR)
     {
-        [ProtoIgnore, JsonPropertyName("client_message")]
+        [ProtoIgnore, JsonPropertyName("header")]
         public IHeader Header { get; set; } = null!;
 
-        [ProtoMember(2, Name = "client_message"), JsonIgnore]
+        [ProtoMember(2, Name = "header"), JsonIgnore]
         public Any HeaderPacked
         {
             get => Any.Pack(this.Header);
