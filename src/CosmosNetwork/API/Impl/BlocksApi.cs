@@ -21,7 +21,7 @@ namespace CosmosNetwork.API.Impl
 
         public async Task<Block> GetLatestBlock(CancellationToken cancellationToken = default)
         {
-            Serialization.Json.Block? block = await Get<Serialization.Json.Block>($"/cosmos/base/tendermint/v1beta1/blocks/latest", cancellationToken).ConfigureAwait(false);
+            Serialization.Json.Block? block = await Get<Serialization.Json.Block>($"/cosmos/base/tendermint/v1beta1/blocks/latest", new Dictionary<string, string>{ { "Cache-Control", "no-cache" } }, cancellationToken).ConfigureAwait(false);
             return block?.ToModel() ?? throw new CosmosException("expected a block");
         }
     }

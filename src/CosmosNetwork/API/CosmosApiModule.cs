@@ -28,15 +28,34 @@ namespace CosmosNetwork.API
 
         protected Task<T?> Get<T>(string endpoint, CancellationToken cancellationToken = default)
         {
-            return Get<T>(PrepareEndpoint(endpoint), cancellationToken);
+            return Get<T>(PrepareEndpoint(endpoint), headers: null, cancellationToken);
         }
 
-        protected async Task<T?> Get<T>(Uri endpoint, CancellationToken cancellationToken = default)
+        protected Task<T?> Get<T>(string endpoint, IDictionary<string, string>? headers = null, CancellationToken cancellationToken = default)
+        {
+            return Get<T>(PrepareEndpoint(endpoint), headers, cancellationToken);
+        }
+
+        protected Task<T?> Get<T>(Uri endpoint, CancellationToken cancellationToken = default)
+        {
+            return Get<T>(endpoint, cancellationToken: cancellationToken);
+        }
+
+        protected async Task<T?> Get<T>(Uri endpoint, IDictionary<string, string>? headers = null, CancellationToken cancellationToken = default)
         {
             this._logger.LogTrace("GET {endpoint}", endpoint);
 
             HttpClient httpClient = GetHttpClient();
-            HttpResponseMessage httpResponse = await httpClient.GetAsync(endpoint, cancellationToken);
+            HttpRequestMessage httpRequest = new(HttpMethod.Get, endpoint);
+            if (headers is not null)
+            {
+                foreach (KeyValuePair<string, string> header in headers)
+                {
+                    httpRequest.Headers.Add(header.Key, header.Value);
+                }
+            }
+
+            HttpResponseMessage httpResponse = await httpClient.SendAsync(httpRequest, cancellationToken).ConfigureAwait(false);
 
             if (httpResponse.IsSuccessStatusCode == false)
             {
