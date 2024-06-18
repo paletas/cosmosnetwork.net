@@ -26,7 +26,7 @@ namespace CosmosNetwork.CosmWasm
             messageRegistry.RegisterMessage<MessageInstantiateContract, Serialization.MessageInstantiateContract>();
             messageRegistry.RegisterMessage<MessageMigrateContractCode, Serialization.MessageMigrateContractCode>();
             messageRegistry.RegisterMessage<MessageStoreContractCode, Serialization.MessageStoreContractCode>();
-            messageRegistry.RegisterMessage<MessageUpdateContractAdmin, Serialization.MessageUpdateContractAdmin>();
+            messageRegistry.RegisterMessage<MessageUpdateAdmin, Serialization.MessageUpdateAdmin>();
 
             this._governanceModule.ProposalsRegistry.Register<ClearAdminProposal>(ClearAdminProposal.ProposalType);
             this._governanceModule.ProposalsRegistry.Register<ExecuteContractProposal>(ExecuteContractProposal.ProposalType);
