@@ -6,7 +6,7 @@ namespace CosmosNetwork.CosmWasm
     public record MessageUpdateAdmin(CosmosAddress Admin, CosmosAddress NewAdmin, CosmosAddress Contract)
         : Message
     {
-        public const string COSMOS_DESCRIPTOR = "/terra.wasm.v1beta1.MsgUpdateAdmin";
+        public const string COSMOS_DESCRIPTOR = "/cosmwasm.wasm.v1.MsgUpdateAdmin";
 
         public override SerializerMessage ToSerialization()
         {

@@ -7,7 +7,7 @@ namespace CosmosNetwork.CosmWasm
         CosmosAddress Admin,
         CosmosAddress Contract) : Message
     {
-        public const string COSMOS_DESCRIPTOR = "/terra.wasm.v1beta1.MsgClearContractAdmin";
+        public const string COSMOS_DESCRIPTOR = "/cosmwasm.wasm.v1.MsgClearAdmin";
 
         public override SerializerMessage ToSerialization()
         {
