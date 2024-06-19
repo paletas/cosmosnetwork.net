@@ -10,8 +10,6 @@ namespace CosmosNetwork.Modules.Gov.Serialization
         [property: ProtoMember(2, Name = "voter"), JsonPropertyName("voter")] string VoterAddress,
         [property: ProtoMember(3, Name = "option"), JsonConverter(typeof(JsonStringEnumConverter))] VoteOptionEnum Option) : SerializerMessage(Gov.MessageVote.COSMOS_DESCRIPTOR)
     {
-        public const string TERRA_DESCRIPTOR = "gov/MsgVote";
-
         public override Message ToModel()
         {
             return new Gov.MessageVote(this.ProposalId, this.VoterAddress, (Gov.VoteOptionEnum)this.Option);

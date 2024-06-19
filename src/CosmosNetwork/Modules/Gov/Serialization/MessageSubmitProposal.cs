@@ -11,8 +11,6 @@ namespace CosmosNetwork.Modules.Gov.Serialization
         [property: ProtoMember(3, Name = "proposer"), JsonPropertyName("proposer")] string ProposerAddress,
         [property: ProtoMember(2, Name = "initial_deposit")] DenomAmount[] InitialDeposit) : SerializerMessage(Gov.MessageSubmitProposal.COSMOS_DESCRIPTOR)
     {
-        public const string TERRA_DESCRIPTOR = "gov/MsMsgSubmitProposalSwap";
-
         [ProtoIgnore]
         public IProposal Content { get; set; } = null!;
 

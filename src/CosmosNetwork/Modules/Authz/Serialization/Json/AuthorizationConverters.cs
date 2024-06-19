@@ -84,7 +84,7 @@ namespace CosmosNetwork.Modules.Authz.Serialization.Json
                 throw new JsonException();
             }
 
-            Type proposalType = this._registry.GetProposalByTypeName(type);
+            Type proposalType = this._registry.GetAuthorizationByTypeName(type);
             return (Authorizations.IAuthorization?)JsonSerializer.Deserialize(ref reader, proposalType, options);
         }
 

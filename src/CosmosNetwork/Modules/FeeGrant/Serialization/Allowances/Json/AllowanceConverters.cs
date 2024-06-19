@@ -84,7 +84,7 @@ namespace CosmosNetwork.Modules.FeeGrant.Serialization.Allowances.Json
                 throw new JsonException();
             }
 
-            Type proposalType = this._registry.GetProposalByTypeName(type);
+            Type proposalType = this._registry.GetAuthorizationByTypeName(type);
             return (IAllowance?)JsonSerializer.Deserialize(ref reader, proposalType, options);
         }
 

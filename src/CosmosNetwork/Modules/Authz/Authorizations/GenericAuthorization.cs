@@ -11,7 +11,10 @@
 
         public Serialization.Authorizations.IAuthorization ToSerialization()
         {
-            return new Serialization.Authorizations.GenericAuthorization(this.MessageType);
+            return new Serialization.Authorizations.GenericAuthorization()
+            {
+                TypeUrl = this.MessageType
+            };
         }
     }
 }

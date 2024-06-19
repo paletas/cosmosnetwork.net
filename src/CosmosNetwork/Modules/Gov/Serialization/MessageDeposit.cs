@@ -10,8 +10,6 @@ namespace CosmosNetwork.Modules.Gov.Serialization
         [property: ProtoMember(2, Name = "depositor"), JsonPropertyName("depositor")] string DepositorAddress,
         [property: ProtoMember(3, Name = "amount")] DenomAmount[] Amount) : SerializerMessage(Gov.MessageDeposit.COSMOS_DESCRIPTOR)
     {
-        public const string TERRA_DESCRIPTOR = "gov/MsgDeposit";
-
         public override Message ToModel()
         {
             return new Gov.MessageDeposit(

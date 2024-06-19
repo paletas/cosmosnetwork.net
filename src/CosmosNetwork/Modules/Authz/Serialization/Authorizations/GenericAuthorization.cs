@@ -1,12 +1,10 @@
-﻿namespace CosmosNetwork.Modules.Authz.Serialization.Authorizations
+﻿using System.Text.Json.Serialization;
+
+namespace CosmosNetwork.Modules.Authz.Serialization.Authorizations
 {
     internal class GenericAuthorization : IAuthorization
     {
-        public GenericAuthorization(string messageType)
-        {
-            this.TypeUrl = messageType;
-        }
-
+        [JsonPropertyName("msg")]
         public string TypeUrl { get; set; }
 
         public Authz.Authorizations.IAuthorization ToModel()

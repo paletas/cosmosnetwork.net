@@ -9,10 +9,10 @@ namespace CosmosNetwork.Modules.Authz.Serialization
     public class Grant
     {
         [ProtoIgnore]
-        [JsonConverter(typeof(AuthorizationConverter))]
         public Serialization.Authorizations.IAuthorization Authorization { get; set; } = null!;
 
         [ProtoMember(1, Name = "authorization")]
+        [JsonIgnore]
         public Any AuthorizationPack
         {
             get => Any.Pack(this.Authorization);
@@ -27,7 +27,7 @@ namespace CosmosNetwork.Modules.Authz.Serialization
             return new CosmosNetwork.Modules.Authz.Grant
             {
                 Authorization = this.Authorization.ToModel(),
-                Expiration = Expiration
+                Expiration = this.Expiration
             };
         }
     }

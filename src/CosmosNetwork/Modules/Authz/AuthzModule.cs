@@ -1,5 +1,5 @@
 ﻿using CosmosNetwork.Modules.Authz.Serialization.Authorizations;
-using Microsoft.Extensions.DependencyInjection;
+using CosmosNetwork.Modules.Authz.Serialization.Json;
 
 namespace CosmosNetwork.Modules.Authz
 {
@@ -14,6 +14,8 @@ namespace CosmosNetwork.Modules.Authz
 
         public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
         {
+            cosmosOptions.JsonSerializerOptions.Converters.Add(new AuthorizationConverter(this.AuthorizationsRegistry));
+
             messageRegistry.RegisterMessage<MessageExecute, Serialization.MessageExecute>();
             messageRegistry.RegisterMessage<MessageGrant, Serialization.MessageGrant>();
             messageRegistry.RegisterMessage<MessageRevoke, Serialization.MessageRevoke>();

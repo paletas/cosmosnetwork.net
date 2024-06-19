@@ -2,7 +2,7 @@
 {
     public class AuthorizationRegistry
     {
-        private readonly IDictionary<string, Type> _proposalRegistry = new Dictionary<string, Type>();
+        private readonly IDictionary<string, Type> _authorizationRegistry = new Dictionary<string, Type>();
 
         public static AuthorizationRegistry Instance { get; private set; } = null!;
 
@@ -14,15 +14,15 @@
         public void Register<T>(string typeName)
             where T : IAuthorization
         {
-            if (this._proposalRegistry.ContainsKey(typeName) == false)
+            if (this._authorizationRegistry.ContainsKey(typeName) == false)
             {
-                this._proposalRegistry.Add(typeName, typeof(T));
+                this._authorizationRegistry.Add(typeName, typeof(T));
             }
         }
 
-        public Type GetProposalByTypeName(string typeName)
+        public Type GetAuthorizationByTypeName(string typeName)
         {
-            return this._proposalRegistry.ContainsKey(typeName) ? this._proposalRegistry[typeName] : typeof(GenericAuthorization);
+            return this._authorizationRegistry.ContainsKey(typeName) ? this._authorizationRegistry[typeName] : typeof(GenericAuthorization);
         }
     }
 }
