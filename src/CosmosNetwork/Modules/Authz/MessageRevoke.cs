@@ -8,7 +8,7 @@ namespace CosmosNetwork.Modules.Authz
         CosmosAddress Grantee,
         string MessageTypeUrl) : Message
     {
-        public const string COSMOS_DESCRIPTOR = "/cosmos.msgauth.v1beta1.MsgRevoke";
+        public const string COSMOS_DESCRIPTOR = "/cosmos.authz.v1beta1.MsgRevoke";
 
         public override SerializerMessage ToSerialization()
         {
