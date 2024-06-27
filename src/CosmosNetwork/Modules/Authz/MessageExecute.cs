@@ -7,7 +7,7 @@ namespace CosmosNetwork.Modules.Authz
         CosmosAddress Grantee,
         Message[] Messages) : Message
     {
-        public const string COSMOS_DESCRIPTOR = "/cosmos.authz.v1beta1.MsgExecAuthorized";
+        public const string COSMOS_DESCRIPTOR = "/cosmos.authz.v1beta1.MsgExec";
 
         public override SerializerMessage ToSerialization()
         {
