@@ -44,7 +44,7 @@ namespace CosmosNetwork
                 PropertyNameCaseInsensitive = true,
                 NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                PropertyNamingPolicy = new SnakeCaseNamingPolicy(),
+                PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
             };
 
             options.Converters.Add(new JsonStringEnumMemberConverter());

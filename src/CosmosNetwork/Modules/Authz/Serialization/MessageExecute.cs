@@ -8,9 +8,11 @@ namespace CosmosNetwork.Modules.Authz.Serialization
 {
     [ProtoContract]
     internal record MessageExecute(
-        [property: ProtoMember(1, Name = "grantee"), JsonPropertyName("grantee")] string GranteeAddress) : SerializerMessage(Authz.MessageExecute.COSMOS_DESCRIPTOR)
+        [property: ProtoMember(1, Name = "grantee"), 
+        JsonPropertyName("grantee")] string GranteeAddress) 
+        : SerializerMessage(Authz.MessageExecute.COSMOS_DESCRIPTOR)
     {
-        [ProtoIgnore, JsonPropertyName("msgs"), JsonConverter(typeof(AuthorizationsConverter))]
+        [ProtoIgnore, JsonPropertyName("msgs")]
         public SerializerMessage[] Messages { get; set; } = null!;
 
         [ProtoMember(2, Name = "msgs")]
