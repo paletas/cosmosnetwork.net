@@ -15,6 +15,7 @@ namespace CosmosNetwork.Modules.Authz
         public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
         {
             cosmosOptions.JsonSerializerOptions.Converters.Add(new AuthorizationConverter(this.AuthorizationsRegistry));
+            cosmosOptions.JsonSerializerOptions.Converters.Add(new AuthorizationsConverter(this.AuthorizationsRegistry));
 
             messageRegistry.RegisterMessage<MessageExecute, Serialization.MessageExecute>();
             messageRegistry.RegisterMessage<MessageGrant, Serialization.MessageGrant>();

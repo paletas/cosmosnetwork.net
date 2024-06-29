@@ -13,7 +13,7 @@
             }
         }
 
-        public Type GetProposalByTypeName(string typeName)
+        public Type GetAllowanceByTypeName(string typeName)
         {
             return this._allowancesRegistry[typeName];
         }

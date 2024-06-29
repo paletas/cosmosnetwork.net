@@ -4,7 +4,7 @@ namespace CosmosNetwork.Modules.FeeGrant.Serialization.Allowances
 {
     public record BasicAllowance(DenomAmount[] SpendLimit, DateTime? Expiration) : IAllowance
     {
-        internal const string AllowanceType = "cosmos.feegrant.v1beta1.BasicAllowance";
+        internal const string AllowanceType = "/cosmos.feegrant.v1beta1.BasicAllowance";
 
         public string TypeUrl => AllowanceType;
 

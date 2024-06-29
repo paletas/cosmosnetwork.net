@@ -2,7 +2,7 @@
 {
     public record AllowedMessageAllowance(IAllowance Allowance, string[] AllowedMessages) : IAllowance
     {
-        internal const string AllowanceType = "cosmos.feegrant.v1beta1.AllowedMsgAllowance";
+        internal const string AllowanceType = "/cosmos.feegrant.v1beta1.AllowedMsgAllowance";
 
         public string TypeUrl => AllowanceType;
 

@@ -15,7 +15,7 @@ namespace CosmosNetwork.Modules.FeeGrant.Serialization
         private Any? _allowancePack;
         public const string TERRA_DESCRIPTOR = "feegrant/MsgGrantAllowance";
 
-        [ProtoIgnore, JsonConverter(typeof(AllowanceConverter))]
+        [ProtoIgnore]
         public IAllowance? Allowance { get; set; }
 
         [ProtoMember(3, Name = "allowance")]

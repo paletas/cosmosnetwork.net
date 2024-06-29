@@ -9,7 +9,7 @@ namespace CosmosNetwork.Modules.FeeGrant.Serialization.Allowances
         DenomAmount[] PeriodCanSpend,
         DateTime PeriodReset) : IAllowance
     {
-        internal const string AllowanceType = "cosmos.feegrant.v1beta1.PeriodicAllowance";
+        internal const string AllowanceType = "/cosmos.feegrant.v1beta1.PeriodicAllowance";
 
         public string TypeUrl => AllowanceType;
 
