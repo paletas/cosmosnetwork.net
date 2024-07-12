@@ -9,6 +9,7 @@ using CosmosNetwork.Modules.Gov;
 using CosmosNetwork.Modules.Params;
 using CosmosNetwork.Modules.Slashing;
 using CosmosNetwork.Modules.Staking;
+using CosmosNetwork.Modules.Upgrade;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CosmosNetwork
@@ -48,6 +49,7 @@ namespace CosmosNetwork
             cosmosNetworkConfigurator.AddMessageModule<SlashingModule>();
             cosmosNetworkConfigurator.AddMessageModule<StakingModule>();
             cosmosNetworkConfigurator.AddMessageModule<ParamsModule>();
+            cosmosNetworkConfigurator.AddMessageModule<UpgradeModule>();
 
             cosmosNetworkConfigurator.AddApiModule<IBlocksApi, BlocksApi>();
             cosmosNetworkConfigurator.AddApiModule<ITransactionsApi, TransactionsApi>();
