@@ -1,14 +1,12 @@
 ﻿namespace CosmosNetwork.Modules.Auth
 {
-    public record VestingPeriod(ulong Length, Coin[] Amounts)
+    public record VestingPeriod(TimeSpan Duration, Coin[] Amounts)
     {
-        internal Serialization.Accounts.VestingPeriod ToSerialization()
+        internal Serialization.VestingPeriod ToSerialization()
         {
-            return new Serialization.Accounts.VestingPeriod
-            {
-                Length = Length,
-                Amount = Amounts.Select(c => c.ToSerialization()).ToArray(),
-            };
+            return new Serialization.VestingPeriod(
+                (long)this.Duration.TotalSeconds,
+                this.Amounts.Select(c => c.ToSerialization()).ToArray());
         }
     }
 }

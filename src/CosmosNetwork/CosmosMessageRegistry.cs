@@ -26,7 +26,7 @@ namespace CosmosNetwork
             CosmosMessageAttribute? messageAttr = GetMessageDescriptor(messageType, serializerType);
             if (messageAttr is null)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("CosmosMessageAttribute is missing");
             }
 
             this._messages.Add(messageAttr.CosmosType, (messageType, serializerType));

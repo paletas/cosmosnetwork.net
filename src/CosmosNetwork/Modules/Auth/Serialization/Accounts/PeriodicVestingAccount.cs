@@ -1,5 +1,4 @@
-﻿using CosmosNetwork.Serialization;
-using ProtoBuf.WellKnownTypes;
+﻿using ProtoBuf.WellKnownTypes;
 
 namespace CosmosNetwork.Modules.Auth.Serialization.Accounts
 {
@@ -23,20 +22,6 @@ namespace CosmosNetwork.Modules.Auth.Serialization.Accounts
                 this.StartTime,
                 this.BaseVestingAccount.EndTime,
                 this.VestingPeriods.Select(c => c.ToModel()).ToArray());
-        }
-    }
-
-    internal class VestingPeriod
-    {
-        public ulong Length { get; set; }
-
-        public DenomAmount[] Amount { get; set; }
-
-        public Auth.VestingPeriod ToModel()
-        {
-            return new Auth.VestingPeriod(
-                this.Length,
-                this.Amount.Select(c => c.ToModel()).ToArray());
         }
     }
 }

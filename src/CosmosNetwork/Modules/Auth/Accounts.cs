@@ -24,7 +24,7 @@
         DateTime? StartTime,
         DateTime? EndTime) : BaseAccount(Address, Sequence, AccountNumber)
     {
-        internal Serialization.Accounts.DelayedVestingAccount ToSerialization()
+        internal new Serialization.Accounts.DelayedVestingAccount ToSerialization()
         {
             return new Serialization.Accounts.DelayedVestingAccount
             {
@@ -59,7 +59,7 @@
         DateTime? EndTime,
         VestingPeriod[] VestingPeriods) : BaseAccount(Address, Sequence, AccountNumber)
     {
-        internal Serialization.Accounts.PeriodicVestingAccount ToSerialization()
+        internal new Serialization.Accounts.PeriodicVestingAccount ToSerialization()
         {
             return new Serialization.Accounts.PeriodicVestingAccount
             {
@@ -94,7 +94,7 @@
         DateTime StartTime,
         DateTime? EndTime) : BaseAccount(Address, Sequence, AccountNumber)
     {
-        internal Serialization.Accounts.ContinuousVestingAccount ToSerialization()
+        internal new Serialization.Accounts.ContinuousVestingAccount ToSerialization()
         {
             return new Serialization.Accounts.ContinuousVestingAccount
             {
@@ -124,7 +124,7 @@
         string AccountNumber,
         string Name) : BaseAccount(Address, Sequence, AccountNumber)
     {
-        internal Serialization.Accounts.ModuleAccount ToSerialization()
+        internal new Serialization.Accounts.ModuleAccount ToSerialization()
         {
             return new Serialization.Accounts.ModuleAccount
             {

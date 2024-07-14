@@ -1,6 +1,7 @@
 ﻿using CosmosNetwork.API;
 using CosmosNetwork.API.Impl;
 using CosmosNetwork.Modules;
+using CosmosNetwork.Modules.Auth;
 using CosmosNetwork.Modules.Authz;
 using CosmosNetwork.Modules.Bank;
 using CosmosNetwork.Modules.Distribution;
@@ -41,6 +42,7 @@ namespace CosmosNetwork
 
             CosmosNetworkConfigurator cosmosNetworkConfigurator = new(services, cosmosMessageRegistry, options, isDefaultClient == false, clientName);
 
+            cosmosNetworkConfigurator.AddMessageModule<AuthModule>();
             cosmosNetworkConfigurator.AddMessageModule<AuthzModule>();
             cosmosNetworkConfigurator.AddMessageModule<GovModule>();
             cosmosNetworkConfigurator.AddMessageModule<BankModule>();
