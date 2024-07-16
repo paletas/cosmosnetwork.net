@@ -2,8 +2,8 @@
 {
     [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageCreatePeriodicVestingAccount(
-        string FromAddress,
-        string ToAddress,
+        CosmosAddress FromAddress,
+        CosmosAddress ToAddress,
         DateTime StartTime,
         VestingPeriod[] VestingPeriods) : Message
     {

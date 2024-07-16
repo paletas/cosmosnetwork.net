@@ -2,8 +2,8 @@
 {
     [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageCreatePermanentLockedAccount(
-        string FromAddress,
-        string ToAddress,
+        CosmosAddress FromAddress,
+        CosmosAddress ToAddress,
         Coin[] Amount) : Message
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.vesting.v1beta1.MsgCreatePermanentLockedAccount";

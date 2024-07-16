@@ -2,13 +2,12 @@
 {
     [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageCreateVestingAccount(
-        string FromAddress,
-        string ToAddress,
+        CosmosAddress FromAddress,
+        CosmosAddress ToAddress,
         Coin[] Amount,
         DateTime StartTime,
         DateTime EndTime,
-        bool Delayed) : Message(
-    )
+        bool Delayed) : Message
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.vesting.v1beta1.MsgCreateVestingAccount";
 
