@@ -4,7 +4,7 @@
     {
         public static CosmosNetworkConfigurator AddIbc(this CosmosNetworkConfigurator configurator)
         {
-            _ = configurator.AddMessageModule(new IbcModule());
+            configurator.AddMessageModule<IbcModule>();
 
             return configurator;
         }

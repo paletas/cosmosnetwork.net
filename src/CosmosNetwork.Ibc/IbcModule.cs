@@ -3,14 +3,26 @@ using CosmosNetwork.Ibc.Applications.Transfer;
 using CosmosNetwork.Ibc.Core.Channel;
 using CosmosNetwork.Ibc.Core.Client;
 using CosmosNetwork.Ibc.Core.Connection;
+using CosmosNetwork.Ibc.Serialization.Core.Client.Proposals;
 using CosmosNetwork.Modules;
+using CosmosNetwork.Modules.Gov;
+using CosmosNetwork.Modules.Gov.Serialization.Proposals;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CosmosNetwork.Ibc
 {
-    internal class IbcModule : ICosmosMessageModule
+    internal class IbcModule(GovModule govModule) : ICosmosMessageModule
     {
+        public IbcModule([ServiceKey] string serviceKey, IServiceProvider serviceProvider)
+            : this(serviceProvider.GetRequiredKeyedService<GovModule>(serviceKey))
+        { }
+        
+        private readonly ProposalsRegistry _proposalsRegistry = govModule.ProposalsRegistry;
+
         public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
         {
+            this._proposalsRegistry.Register<ClientUpdateProposal>(ClientUpdateProposal.ProposalType);
+
             messageRegistry.RegisterMessage<MessagePayPacketFee, Serialization.Applications.Fees.MessagePayPacketFee>();
             messageRegistry.RegisterMessage<MessagePayPacketFeeAsync, Serialization.Applications.Fees.MessagePayPacketFeeAsync>();
             messageRegistry.RegisterMessage<MessageRegisterCounterpartyAddress, Serialization.Applications.Fees.MessageRegisterCounterpartyAddress>();
