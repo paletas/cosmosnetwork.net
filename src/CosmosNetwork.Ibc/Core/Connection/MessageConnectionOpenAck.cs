@@ -4,7 +4,6 @@ using CosmosNetwork.Serialization;
 
 namespace CosmosNetwork.Ibc.Core.Connection
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageConnectionOpenAck(
         string ConnectionId,
         string PreviousConnectionId,
@@ -15,7 +14,7 @@ namespace CosmosNetwork.Ibc.Core.Connection
         byte[] ProofClient,
         byte[] ProofConsensus,
         Height ConsensusHeight,
-        string Signer) : Message
+        string Signer) : Message(COSMOS_DESCRIPTOR)
     {
         public const string COSMOS_DESCRIPTOR = "/ibc.core.connection.v1.MsgConnectionOpenAck";
 

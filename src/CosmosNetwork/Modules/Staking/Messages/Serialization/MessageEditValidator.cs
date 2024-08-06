@@ -14,6 +14,7 @@ namespace CosmosNetwork.Modules.Staking.Messages.Serialization
         public override Message ToModel()
         {
             return new Staking.Messages.MessageEditValidator(
+                this.TypeUrl,
                 this.ValidatorAddress, this.MinimumSelfDelegation,
                 new Staking.ValidatorDescription(
                     this.Description.Moniker,

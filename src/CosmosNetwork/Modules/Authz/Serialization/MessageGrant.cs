@@ -13,6 +13,7 @@ namespace CosmosNetwork.Modules.Authz.Serialization
         public override Message ToModel()
         {
             return new CosmosNetwork.Modules.Authz.MessageGrant(
+                this.TypeUrl,
                 this.GranterAddress,
                 this.GranteeAddress,
                 this.Grant.ToModel());

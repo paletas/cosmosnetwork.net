@@ -14,36 +14,26 @@ namespace CosmosNetwork
             Instance = this;
         }
 
-        public void RegisterMessage<TM, TS>()
+        public void RegisterMessage<TM, TS>(string typeDescriptor)
             where TM : Message
             where TS : SerializerMessage
         {
-            RegisterMessage(typeof(TM), typeof(TS));
+            RegisterMessage(typeof(TM), typeof(TS), typeDescriptor);
         }
 
-        public void RegisterMessage(Type messageType, Type serializerType)
+        public void RegisterMessage(Type messageType, Type serializerType, string typeDescriptor)
         {
-            CosmosMessageAttribute? messageAttr = GetMessageDescriptor(messageType, serializerType);
-            if (messageAttr is null)
-            {
-                throw new InvalidOperationException("CosmosMessageAttribute is missing");
-            }
-
-            this._messages.Add(messageAttr.CosmosType, (messageType, serializerType));
-            if (messageAttr.CustomTypeAlias is not null)
-            {
-                this._messages.Add(messageAttr.CustomTypeAlias, (messageType, serializerType));
-            }
+            this._messages.Add(typeDescriptor, (messageType, serializerType));
         }
 
         internal Type? GetMessageType(string type)
         {
-            return this._messages.ContainsKey(type) ? this._messages[type].Message : null;
+            return this._messages.TryGetValue(type, out (Type Message, Type SerializerMessage) value) ? value.Message : null;
         }
 
         internal Type? GetSerializerMessageType(string type)
         {
-            return this._messages.ContainsKey(type) ? this._messages[type].SerializerMessage : null;
+            return this._messages.TryGetValue(type, out (Type Message, Type SerializerMessage) value) ? value.SerializerMessage : null;
         }
 
         internal string GetMessageTypeName(Type type)
@@ -54,18 +44,6 @@ namespace CosmosNetwork
         internal string GetSerializerMessageTypeName(Type type)
         {
             return this._messages.Single(kv => kv.Value.SerializerMessage == type).Key;
-        }
-
-        private CosmosMessageAttribute? GetMessageDescriptor<TM, TS>()
-            where TM : Message
-            where TS : SerializerMessage
-        {
-            return GetMessageDescriptor(typeof(TM), typeof(TS));
-        }
-
-        private CosmosMessageAttribute? GetMessageDescriptor(Type messageType, Type serializerType)
-        {
-            return messageType.GetCustomAttributes(false).OfType<CosmosMessageAttribute>().SingleOrDefault();
         }
     }
 }

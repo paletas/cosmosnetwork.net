@@ -2,13 +2,12 @@
 
 namespace CosmosNetwork.Ibc.Core.Connection
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageConnectionOpenInit(
         string ClientId,
         Counterparty Counterparty,
         Version? Version,
         ulong DelayPeriod,
-        string Signer) : Message
+        string Signer) : Message(COSMOS_DESCRIPTOR)
     {
         public const string COSMOS_DESCRIPTOR = "/ibc.core.connection.v1.MsgConnectionOpenInit";
 

@@ -1,7 +1,6 @@
 ﻿namespace CosmosNetwork.Modules.Auth.Vesting
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
-    public record MessageDonateAllVestingTokens(CosmosAddress FromAddress) : Message
+    public record MessageDonateAllVestingTokens(string MessageType, CosmosAddress FromAddress) : Message(MessageType)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.vesting.v1beta1.MsgDonateAllVestingTokens";
 

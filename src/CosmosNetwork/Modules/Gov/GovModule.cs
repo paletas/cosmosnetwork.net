@@ -15,10 +15,18 @@ namespace CosmosNetwork.Modules.Gov
 
         public virtual void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
         {
-            messageRegistry.RegisterMessage<MessageDeposit, Serialization.MessageDeposit>();
-            messageRegistry.RegisterMessage<MessageSubmitProposal, Serialization.MessageSubmitProposal>();
-            messageRegistry.RegisterMessage<MessageVote, Serialization.MessageVote>();
-            messageRegistry.RegisterMessage<MessageVoteWeighted, Serialization.MessageVoteWeighted>();
+            messageRegistry.RegisterMessage<MessageDeposit, Serialization.MessageDeposit>(MessageDeposit.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageSubmitProposal, Serialization.MessageSubmitProposal>(MessageSubmitProposal.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageVote, Serialization.MessageVote>(MessageVote.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageVoteWeighted, Serialization.MessageVoteWeighted>(MessageVoteWeighted.COSMOS_DESCRIPTOR);
+
+            if (cosmosOptions.RegisterBetaMessages)
+            {
+                messageRegistry.RegisterMessage<MessageDeposit, Serialization.MessageDeposit>(MessageDeposit.COSMOS_BETA_DESCRIPTOR);
+                messageRegistry.RegisterMessage<MessageSubmitProposal, Serialization.MessageSubmitProposal>(MessageSubmitProposal.COSMOS_BETA_DESCRIPTOR);
+                messageRegistry.RegisterMessage<MessageVote, Serialization.MessageVote>(MessageVote.COSMOS_BETA_DESCRIPTOR);
+                messageRegistry.RegisterMessage<MessageVoteWeighted, Serialization.MessageVoteWeighted>(MessageVoteWeighted.COSMOS_BETA_DESCRIPTOR);
+            }
 
             cosmosOptions.JsonSerializerOptions.Converters.Add(new ProposalConverter(this.ProposalsRegistry));
 

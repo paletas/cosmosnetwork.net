@@ -2,11 +2,10 @@
 
 namespace CosmosNetwork.CosmWasm
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageStoreContractCode(
         CosmosAddress Sender,
         string WasmByteCode,
-        AccessConfig? InstantiatePermission) : Message
+        AccessConfig? InstantiatePermission) : Message(COSMOS_DESCRIPTOR)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmwasm.wasm.v1.MsgStoreCode";
 

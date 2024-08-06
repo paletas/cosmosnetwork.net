@@ -13,6 +13,7 @@ namespace CosmosNetwork.Modules.Bank.Serialization
         public override Message ToModel()
         {
             return new Bank.MessageSend(
+                this.TypeUrl,
                 this.FromAddress,
                 this.ToAddress,
                 this.Coins.Select(c => c.ToModel()).ToArray());

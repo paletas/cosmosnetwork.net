@@ -24,6 +24,7 @@ namespace CosmosNetwork.Modules.Gov.Serialization
         public override Message ToModel()
         {
             return new Gov.MessageSubmitProposal(
+                this.TypeUrl,
                 this.Content.ToModel(),
                 this.ProposerAddress,
                 this.InitialDeposit.Select(c => c.ToModel()).ToArray());

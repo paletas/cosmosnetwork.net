@@ -1,11 +1,11 @@
 ﻿namespace CosmosNetwork.Modules.Auth.Vesting
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageCreatePeriodicVestingAccount(
+        string MessageType,
         CosmosAddress FromAddress,
         CosmosAddress ToAddress,
         DateTime StartTime,
-        VestingPeriod[] VestingPeriods) : Message
+        VestingPeriod[] VestingPeriods) : Message(MessageType)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.vesting.v1beta1.MsgCreatePeriodicVestingAccount";
 

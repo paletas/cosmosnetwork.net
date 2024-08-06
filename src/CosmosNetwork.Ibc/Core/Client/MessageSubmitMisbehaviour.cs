@@ -3,11 +3,10 @@ using CosmosNetwork.Serialization;
 
 namespace CosmosNetwork.Ibc.Core.Client
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageSubmitMisbehaviour(
         string ClientId,
         IMisbehaviour Misbehaviour,
-        string Signer) : Message
+        string Signer) : Message(COSMOS_DESCRIPTOR)
     {
         public const string COSMOS_DESCRIPTOR = "/ibc.core.client.v1.MsgSubmitMisbehaviour";
 

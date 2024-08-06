@@ -14,6 +14,7 @@ namespace CosmosNetwork.Modules.Staking.Messages.Serialization
         public override Message ToModel()
         {
             return new Staking.Messages.MessageBeginRedelegate(
+                this.TypeUrl,
                 this.DelegatorAddress,
                 this.SourceValidatorAddress,
                 this.DestinationValidatorAddress,

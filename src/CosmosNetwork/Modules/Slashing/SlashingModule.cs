@@ -4,7 +4,7 @@
     {
         public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
         {
-            messageRegistry.RegisterMessage<MessageUnjail, Serialization.MessageUnjail>();
+            messageRegistry.RegisterMessage<MessageUnjail, Serialization.MessageUnjail>(MessageUnjail.COSMOS_DESCRIPTOR);
         }
     }
 }

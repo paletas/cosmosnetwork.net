@@ -35,6 +35,7 @@ namespace CosmosNetwork.Modules.Authz.Serialization
         public override Message ToModel()
         {
             return new Authz.MessageExecute(
+                this.TypeUrl,
                 this.GranteeAddress,
                 this.Messages.Select(msg => msg.ToModel()).ToArray());
         }

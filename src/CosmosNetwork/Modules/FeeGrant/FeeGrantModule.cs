@@ -17,8 +17,8 @@ namespace CosmosNetwork.Modules.FeeGrant
             cosmosOptions.JsonSerializerOptions.Converters.Add(new AllowanceConverter(this.AllowancesRegistry));
             cosmosOptions.JsonSerializerOptions.Converters.Add(new AllowancesConverter(this.AllowancesRegistry));
 
-            messageRegistry.RegisterMessage<MessageGrantAllowance, Serialization.MessageGrantAllowance>();
-            messageRegistry.RegisterMessage<MessageRevokeAllowance, Serialization.MessageRevokeAllowance>();
+            messageRegistry.RegisterMessage<MessageGrantAllowance, Serialization.MessageGrantAllowance>(MessageGrantAllowance.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageRevokeAllowance, Serialization.MessageRevokeAllowance>(MessageRevokeAllowance.COSMOS_DESCRIPTOR);
 
             this.AllowancesRegistry.Register<BasicAllowance>(BasicAllowance.AllowanceType);
             this.AllowancesRegistry.Register<PeriodicAllowance>(PeriodicAllowance.AllowanceType);

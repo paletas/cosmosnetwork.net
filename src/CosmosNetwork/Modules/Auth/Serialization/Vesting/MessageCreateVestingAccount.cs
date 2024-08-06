@@ -16,6 +16,7 @@ namespace CosmosNetwork.Modules.Auth.Serialization.Vesting
         public override Message ToModel()
         {
             return new Auth.Vesting.MessageCreateVestingAccount(
+                this.TypeUrl,
                 this.FromAddress,
                 this.ToAddress,
                 this.Amount.Select(x => x.ToModel()).ToArray(),

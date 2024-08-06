@@ -1,7 +1,6 @@
 ﻿namespace CosmosNetwork.Modules.Staking.Messages
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
-    public record MessageDelegate(CosmosAddress Delegator, CosmosAddress Validator, Coin Amount) : Message
+    public record MessageDelegate(string MessageType, CosmosAddress Delegator, CosmosAddress Validator, Coin Amount) : Message(MessageType)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.staking.v1beta1.MsgDelegate";
 

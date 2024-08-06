@@ -44,7 +44,7 @@ namespace CosmosNetwork.Modules.FeeGrant.Serialization
 
         public override Message ToModel()
         {
-            return new CosmosNetwork.Modules.FeeGrant.MessageGrantAllowance(this.GranterAddress, this.GranteeAddress, this.Allowance?.ToModel() ?? throw new InvalidOperationException("no allowance found"));
+            return new CosmosNetwork.Modules.FeeGrant.MessageGrantAllowance(this.TypeUrl, this.GranterAddress, this.GranteeAddress, this.Allowance?.ToModel() ?? throw new InvalidOperationException("no allowance found"));
         }
     }
 }

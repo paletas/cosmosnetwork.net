@@ -10,7 +10,7 @@ namespace CosmosNetwork.Modules.Slashing.Serialization
     {
         public override Message ToModel()
         {
-            return new Slashing.MessageUnjail(this.ValidatorAddress);
+            return new Slashing.MessageUnjail(this.TypeUrl, this.ValidatorAddress);
         }
     }
 }

@@ -1,14 +1,14 @@
 ﻿namespace CosmosNetwork.Modules.Staking.Messages
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageCreateValidator(
+        string MessageType,
         CosmosAddress Delegator,
         CosmosAddress Validator,
         ulong MinimumSelfDelegation,
         ValidatorDescription Description,
         ValidatorCommissionRates Comission,
         Coin SelfDelegation,
-        IPublicKey PublicKey) : Message
+        IPublicKey PublicKey) : Message(MessageType)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.staking.v1beta1.MsgCreateValidator";
 

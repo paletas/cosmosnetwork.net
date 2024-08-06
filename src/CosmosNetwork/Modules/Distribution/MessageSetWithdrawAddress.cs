@@ -1,9 +1,9 @@
 ﻿namespace CosmosNetwork.Modules.Distribution
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
-    public record MessageSetWithdrawAddress(CosmosAddress Delegator, CosmosAddress Withdraw) : Message
+    public record MessageSetWithdrawAddress(string MessageType, CosmosAddress Delegator, CosmosAddress Withdraw) : Message(MessageType)
     {
-        public const string COSMOS_DESCRIPTOR = "/cosmos.distribution.v1beta1.MsgSetWithdrawAddress";
+        public const string COSMOS_DESCRIPTOR = "/cosmos.distribution.v1.MsgSetWithdrawAddress";
+        public const string COSMOS_BETA_DESCRIPTOR = "/cosmos.distribution.v1beta1.MsgSetWithdrawAddress";
 
         public override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {

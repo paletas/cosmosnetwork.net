@@ -11,7 +11,7 @@ namespace CosmosNetwork.Modules.Staking.Messages.Serialization
     {
         public override Message ToModel()
         {
-            return new Staking.Messages.MessageUndelegate(this.DelegatorAddress, this.ValidatorAddress, this.Amount.ToModel());
+            return new Staking.Messages.MessageUndelegate(this.TypeUrl, this.DelegatorAddress, this.ValidatorAddress, this.Amount.ToModel());
         }
     }
 }

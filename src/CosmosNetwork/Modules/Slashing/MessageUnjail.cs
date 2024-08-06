@@ -1,7 +1,6 @@
 ﻿namespace CosmosNetwork.Modules.Slashing
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
-    public record MessageUnjail(CosmosAddress Validator) : Message
+    public record MessageUnjail(string MessageType, CosmosAddress Validator) : Message(MessageType)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.slashing.v1beta1.MsgUnjail";
 

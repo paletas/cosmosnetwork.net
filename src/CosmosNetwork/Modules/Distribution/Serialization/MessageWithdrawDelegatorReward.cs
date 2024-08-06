@@ -12,7 +12,7 @@ namespace CosmosNetwork.Modules.Distribution.Serialization
 
         public override Message ToModel()
         {
-            return new Distribution.MessageWithdrawDelegatorReward(this.DelegatorAddress, this.ValidatorAddress);
+            return new Distribution.MessageWithdrawDelegatorReward(this.TypeUrl, this.DelegatorAddress, this.ValidatorAddress);
         }
     }
 }

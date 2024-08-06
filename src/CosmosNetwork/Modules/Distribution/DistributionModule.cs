@@ -21,10 +21,18 @@ namespace CosmosNetwork.Modules.Distribution
 
         public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
         {
-            messageRegistry.RegisterMessage<MessageFundCommunityPool, Serialization.MessageFundCommunityPool>();
-            messageRegistry.RegisterMessage<MessageSetWithdrawAddress, Serialization.MessageSetWithdrawAddress>();
-            messageRegistry.RegisterMessage<MessageWithdrawDelegatorReward, Serialization.MessageWithdrawDelegatorReward>();
-            messageRegistry.RegisterMessage<MessageWithdrawValidatorCommission, Serialization.MessageWithdrawValidatorCommission>();
+            messageRegistry.RegisterMessage<MessageFundCommunityPool, Serialization.MessageFundCommunityPool>(MessageFundCommunityPool.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageSetWithdrawAddress, Serialization.MessageSetWithdrawAddress>(MessageSetWithdrawAddress.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageWithdrawDelegatorReward, Serialization.MessageWithdrawDelegatorReward>(MessageWithdrawDelegatorReward.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageWithdrawValidatorCommission, Serialization.MessageWithdrawValidatorCommission>(MessageWithdrawValidatorCommission.COSMOS_DESCRIPTOR);
+
+            if (cosmosOptions.RegisterBetaMessages)
+            {
+                messageRegistry.RegisterMessage<MessageFundCommunityPool, Serialization.MessageFundCommunityPool>(MessageFundCommunityPool.COSMOS_BETA_DESCRIPTOR);
+                messageRegistry.RegisterMessage<MessageSetWithdrawAddress, Serialization.MessageSetWithdrawAddress>(MessageSetWithdrawAddress.COSMOS_BETA_DESCRIPTOR);
+                messageRegistry.RegisterMessage<MessageWithdrawDelegatorReward, Serialization.MessageWithdrawDelegatorReward>(MessageWithdrawDelegatorReward.COSMOS_BETA_DESCRIPTOR);
+                messageRegistry.RegisterMessage<MessageWithdrawValidatorCommission, Serialization.MessageWithdrawValidatorCommission>(MessageWithdrawValidatorCommission.COSMOS_BETA_DESCRIPTOR);
+            }
 
             this._governanceModule.ProposalsRegistry.Register<CommunityPoolSpendProposal>(CommunityPoolSpendProposal.ProposalType);
         }

@@ -13,6 +13,7 @@ namespace CosmosNetwork.Modules.Gov.Serialization
         public override Message ToModel()
         {
             return new Gov.MessageVoteWeighted(
+                this.TypeUrl,
                 this.ProposalId,
                 this.VoterAddress,
                 this.Options.Select(opt => opt.ToModel()).ToArray());

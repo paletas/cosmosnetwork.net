@@ -2,10 +2,10 @@
 
 namespace CosmosNetwork.Modules.Authz
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageExecute(
+        string MessageType,
         CosmosAddress Grantee,
-        Message[] Messages) : Message
+        Message[] Messages) : Message(MessageType)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.authz.v1beta1.MsgExec";
 

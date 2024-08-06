@@ -13,6 +13,7 @@ namespace CosmosNetwork.Modules.Gov.Serialization
         public override Message ToModel()
         {
             return new Gov.MessageDeposit(
+                this.TypeUrl,
                 this.ProposalId,
                 this.DepositorAddress,
                 this.Amount.Select(c => c.ToModel()).ToArray());

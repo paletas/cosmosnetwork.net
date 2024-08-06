@@ -1,9 +1,9 @@
 ﻿namespace CosmosNetwork.Modules.Gov
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
-    public record MessageVoteWeighted(ulong ProposalId, CosmosAddress Voter, WeightedVoteOption[] Options) : Message
+    public record MessageVoteWeighted(string MessageType, ulong ProposalId, CosmosAddress Voter, WeightedVoteOption[] Options) : Message(MessageType)
     {
-        public const string COSMOS_DESCRIPTOR = "/cosmos.gov.v1beta1.MsgVoteWeighted";
+        public const string COSMOS_DESCRIPTOR = "/cosmos.gov.v1.MsgVoteWeighted";
+        public const string COSMOS_BETA_DESCRIPTOR = "/cosmos.gov.v1beta1.MsgVoteWeighted";
 
         public override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {

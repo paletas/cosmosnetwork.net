@@ -12,7 +12,7 @@ namespace CosmosNetwork.Modules.Gov.Serialization
     {
         public override Message ToModel()
         {
-            return new Gov.MessageVote(this.ProposalId, this.VoterAddress, (Gov.VoteOptionEnum)this.Option);
+            return new Gov.MessageVote(this.TypeUrl, this.ProposalId, this.VoterAddress, (Gov.VoteOptionEnum)this.Option);
         }
     }
 

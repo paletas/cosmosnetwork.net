@@ -27,7 +27,7 @@ namespace CosmosNetwork.Serialization.Json.Converters
             JsonSerializerOptions serializerOptions = new(options);
             serializerOptions.Converters.Add(new MessageConverter(this._messageRegistry));
 
-            List<SerializerMessage> messages = new();
+            List<SerializerMessage> messages = [];
             do
             {
                 SerializerMessage? message = JsonSerializer.Deserialize<SerializerMessage>(ref reader, serializerOptions);

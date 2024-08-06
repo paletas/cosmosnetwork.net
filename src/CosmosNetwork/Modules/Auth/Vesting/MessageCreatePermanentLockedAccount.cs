@@ -1,10 +1,10 @@
 ﻿namespace CosmosNetwork.Modules.Auth.Vesting
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageCreatePermanentLockedAccount(
+        string MessageType,
         CosmosAddress FromAddress,
         CosmosAddress ToAddress,
-        Coin[] Amount) : Message
+        Coin[] Amount) : Message(MessageType)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.vesting.v1beta1.MsgCreatePermanentLockedAccount";
 

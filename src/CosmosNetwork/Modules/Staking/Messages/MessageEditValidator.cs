@@ -1,11 +1,11 @@
 ﻿namespace CosmosNetwork.Modules.Staking.Messages
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageEditValidator(
+        string MessageType,
         CosmosAddress Validator,
         ulong? MinimumSelfDelegation,
         ValidatorDescription Description,
-        decimal? ComissionRate) : Message
+        decimal? ComissionRate) : Message(MessageType)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.staking.v1beta1.MsgEditValidator";
 

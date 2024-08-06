@@ -2,11 +2,11 @@
 
 namespace CosmosNetwork.Modules.Authz
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageRevoke(
+        string MessageType,
         CosmosAddress Granter,
         CosmosAddress Grantee,
-        string MessageTypeUrl) : Message
+        string MessageTypeUrl) : Message(MessageType)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.authz.v1beta1.MsgRevoke";
 

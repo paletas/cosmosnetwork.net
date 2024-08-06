@@ -3,12 +3,11 @@ using CosmosNetwork.Serialization;
 
 namespace CosmosNetwork.Ibc.Core.Connection
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageConnectionOpenConfirm(
         string ConnectionId,
         byte[] ProofAck,
         Height ProofHeight,
-        string Signer) : Message
+        string Signer) : Message(COSMOS_DESCRIPTOR)
     {
         public const string COSMOS_DESCRIPTOR = "/ibc.core.connection.v1.MsgConnectionOpenConfirm";
 

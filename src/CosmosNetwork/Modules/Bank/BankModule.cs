@@ -20,8 +20,8 @@ namespace CosmosNetwork.Modules.Bank
 
         public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
         {
-            messageRegistry.RegisterMessage<MessageSend, Serialization.MessageSend>();
-            messageRegistry.RegisterMessage<MessageMultiSend, Serialization.MessageMultiSend>();
+            messageRegistry.RegisterMessage<MessageSend, Serialization.MessageSend>(MessageSend.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageMultiSend, Serialization.MessageMultiSend>(MessageMultiSend.COSMOS_DESCRIPTOR);
 
             this._authzModule.AuthorizationsRegistry.Register<Serialization.Authz.SendAuthorization>(SendAuthorization.AuthorizationType);
         }

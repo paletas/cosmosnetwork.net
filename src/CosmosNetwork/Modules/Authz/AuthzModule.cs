@@ -17,9 +17,9 @@ namespace CosmosNetwork.Modules.Authz
             cosmosOptions.JsonSerializerOptions.Converters.Add(new AuthorizationConverter(this.AuthorizationsRegistry));
             cosmosOptions.JsonSerializerOptions.Converters.Add(new AuthorizationsConverter(this.AuthorizationsRegistry));
 
-            messageRegistry.RegisterMessage<MessageExecute, Serialization.MessageExecute>();
-            messageRegistry.RegisterMessage<MessageGrant, Serialization.MessageGrant>();
-            messageRegistry.RegisterMessage<MessageRevoke, Serialization.MessageRevoke>();
+            messageRegistry.RegisterMessage<MessageExecute, Serialization.MessageExecute>(MessageExecute.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageGrant, Serialization.MessageGrant>(MessageGrant.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageRevoke, Serialization.MessageRevoke>(MessageRevoke.COSMOS_DESCRIPTOR);
         }
     }
 }

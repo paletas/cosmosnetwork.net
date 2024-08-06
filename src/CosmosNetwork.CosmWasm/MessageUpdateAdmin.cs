@@ -2,9 +2,8 @@
 
 namespace CosmosNetwork.CosmWasm
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageUpdateAdmin(CosmosAddress Admin, CosmosAddress NewAdmin, CosmosAddress Contract)
-        : Message
+        : Message(COSMOS_DESCRIPTOR)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmwasm.wasm.v1.MsgUpdateAdmin";
 

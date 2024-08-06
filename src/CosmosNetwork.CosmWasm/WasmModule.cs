@@ -21,12 +21,12 @@ namespace CosmosNetwork.CosmWasm
 
         public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
         {
-            messageRegistry.RegisterMessage<MessageClearContractAdmin, Serialization.MessageClearContractAdmin>();
-            messageRegistry.RegisterMessage<MessageExecuteContract, Serialization.MessageExecuteContract>();
-            messageRegistry.RegisterMessage<MessageInstantiateContract, Serialization.MessageInstantiateContract>();
-            messageRegistry.RegisterMessage<MessageMigrateContractCode, Serialization.MessageMigrateContractCode>();
-            messageRegistry.RegisterMessage<MessageStoreContractCode, Serialization.MessageStoreContractCode>();
-            messageRegistry.RegisterMessage<MessageUpdateAdmin, Serialization.MessageUpdateAdmin>();
+            messageRegistry.RegisterMessage<MessageClearContractAdmin, Serialization.MessageClearContractAdmin>(MessageClearContractAdmin.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageExecuteContract, Serialization.MessageExecuteContract>(MessageExecuteContract.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageInstantiateContract, Serialization.MessageInstantiateContract>(MessageInstantiateContract.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageMigrateContractCode, Serialization.MessageMigrateContractCode>(MessageMigrateContractCode.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageStoreContractCode, Serialization.MessageStoreContractCode>(MessageStoreContractCode.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageUpdateAdmin, Serialization.MessageUpdateAdmin>(MessageUpdateAdmin.COSMOS_DESCRIPTOR);
 
             this._governanceModule.ProposalsRegistry.Register<ClearAdminProposal>(ClearAdminProposal.ProposalType);
             this._governanceModule.ProposalsRegistry.Register<ExecuteContractProposal>(ExecuteContractProposal.ProposalType);

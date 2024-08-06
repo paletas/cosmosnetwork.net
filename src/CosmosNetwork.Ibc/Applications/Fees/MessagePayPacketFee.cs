@@ -1,12 +1,11 @@
 ﻿namespace CosmosNetwork.Ibc.Applications.Fees
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessagePayPacketFee(
         Fee Fee,
         string SourcePortId,
         string SourceChannelId,
         string Signer,
-        string[] Relayers) : Message
+        string[] Relayers) : Message(COSMOS_DESCRIPTOR)
     {
         public const string COSMOS_DESCRIPTOR = "/ibc.applications.fee.v1.MsgPayPacketFee";
 

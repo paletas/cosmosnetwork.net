@@ -2,11 +2,11 @@
 
 namespace CosmosNetwork.Modules.Authz
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageGrant(
+        string MessageType,
         CosmosAddress Granter,
         CosmosAddress Grantee,
-        Grant Grant) : Message
+        Grant Grant) : Message(MessageType)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.authz.v1beta1.MsgGrant";
 

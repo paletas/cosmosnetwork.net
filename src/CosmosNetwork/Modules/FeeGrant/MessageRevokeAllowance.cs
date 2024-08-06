@@ -1,7 +1,6 @@
 ﻿namespace CosmosNetwork.Modules.FeeGrant
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
-    public record MessageRevokeAllowance(CosmosAddress Granter, CosmosAddress Grantee) : Message
+    public record MessageRevokeAllowance(string MessageType, CosmosAddress Granter, CosmosAddress Grantee) : Message(MessageType)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.feegrant.v1beta1.MsgRevokeAllowance";
 

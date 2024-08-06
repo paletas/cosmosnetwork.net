@@ -23,31 +23,31 @@ namespace CosmosNetwork.Ibc
         {
             this._proposalsRegistry.Register<ClientUpdateProposal>(ClientUpdateProposal.ProposalType);
 
-            messageRegistry.RegisterMessage<MessagePayPacketFee, Serialization.Applications.Fees.MessagePayPacketFee>();
-            messageRegistry.RegisterMessage<MessagePayPacketFeeAsync, Serialization.Applications.Fees.MessagePayPacketFeeAsync>();
-            messageRegistry.RegisterMessage<MessageRegisterCounterpartyAddress, Serialization.Applications.Fees.MessageRegisterCounterpartyAddress>();
+            messageRegistry.RegisterMessage<MessagePayPacketFee, Serialization.Applications.Fees.MessagePayPacketFee>(MessagePayPacketFee.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessagePayPacketFeeAsync, Serialization.Applications.Fees.MessagePayPacketFeeAsync>(MessagePayPacketFeeAsync.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageRegisterCounterpartyAddress, Serialization.Applications.Fees.MessageRegisterCounterpartyAddress>(MessageRegisterCounterpartyAddress.COSMOS_DESCRIPTOR);
 
-            messageRegistry.RegisterMessage<MessageTransfer, Serialization.Applications.Transfer.MessageTransfer>();
+            messageRegistry.RegisterMessage<MessageTransfer, Serialization.Applications.Transfer.MessageTransfer>(MessageTransfer.COSMOS_DESCRIPTOR);
 
-            messageRegistry.RegisterMessage<MessageAcknowledgement, Serialization.Core.Channel.MessageAcknowledgement>();
-            messageRegistry.RegisterMessage<MessageChannelCloseConfirm, Serialization.Core.Channel.MessageChannelCloseConfirm>();
-            messageRegistry.RegisterMessage<MessageChannelCloseInit, Serialization.Core.Channel.MessageChannelCloseInit>();
-            messageRegistry.RegisterMessage<MessageChannelOpenAck, Serialization.Core.Channel.MessageChannelOpenAck>();
-            messageRegistry.RegisterMessage<MessageChannelOpenConfirm, Serialization.Core.Channel.MessageChannelOpenConfirm>();
-            messageRegistry.RegisterMessage<MessageChannelOpenInit, Serialization.Core.Channel.MessageChannelOpenInit>();
-            messageRegistry.RegisterMessage<MessageChannelOpenTry, Serialization.Core.Channel.MessageChannelOpenTry>();
-            messageRegistry.RegisterMessage<MessageReceivePacket, Serialization.Core.Channel.MessageReceivePacket>();
-            messageRegistry.RegisterMessage<MessageTimeout, Serialization.Core.Channel.MessageTimeout>();
-            messageRegistry.RegisterMessage<MessageTimeoutOnClose, Serialization.Core.Channel.MessageTimeoutOnClose>();
+            messageRegistry.RegisterMessage<MessageAcknowledgement, Serialization.Core.Channel.MessageAcknowledgement>(MessageAcknowledgement.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageChannelCloseConfirm, Serialization.Core.Channel.MessageChannelCloseConfirm>(MessageChannelCloseConfirm.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageChannelCloseInit, Serialization.Core.Channel.MessageChannelCloseInit>(MessageChannelCloseInit.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageChannelOpenAck, Serialization.Core.Channel.MessageChannelOpenAck>(MessageChannelOpenAck.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageChannelOpenConfirm, Serialization.Core.Channel.MessageChannelOpenConfirm>(MessageChannelOpenConfirm.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageChannelOpenInit, Serialization.Core.Channel.MessageChannelOpenInit>(MessageChannelOpenInit.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageChannelOpenTry, Serialization.Core.Channel.MessageChannelOpenTry>(MessageChannelOpenTry.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageReceivePacket, Serialization.Core.Channel.MessageReceivePacket>(MessageReceivePacket.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageTimeout, Serialization.Core.Channel.MessageTimeout>(MessageTimeout.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageTimeoutOnClose, Serialization.Core.Channel.MessageTimeoutOnClose>(MessageTimeoutOnClose.COSMOS_DESCRIPTOR);
 
-            messageRegistry.RegisterMessage<MessageCreateClient, Serialization.Core.Client.MessageCreateClient>();
-            messageRegistry.RegisterMessage<MessageSubmitMisbehaviour, Serialization.Core.Client.MessageSubmitMisbehaviour>();
-            messageRegistry.RegisterMessage<MessageUpdateClient, Serialization.Core.Client.MessageUpdateClient>();
+            messageRegistry.RegisterMessage<MessageCreateClient, Serialization.Core.Client.MessageCreateClient>(MessageCreateClient.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageSubmitMisbehaviour, Serialization.Core.Client.MessageSubmitMisbehaviour>(MessageSubmitMisbehaviour.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageUpdateClient, Serialization.Core.Client.MessageUpdateClient>(MessageUpdateClient.COSMOS_DESCRIPTOR);
 
-            messageRegistry.RegisterMessage<MessageConnectionOpenAck, Serialization.Core.Connection.MessageConnectionOpenAck>();
-            messageRegistry.RegisterMessage<MessageConnectionOpenConfirm, Serialization.Core.Connection.MessageConnectionOpenConfirm>();
-            messageRegistry.RegisterMessage<MessageConnectionOpenInit, Serialization.Core.Connection.MessageConnectionOpenInit>();
-            messageRegistry.RegisterMessage<MessageConnectionOpenTry, Serialization.Core.Connection.MessageConnectionOpenTry>();
+            messageRegistry.RegisterMessage<MessageConnectionOpenAck, Serialization.Core.Connection.MessageConnectionOpenAck>(MessageConnectionOpenAck.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageConnectionOpenConfirm, Serialization.Core.Connection.MessageConnectionOpenConfirm>(MessageConnectionOpenConfirm.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageConnectionOpenInit, Serialization.Core.Connection.MessageConnectionOpenInit>(MessageConnectionOpenInit.COSMOS_DESCRIPTOR);
+            messageRegistry.RegisterMessage<MessageConnectionOpenTry, Serialization.Core.Connection.MessageConnectionOpenTry>(MessageConnectionOpenTry.COSMOS_DESCRIPTOR);
         }
     }
 }

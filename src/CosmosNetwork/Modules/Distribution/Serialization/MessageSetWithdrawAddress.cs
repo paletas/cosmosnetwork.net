@@ -10,7 +10,7 @@ namespace CosmosNetwork.Modules.Distribution.Serialization
     {
         public override Message ToModel()
         {
-            return new Distribution.MessageSetWithdrawAddress(this.DelegatorAddress, this.WithdrawAddress);
+            return new Distribution.MessageSetWithdrawAddress(this.TypeUrl, this.DelegatorAddress, this.WithdrawAddress);
         }
     }
 }

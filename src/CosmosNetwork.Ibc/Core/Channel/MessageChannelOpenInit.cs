@@ -2,11 +2,10 @@
 
 namespace CosmosNetwork.Ibc.Core.Channel
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageChannelOpenInit(
         string PortId,
         Channel Channel,
-        string Signer) : Message
+        string Signer) : Message(COSMOS_DESCRIPTOR)
     {
         public const string COSMOS_DESCRIPTOR = "/ibc.core.channel.v1.MsgChannelOpenInit";
 

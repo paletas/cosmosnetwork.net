@@ -3,14 +3,13 @@ using System.Text.Json;
 
 namespace CosmosNetwork.CosmWasm
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageInstantiateContract(
         CosmosAddress Sender,
         CosmosAddress? Admin,
         ulong CodeId,
         string Label,
         string InitMessage,
-        Coin[] InitCoins) : Message
+        Coin[] InitCoins) : Message(COSMOS_DESCRIPTOR)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmwasm.wasm.v1.MsgInstantiateContract";
 

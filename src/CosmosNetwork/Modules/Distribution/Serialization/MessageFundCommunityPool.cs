@@ -12,6 +12,7 @@ namespace CosmosNetwork.Modules.Distribution.Serialization
         public override Message ToModel()
         {
             return new Distribution.MessageFundCommunityPool(
+                this.TypeUrl,
                 this.DepositorAddress,
                 this.Amount.Select(amt => amt.ToModel()).ToArray());
         }

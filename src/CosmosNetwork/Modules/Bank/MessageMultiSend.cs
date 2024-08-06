@@ -1,9 +1,9 @@
 ﻿namespace CosmosNetwork.Modules.Bank
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageMultiSend(
+        string MessageType,
         MessageMultiSendInputOutput[] Inputs,
-        MessageMultiSendInputOutput[] Outputs) : Message
+        MessageMultiSendInputOutput[] Outputs) : Message(MessageType)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.bank.v1beta1.MsgMultiSend";
 

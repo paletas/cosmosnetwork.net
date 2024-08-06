@@ -1,11 +1,12 @@
 ﻿namespace CosmosNetwork.Modules.Distribution
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageFundCommunityPool(
+        string MessageType,
         CosmosAddress Depositor,
-        Coin[] Coins) : Message
+        Coin[] Coins) : Message(MessageType)
     {
-        public const string COSMOS_DESCRIPTOR = "/cosmos.distribution.v1beta1.MsgFundCommunityPool";
+        public const string COSMOS_DESCRIPTOR = "/cosmos.distribution.v1.MsgFundCommunityPool";
+        public const string COSMOS_BETA_DESCRIPTOR = "/cosmos.distribution.v1beta1.MsgFundCommunityPool";
 
         public override CosmosNetwork.Serialization.SerializerMessage ToSerialization()
         {

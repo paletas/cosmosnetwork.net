@@ -1,11 +1,11 @@
 ﻿namespace CosmosNetwork.Modules.Staking.Messages
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageBeginRedelegate(
+        string MessageType,
         CosmosAddress Delegator,
         CosmosAddress SourceValidator,
         CosmosAddress DestinationValidator,
-        Coin Amount) : Message
+        Coin Amount) : Message(MessageType)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.staking.v1beta1.MsgBeginRedelegate";
 

@@ -26,6 +26,8 @@ namespace CosmosNetwork
 
         internal CosmosMessageRegistry? MessageRegistry { get; set; }
 
+        public bool RegisterBetaMessages { get; set; } = true;
+
         public ulong MinimumAvailableBlockHeight { get; set; } = 1;
 
         public CoinDecimal[]? GasPrices { get; set; } = null;

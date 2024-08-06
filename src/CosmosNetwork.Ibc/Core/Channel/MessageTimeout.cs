@@ -3,13 +3,12 @@ using CosmosNetwork.Serialization;
 
 namespace CosmosNetwork.Ibc.Core.Channel
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageTimeout(
         Packet Packet,
         byte[] ProofUnreceived,
         Height ProofHeight,
         ulong NextSequenceReceiver,
-        string Signer) : Message
+        string Signer) : Message(COSMOS_DESCRIPTOR)
     {
         public const string COSMOS_DESCRIPTOR = "/ibc.core.channel.v1.MsgTimeout";
 

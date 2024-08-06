@@ -1,10 +1,10 @@
 ﻿namespace CosmosNetwork.Modules.Bank
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageSend(
+        string MessageType,
         CosmosAddress From,
         CosmosAddress To,
-        Coin[] Coins) : Message
+        Coin[] Coins) : Message(MessageType)
     {
         public const string COSMOS_DESCRIPTOR = "/cosmos.bank.v1beta1.MsgSend";
 

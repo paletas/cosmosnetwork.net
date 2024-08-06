@@ -3,13 +3,12 @@ using CosmosNetwork.Serialization;
 
 namespace CosmosNetwork.Ibc.Core.Channel
 {
-    [CosmosMessage(COSMOS_DESCRIPTOR)]
     public record MessageAcknowledgement(
         Packet Packet,
         byte[] Acknowledgement,
         byte[] ProofAcknowledged,
         Height ProofHeight,
-        string Signer) : Message
+        string Signer) : Message(COSMOS_DESCRIPTOR)
     {
         public const string COSMOS_DESCRIPTOR = "/ibc.core.channel.v1.MsgAcknowledgement";
 

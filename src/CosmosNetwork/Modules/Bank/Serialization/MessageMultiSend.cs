@@ -11,6 +11,7 @@ namespace CosmosNetwork.Modules.Bank.Serialization
         public override Message ToModel()
         {
             return new CosmosNetwork.Modules.Bank.MessageMultiSend(
+                this.TypeUrl,
                 this.Inputs.Select(i => i.ToModel()).ToArray(),
                 this.Outputs.Select(o => o.ToModel()).ToArray());
         }

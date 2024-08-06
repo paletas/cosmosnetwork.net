@@ -2,17 +2,8 @@
 
 namespace CosmosNetwork
 {
-    public abstract record Message()
+    public abstract record Message(string MessageType)
     {
-        private string? _messageType;
-        public virtual string MessageType => this._messageType ??= GetMessageType();
-
         public abstract Serialization.SerializerMessage ToSerialization();
-
-        private string GetMessageType()
-        {
-            CosmosMessageAttribute? attr = GetType().GetCustomAttribute<CosmosMessageAttribute>();
-            return attr is null ? throw new InvalidOperationException() : attr.CosmosType;
-        }
     }
 }
