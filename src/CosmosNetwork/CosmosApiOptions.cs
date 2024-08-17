@@ -1,5 +1,4 @@
 ﻿using CosmosNetwork.Modules.Auth.Serialization.Json;
-using CosmosNetwork.Serialization.Json;
 using CosmosNetwork.Serialization.Json.Converters;
 using System.Text.Json;
 using System.Text.Json.Serialization;

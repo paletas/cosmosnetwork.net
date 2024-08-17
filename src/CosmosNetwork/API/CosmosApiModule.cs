@@ -85,7 +85,7 @@ namespace CosmosNetwork.API
         {
             return Post<TP, TR>(PrepareEndpoint(endpoint), request, cancellationToken);
         }
-            
+
         protected async Task<TR?> Post<TP, TR>(Uri endpoint, TP request, CancellationToken cancellationToken = default)
         {
             string serializedRequest = JsonSerializer.Serialize(request, options: this.JsonSerializerOptions);
@@ -112,7 +112,7 @@ namespace CosmosNetwork.API
         {
             return Post<TP, TR, TErr>(PrepareEndpoint(endpoint), request, cancellationToken);
         }
-         
+
         protected async Task<(TR? ResponseOK, TErr? ResponseError)> Post<TP, TR, TErr>(Uri endpoint, TP request, CancellationToken cancellationToken = default)
         {
             string serializedRequest = JsonSerializer.Serialize(request, options: this.JsonSerializerOptions);

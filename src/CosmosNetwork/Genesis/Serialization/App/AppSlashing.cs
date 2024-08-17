@@ -1,5 +1,5 @@
-﻿using System.Text.Json.Serialization;
-using CosmosNetwork.Modules.Slashing.Serialization;
+﻿using CosmosNetwork.Modules.Slashing.Serialization;
+using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Genesis.Serialization.App
 {

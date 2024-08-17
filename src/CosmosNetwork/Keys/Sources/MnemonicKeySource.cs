@@ -10,7 +10,7 @@
 
             base.SetKeys(new BasicPrivateKey(privateKey), new BasicPublicKey(publicKey, KeyCurveAlgorithm.Secp256k1));
         }
-        
+
         private static string GetHdPath(string coinType, uint account, uint index)
         {
             return $"m/44'/{coinType}'/{account}'/0/x";

@@ -10,10 +10,10 @@
         SlashingEvent[] SlashingEvents)
     {
         internal (
-            Serialization.ValidatorCommissions Commissions, 
+            Serialization.ValidatorCommissions Commissions,
             Serialization.ValidatorCurrentRewards currentRewards,
             Serialization.ValidatorHistoricalRewards[] historicalRewards,
-            Serialization.ValidatorOutstandingRewards OutstandingRewards, 
+            Serialization.ValidatorOutstandingRewards OutstandingRewards,
             Serialization.ValidatorSlashEvent[] SlashEvents) ToSerialization()
         {
             Serialization.ValidatorCommissions validatorCommissions = new Serialization.ValidatorCommissions

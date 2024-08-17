@@ -13,7 +13,7 @@ namespace CosmosNetwork.Modules.FeeGrant
         public AllowancesRegistry AllowancesRegistry { get; init; }
 
         public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
-        {            
+        {
             cosmosOptions.JsonSerializerOptions.Converters.Add(new AllowanceConverter(this.AllowancesRegistry));
             cosmosOptions.JsonSerializerOptions.Converters.Add(new AllowancesConverter(this.AllowancesRegistry));
 

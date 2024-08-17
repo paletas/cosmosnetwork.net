@@ -1,5 +1,4 @@
 ﻿using CosmosNetwork.Modules.FeeGrant.Serialization.Allowances;
-using CosmosNetwork.Modules.FeeGrant.Serialization.Allowances.Json;
 using CosmosNetwork.Serialization;
 using CosmosNetwork.Serialization.Proto;
 using ProtoBuf;

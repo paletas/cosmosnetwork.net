@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CosmosNetwork.API.Impl
 {
-  internal class WalletApi : CosmosApiModule, IWalletApi
+    internal class WalletApi : CosmosApiModule, IWalletApi
     {
         private readonly NetworkOptions _networkOptions;
         private readonly ITransactionsApi _transactionsApi;

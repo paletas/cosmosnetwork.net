@@ -8,7 +8,7 @@ namespace CosmosNetwork.CosmWasm.Serialization
         ContractCodeHistoryOperationTypes Operation,
         ulong CodeId,
         EntryUpdatedAt Updated,
-        [property: JsonPropertyName("msg")]JsonDocument RawMessage)
+        [property: JsonPropertyName("msg")] JsonDocument RawMessage)
     {
         public CosmWasm.ContractCodeHistoryEntry ToModel()
         {

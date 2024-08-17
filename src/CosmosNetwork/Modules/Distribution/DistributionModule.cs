@@ -1,5 +1,4 @@
-﻿using CosmosNetwork.Modules.Authz;
-using CosmosNetwork.Modules.Distribution.Serialization.Proposals;
+﻿using CosmosNetwork.Modules.Distribution.Serialization.Proposals;
 using CosmosNetwork.Modules.Gov;
 using Microsoft.Extensions.DependencyInjection;
 

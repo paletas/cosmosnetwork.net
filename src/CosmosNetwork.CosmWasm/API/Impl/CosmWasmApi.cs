@@ -13,7 +13,7 @@ namespace CosmosNetwork.CosmWasm.API.Impl
     {
         public async IAsyncEnumerable<ContractCodeHistoryEntry> GetContractHistory(CosmosAddress contract, bool orderReversed = false, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            Serialization.Responses.ContractHistoryResponse? contractHistoryResponse 
+            Serialization.Responses.ContractHistoryResponse? contractHistoryResponse
                 = await GetContractHistory(contract, nextKey: null, orderReversed, cancellationToken);
 
             if (contractHistoryResponse is null)

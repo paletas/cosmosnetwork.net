@@ -5,7 +5,7 @@ namespace CosmosNetwork.Modules.Upgrade.Serialization.Proposals
     public record CancelSoftwareUpgradeProposal(string Title, string Description) : IProposal
     {
         public const string ProposalType = "/cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal";
-        
+
         public string TypeUrl => ProposalType;
 
         public Gov.Proposals.IProposal ToModel()

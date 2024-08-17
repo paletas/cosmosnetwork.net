@@ -10,7 +10,7 @@ namespace CosmosNetwork.API.Impl
     internal class TransactionsApi : CosmosApiModule, ITransactionsApi
     {
         private readonly IBlocksApi _blocksApi;
-        
+
         public TransactionsApi(
             [ServiceKey] string servicesKey,
             IServiceProvider serviceProvider,

@@ -41,7 +41,7 @@
         DateTime CompletionTime,
         decimal InitialBalance,
         decimal SharesDestination,
-        Coin Balance) 
+        Coin Balance)
         : RedelegationEntry(CreationHeight, CompletionTime, InitialBalance, SharesDestination)
     {
         internal new Serialization.Json.RedelegationEntryBalance ToSerialization()

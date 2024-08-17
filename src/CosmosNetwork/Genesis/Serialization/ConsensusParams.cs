@@ -9,7 +9,7 @@ namespace CosmosNetwork.Genesis.Serialization
         public ConsensusEvidenceParams Evidence { get; set; }
 
         public ConsensusValidatorParams Validator { get; set; }
-        
+
         public Genesis.ConsensusParams ToModel()
         {
             return new Genesis.ConsensusParams(

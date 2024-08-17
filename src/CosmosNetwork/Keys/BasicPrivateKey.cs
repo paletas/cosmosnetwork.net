@@ -5,7 +5,7 @@
         public BasicPrivateKey(byte[] rawKey)
         {
             this.RawKey = rawKey;
-        }     
+        }
 
         public byte[] RawKey { get; init; }
 

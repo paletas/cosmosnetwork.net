@@ -1,9 +1,9 @@
 ﻿namespace CosmosNetwork.Modules.Auth
 {
     public record AuthParams(
-        int MaxMemoCharacters, 
-        int SignatureVerifyCostForEd25519, 
-        int SignatureVerifyCostForSecp256k1, 
+        int MaxMemoCharacters,
+        int SignatureVerifyCostForEd25519,
+        int SignatureVerifyCostForSecp256k1,
         int TransactionSignaturesLimit,
         int TransactionSizeCostPerByte)
     {

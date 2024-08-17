@@ -2,7 +2,7 @@
 
 namespace CosmosNetwork
 {
-  public record AccountInformation(string AccountNumber, ulong AccountSequence);
+    public record AccountInformation(string AccountNumber, ulong AccountSequence);
 
     public class AccountBalances : IEnumerable<Coin>
     {

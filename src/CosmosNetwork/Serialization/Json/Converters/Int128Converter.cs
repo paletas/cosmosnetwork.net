@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Serialization.Json.Converters
 {
-  internal class Int128Converter : JsonConverter<Int128>
+    internal class Int128Converter : JsonConverter<Int128>
     {
         public override Int128 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

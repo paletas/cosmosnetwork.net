@@ -6,7 +6,7 @@ namespace CosmosNetwork.Modules.Upgrade.Proposals
     {
         public Gov.Serialization.Proposals.IProposal ToSerialization()
         {
-            return new Upgrade.Serialization.Proposals.CancelSoftwareUpgradeProposal(this.Title, this.Description);   
+            return new Upgrade.Serialization.Proposals.CancelSoftwareUpgradeProposal(this.Title, this.Description);
         }
     }
 }

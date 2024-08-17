@@ -1,5 +1,4 @@
-﻿using CosmosNetwork.Modules.Authz.Serialization.Json;
-using CosmosNetwork.Serialization;
+﻿using CosmosNetwork.Serialization;
 using CosmosNetwork.Serialization.Proto;
 using ProtoBuf;
 using System.Text.Json.Serialization;
@@ -8,8 +7,8 @@ namespace CosmosNetwork.Modules.Authz.Serialization
 {
     [ProtoContract]
     internal record MessageExecute(
-        [property: ProtoMember(1, Name = "grantee"), 
-        JsonPropertyName("grantee")] string GranteeAddress) 
+        [property: ProtoMember(1, Name = "grantee"),
+        JsonPropertyName("grantee")] string GranteeAddress)
         : SerializerMessage(Authz.MessageExecute.COSMOS_DESCRIPTOR)
     {
         [ProtoIgnore, JsonPropertyName("msgs")]

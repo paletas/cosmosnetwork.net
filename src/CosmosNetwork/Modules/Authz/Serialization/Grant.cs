@@ -1,5 +1,4 @@
-﻿using CosmosNetwork.Modules.Authz.Serialization.Json;
-using CosmosNetwork.Serialization.Proto;
+﻿using CosmosNetwork.Serialization.Proto;
 using ProtoBuf;
 using System.Text.Json.Serialization;
 

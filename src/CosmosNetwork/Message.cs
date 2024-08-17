@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace CosmosNetwork
+﻿namespace CosmosNetwork
 {
     public abstract record Message(string MessageType)
     {

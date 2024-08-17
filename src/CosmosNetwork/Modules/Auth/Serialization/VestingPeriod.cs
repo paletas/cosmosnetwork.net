@@ -1,6 +1,5 @@
 using CosmosNetwork.Serialization;
 using ProtoBuf;
-using ProtoBuf.WellKnownTypes;
 
 namespace CosmosNetwork.Modules.Auth.Serialization
 {

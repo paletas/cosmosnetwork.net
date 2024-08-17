@@ -1,5 +1,4 @@
 ﻿using CosmosNetwork.Keys;
-using System.Text.Json.Serialization;
 
 namespace CosmosNetwork.Genesis.Serialization
 {

@@ -16,7 +16,7 @@ namespace CosmosNetwork.Ibc
         public IbcModule([ServiceKey] string serviceKey, IServiceProvider serviceProvider)
             : this(serviceProvider.GetRequiredKeyedService<GovModule>(serviceKey))
         { }
-        
+
         private readonly ProposalsRegistry _proposalsRegistry = govModule.ProposalsRegistry;
 
         public void ConfigureModule(CosmosApiOptions cosmosOptions, CosmosMessageRegistry messageRegistry)
